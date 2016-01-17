@@ -1,24 +1,24 @@
 # Swift Lint
 
-[![Travis CI Status](https://api.travis-ci.org/ryuichis/swift-lint.svg?branch=master)](https://travis-ci.org/ryuichis/swift-lint)
+[![Travis CI Status](https://api.travis-ci.org/yanagiba/swift-lint.svg?branch=master)](https://travis-ci.org/yanagiba/swift-lint)
 
 The Swift Lint is a static code analysis tool for improving quality and reducing
 defects by inspecting [Swift](https://swift.org/about/) code and looking for
 potential problems like possible bugs, unused code, complicated code, redundant
 code, code smells, bad practices, and so on.
 
-Swift Lint replies on the [abstract syntax tree](https://github.com/ryuichis/swift-ast)
+Swift Lint replies on the [abstract syntax tree](https://github.com/yanagiba/swift-ast)
 of the source code for better accuracy and efficiency.
 
 * * *
 
 ## A Work In Progress
 
-Both the [Swift Abstract Syntax Tree](https://github.com/ryuichis/swift-ast)
+Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
 and the Swift Lint are still in early design and development. Many features are
 incomplete or partially implemented. Some with technical limitations.
 
-Please also check out the [status](https://github.com/ryuichis/swift-ast#a-work-in-progress) and [technical limitations](https://github.com/ryuichis/swift-ast#known-limitations) from [swift-ast](https://github.com/ryuichis/swift-ast).
+Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-in-progress) and [technical limitations](https://github.com/yanagiba/swift-ast#known-limitations) from [swift-ast](https://github.com/yanagiba/swift-ast).
 
 ## Requirements
 
@@ -31,7 +31,7 @@ Please also check out the [status](https://github.com/ryuichis/swift-ast#a-work-
 To use it as a standalone tool, clone this repository to your local machine by
 
 ```bash
-git clone https://github.com/ryuichis/swift-lint
+git clone https://github.com/yanagiba/swift-lint
 ```
 
 Go to the repository folder, run the following command:
@@ -54,7 +54,7 @@ import PackageDescription
 let package = Package(
   name: "MyAwesomeProject",
   testDependencies: [
-    .Package(url: "https://github.com/ryuichis/swift-lint.git", majorVersion: 0)
+    .Package(url: "https://github.com/yanagiba/swift-lint.git", majorVersion: 0)
   ]
 )
 ```

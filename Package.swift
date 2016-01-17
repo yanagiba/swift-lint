@@ -27,7 +27,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .Package(url: "https://github.com/ryuichis/swift-ast", Version(0, 1, 3)),
+        .Package(url: "https://github.com/yanagiba/swift-ast", Version(0, 1, 3)),
         .Package(url: "https://github.com/kylef/Commander", majorVersion: 0)
     ],
     testDependencies: [
