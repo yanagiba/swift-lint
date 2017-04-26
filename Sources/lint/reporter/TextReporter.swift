@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,35 +14,22 @@
    limitations under the License.
 */
 
-import source
+import Source
 
-class TextReporter: Reporter {
-    func handleIssue(issue: Issue) -> String {
-        return "\(issue.location.toText): warning: \(issue.description)"
-                                        // ^ this format can be used in Xcode directly
-    }
+class TextReporter : Reporter {
+  func handle(issue: Issue) -> String {
+    return "\(issue.location): warning: \(issue.description)"
+  }
 
-    func header() -> String {
-        return "Swift Lint Report"
-    }
+  func header() -> String {
+    return "Swift Lint Report"
+  }
 
-    func footer() -> String {
-        return "[Swift Lint (http://swiftlint.org) v\(SWIFT_LINT_VERSION)]"
-    }
+  func footer() -> String {
+    return "[Swift Lint (http://swiftlint.org) v\(SWIFT_LINT_VERSION)]"
+  }
 
-    func separator() -> String {
-        return "\n"
-    }
-}
-
-private extension SourceLocation {
-    var toText: String {
-        return "\(path):\(line):\(column)"
-    }
-}
-
-private extension SourceRange {
-    var toText: String {
-        return "\(start.toText)"
-    }
+  func separator() -> String {
+    return "\n"
+  }
 }

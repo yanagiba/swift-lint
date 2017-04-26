@@ -14,25 +14,16 @@
    limitations under the License.
 */
 
-import Source
+import XCTest
 
-struct Issue {
-  enum Category {
-    case complexity
-    case size
-    case badPractice
-  }
+import CanaryTests
+import LintTests
+import RuleTests
+import ReporterTests
 
-  enum Severity {
-    case info
-    case normal
-    case critical
-  }
-
-  let ruleIdentifier: String
-  let description: String
-  let category: Category
-  let location: SourceRange
-  let severity: Severity
-  let correction: Correction?
-}
+var tests = [XCTestCaseEntry]()
+tests += CanaryTests.allTests()
+tests += LintTests.allTests()
+tests += RuleTests.allTests()
+tests += ReporterTests.allTests()
+XCTMain(tests)

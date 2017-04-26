@@ -14,25 +14,25 @@
    limitations under the License.
 */
 
-import Source
+import XCTest
 
-struct Issue {
-  enum Category {
-    case complexity
-    case size
-    case badPractice
+@testable import Lint
+
+class CorrectionTests : XCTestCase {
+  func testOneSuggestion() {
+    let correction = Correction(suggestion: "one suggestion")
+    XCTAssertEqual(correction.suggestions.count, 1)
+    XCTAssertEqual(correction.description, "one suggestion")
   }
 
-  enum Severity {
-    case info
-    case normal
-    case critical
+  func testMultipleSuggestions() {
+    let correction = Correction(suggestions: ["foo", "bar", "abc", "xyz"])
+    XCTAssertEqual(correction.suggestions.count, 4)
+    XCTAssertEqual(correction.description, "foo;bar;abc;xyz")
   }
 
-  let ruleIdentifier: String
-  let description: String
-  let category: Category
-  let location: SourceRange
-  let severity: Severity
-  let correction: Correction?
+  static var allTests = [
+    ("testOneSuggestion", testOneSuggestion),
+    ("testMultipleSuggestions", testMultipleSuggestions),
+  ]
 }

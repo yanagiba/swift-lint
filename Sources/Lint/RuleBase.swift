@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,12 +14,7 @@
    limitations under the License.
 */
 
-import Spectre
-
-func specCanary() {
-    describe("CanarySpec") {
-        $0.it("should always pass") {
-          try expect(true) == true
-        }
-    }
+class RuleBase {
+  var astContext: ASTContext?
+  var configurations: [String: Any]?
 }

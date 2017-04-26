@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
 */
 
 struct Correction {
-    let suggestions: [String]
+  let suggestions: [String]
 
-    init(suggestions: [String]) {
-        self.suggestions = suggestions
-    }
+  init(suggestions: [String]) {
+    self.suggestions = suggestions
+  }
 
-    init(suggestion: String) {
-        self.suggestions = [suggestion]
-    }
+  init(suggestion: String) {
+    self.suggestions = [suggestion]
+  }
 }
 
 extension Correction: CustomStringConvertible {
-    var description: String {
-        return suggestions.joinWithSeparator(";")
-    }
+  var description: String {
+    return suggestions.joined(separator: ";")
+  }
 }

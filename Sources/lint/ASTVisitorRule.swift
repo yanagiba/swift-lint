@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,28 +14,16 @@
    limitations under the License.
 */
 
-import ast
-import parser
-import source
+import AST
 
-class ASTVisitorRule {
-    var astContext: ASTContext!
-    var configurations: [String: AnyObject]?
-
-    func inspect(statement: Statement) {
-        // Do nothing here, waiting for subclass to override.
-        // TODO: This currently does not follow visitor pattern yet.
-    }
+protocol ASTVisitorRule : Rule, ASTVisitor {
 }
 
-extension Rule where Self: ASTVisitorRule {
-    func inspect(ast: ASTContext, configurations: [String: AnyObject]? = nil) {
-        self.astContext = ast
-        self.configurations = configurations
+extension ASTVisitorRule where Self: RuleBase {
+  func inspect(_ astContext: ASTContext, configurations: [String: Any]? = nil) {
+    self.astContext = astContext
+    self.configurations = configurations
 
-        let statements = astContext.topLevelDeclaration.statements
-        for statement in statements {
-            inspect(statement)
-        }
-    }
+    _ = try? traverse(astContext.topLevelDeclaration)
+  }
 }

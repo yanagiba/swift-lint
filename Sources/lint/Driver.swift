@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,89 +16,86 @@
 
 import Foundation
 
-import source
-import parser
+import Source
+import Parser
 
 public class Driver: NSObject {
-    private var _reporter: Reporter
-    private var _rules: [Rule]
-    private var _outputHandle: NSFileHandle
-    private var _isStreamingIssues: Bool
+  private var _reporter: Reporter
+  private var _rules: [Rule]
+  private var _outputHandle: FileHandle
 
-    public init(ruleIdentifiers rules: [String], reportType reporter: String, outputHandle: NSFileHandle, streamingIssues: Bool) {
-        switch reporter {
-        case "text":
-            fallthrough
-        default:
-            _reporter = TextReporter()
-        }
-        _rules = []
-        _outputHandle = outputHandle
-        _isStreamingIssues = streamingIssues
+  public init(
+    ruleIdentifiers rules: [String] = [],
+    reportType reporter: String = "text",
+    outputHandle: FileHandle = .standardOutput
+  ) {
+    switch reporter {
+    case "text":
+      fallthrough
+    default:
+      _reporter = TextReporter()
+    }
+    _rules = []
+    _outputHandle = outputHandle
 
-        super.init()
+    super.init()
 
-        registerRule(NoForceCastRule(), ruleIdentifiers: rules)
+    registerRule(NoForceCastRule(), ruleIdentifiers: rules)
+  }
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleIssueNotification:", name:EMIT_ISSUE_NOTIFICATION_NAME, object: nil)
+
+  func setReporter(_ reporter: Reporter) {
+    _reporter = reporter
+  }
+
+  func registerRule(_ rule: Rule, ruleIdentifiers rules: [String]) {
+    if rules.contains(rule.identifier) {
+      _rules.append(rule)
+    }
+  }
+
+  func updateOutputHandle(_ outputHandle: FileHandle) {
+    _outputHandle = outputHandle
+  }
+
+  @discardableResult public func lint(sourceFiles: [SourceFile]) -> Int32 {
+    IssuePool.shared.clearIssues()
+
+    _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
+    _outputHandle.puts("", separator: _reporter.separator())
+
+    for sourceFile in sourceFiles {
+      let parser = Parser(source: sourceFile)
+      guard let result = try? parser.parse() else {
+        print("Failed in parsing file \(sourceFile.path)")
+        // Ignore the errors for now
+        return -2
+      }
+
+      let astContext =
+        ASTContext(sourceFile: sourceFile, topLevelDeclaration: result)
+
+      for rule in _rules {
+        rule.inspect(astContext, configurations: nil)
+      }
     }
 
-    public convenience override init() {
-        self.init(ruleIdentifiers: [], reportType: "text", outputHandle: NSFileHandle.fileHandleWithStandardOutput(), streamingIssues: false)
+    for issue in IssuePool.shared.issues {
+      _outputHandle.puts(
+        _reporter.handle(issue: issue), separator: _reporter.separator())
     }
 
+    _outputHandle.puts("", separator: _reporter.separator())
+    _outputHandle.puts(_reporter.footer(), separator: _reporter.separator())
 
-    func setReporter(reporter: Reporter) {
-        _reporter = reporter
-    }
-
-    func registerRule(rule: Rule, ruleIdentifiers rules: [String]) {
-        if rules.contains(rule.identifier) {
-            _rules.append(rule)
-        }
-    }
-
-    func updateOutputHandle(outputHandle: NSFileHandle) {
-        _outputHandle = outputHandle
-    }
-
-    func updateStreamingIssueSetting(streamingIssues: Bool) {
-        _isStreamingIssues = streamingIssues
-    }
-
-    public func lint(sourceFiles: [SourceFile]) {
-        if !_isStreamingIssues {
-            _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
-            _outputHandle.puts("", separator: _reporter.separator())
-        }
-
-        let parser = Parser()
-        for sourceFile in sourceFiles {
-            let (astContext, _) = parser.parse(sourceFile) // Ignore the errors for now
-
-            for rule in _rules {
-                rule.inspect(astContext, configurations: nil)
-            }
-        }
-
-        if !_isStreamingIssues {
-            _outputHandle.puts("", separator: _reporter.separator())
-            _outputHandle.puts(_reporter.footer(), separator: _reporter.separator())
-        }
-    }
-
-    func handleIssueNotification(notification: NSNotification) {
-        if let issue = notification.object as? Issue {
-            _outputHandle.puts(_reporter.handleIssue(issue), separator: _reporter.separator())
-        }
-    }
-
+    return 0
+  }
 }
 
-private extension NSFileHandle {
-    func puts(str: String, separator: String = "\n") {
-        if let strData = "\(str)\(separator)".dataUsingEncoding(NSUTF8StringEncoding) {
-            writeData(strData)
-        }
+private extension FileHandle {
+  func puts(_ str: String, separator: String = "\n") {
+    if let strData = "\(str)\(separator)".data(using: .utf8) {
+      write(strData)
     }
+  }
 }

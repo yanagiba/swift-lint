@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,28 +16,24 @@
 
 import Foundation
 
-import ast
-import source
+import AST
+import Source
 
-class SourceCodeRule {
-    var sourceFile: SourceFile!
-    var configurations: [String: AnyObject]?
 
-    func inspect(line: String, lineNumber: Int) {
-        // Do nothing here, waiting for subclass to override
-    }
+protocol SourceCodeRule : Rule {
+  func inspect(line: String, lineNumber: Int)
 }
 
-extension Rule where Self: SourceCodeRule {
-    func inspect(ast: ASTContext, configurations: [String: AnyObject]? = nil) {
-        self.sourceFile = ast.source
-        self.configurations = configurations
+extension SourceCodeRule where Self: RuleBase {
+  func inspect(_ astContext: ASTContext, configurations: [String: Any]? = nil) {
+    self.astContext = astContext
+    self.configurations = configurations
 
-        let sourceContent = sourceFile.content
+    let sourceContent = astContext.sourceFile.content
 
-        let lines = sourceContent.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-        for (lineNumber, line) in lines.enumerate() {
-            inspect(line, lineNumber: lineNumber + 1)
-        }
+    let lines = sourceContent.components(separatedBy: .newlines)
+    for (lineNumber, line) in lines.enumerated() {
+        inspect(line: line, lineNumber: lineNumber + 1)
     }
+  }
 }

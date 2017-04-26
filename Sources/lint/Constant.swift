@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,6 +14,6 @@
    limitations under the License.
 */
 
-public let SWIFT_LINT_VERSION = "0.1.1"
+import Foundation
 
-let EMIT_ISSUE_NOTIFICATION_NAME = "org.swiftlint.emit_issue_notification"
+public let SWIFT_LINT_VERSION = "0.1.2"

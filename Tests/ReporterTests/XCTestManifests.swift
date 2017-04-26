@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2016 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
    limitations under the License.
 */
 
-specCanary()
+import XCTest
 
-specCorrection()
-specDriver()
-specRuleProtocol()
-specASTVisitorRuleBase()
-specSourceCodeRuleBase()
-
-// spec reporters
-specTextReporter()
-
-// spec rules
-specNoForceCastRule()
+#if !os(macOS)
+public func allTests() -> [XCTestCaseEntry] {
+  return [
+    testCase(TextReporterTests.allTests),
+  ]
+}
+#endif

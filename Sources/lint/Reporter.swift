@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,23 +15,23 @@
 */
 
 protocol Reporter {
-    func handleIssue(issue: Issue) -> String
+  func handle(issue: Issue) -> String
 
-    func header() -> String
-    func footer() -> String
-    func separator() -> String
+  func header() -> String
+  func footer() -> String
+  func separator() -> String
 }
 
 extension Reporter {
-    func header() -> String {
-        return ""
-    }
+  func header() -> String {
+    return ""
+  }
 
-    func footer() -> String {
-        return ""
-    }
+  func footer() -> String {
+    return ""
+  }
 
-    func separator() -> String {
-        return ""
-    }
+  func separator() -> String {
+    return ""
+  }
 }

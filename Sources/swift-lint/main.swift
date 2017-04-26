@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,34 +16,21 @@
 
 import Foundation
 
-import Commander
-import PathKit
+import Source
+import Lint
 
-import source
-import lint
+var filePaths = CommandLine.arguments
+filePaths.remove(at: 0)
 
-command(
-  Option("report-type", "text", description: "Change output report type"),
-  Flag("streaming", description: "Enable streaming outputs immediately when issues are emitted"),
-  VaradicArgument<String>("<file paths>")
-) { reportType, streaming, filePaths in
-  var sourceFiles = [SourceFile]()
-  for filePath in filePaths {
-    let absolutePath = Path(filePath).absolute()
-
-    guard let fileContent = try? absolutePath.read(NSUTF8StringEncoding) else {
-      print("Error in reading file \(absolutePath)")
-      continue
-    }
-
-    let sourceFile = SourceFile(path: "\(absolutePath)", content: fileContent)
-    sourceFiles.append(sourceFile)
+var sourceFiles = [SourceFile]()
+for filePath in filePaths {
+  guard let sourceFile = try? SourceReader.read(at: filePath) else {
+    print("Can't read file \(filePath)")
+    exit(-1)
   }
+  sourceFiles.append(sourceFile)
+}
 
-  let driver = Driver(
-    ruleIdentifiers: ["no_force_cast"],
-    reportType: reportType,
-    outputHandle: NSFileHandle.fileHandleWithStandardOutput(),
-    streamingIssues: streaming)
-  driver.lint(sourceFiles)
-}.run(SWIFT_LINT_VERSION)
+let driver = Driver(ruleIdentifiers: ["no_force_cast"])
+let exitCode = driver.lint(sourceFiles: sourceFiles)
+exit(exitCode)

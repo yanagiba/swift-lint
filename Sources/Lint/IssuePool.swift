@@ -1,5 +1,5 @@
 /*
-   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,23 +16,20 @@
 
 import Source
 
-struct Issue {
-  enum Category {
-    case complexity
-    case size
-    case badPractice
+class IssuePool {
+  static let shared = IssuePool()
+
+  public private(set) var issues: [Issue]
+
+  private init() {
+    issues = []
   }
 
-  enum Severity {
-    case info
-    case normal
-    case critical
+  func add(issue: Issue) {
+    issues.append(issue)
   }
 
-  let ruleIdentifier: String
-  let description: String
-  let category: Category
-  let location: SourceRange
-  let severity: Severity
-  let correction: Correction?
+  func clearIssues() {
+    issues = []
+  }
 }

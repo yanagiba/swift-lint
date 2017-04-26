@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,44 +16,31 @@
 
 import Foundation
 
-import source
+import AST
 
-class NoForceCastRule: SourceCodeRule, Rule {
-    var name: String {
-        return "No Force Cast"
+class NoForceCastRule: RuleBase, ASTVisitorRule {
+  var name: String {
+    return "No Force Cast"
+  }
+  var description: String {
+    return ""
+  }
+  var markdown: String {
+    return ""
+  }
+
+  func visit(_ typeCasting: TypeCastingOperatorExpression) throws -> Bool {
+    if case .forcedCast = typeCasting.kind {
+      let foundIssue = Issue(
+        ruleIdentifier: identifier,
+        description: "having forced type casting is dangerous",
+        category: .badPractice,
+        location: typeCasting.sourceRange,
+        severity: .normal,
+        correction: nil)
+      emitIssue(foundIssue)
     }
 
-    override func inspect(line: String, lineNumber: Int) {
-        var remainingLine = line
-        var startIndex = 0
-        var (contains, start, length) = remainingLine.contains("as!")
-        while contains {
-            let foundIssue = Issue(
-                ruleIdentifier: identifier,
-                description: "having force cast in line `\(line)` is dangerous",
-                type: .BadPractice,
-                location: SourceRange(
-                    start: SourceLocation(path: sourceFile.path, line: lineNumber, column: 1 + startIndex + start),
-                    end: SourceLocation(path: sourceFile.path, line: lineNumber, column: 1 + startIndex + start + length)),
-                severity: .Normal,
-                correction: nil)
-            emitIssue(foundIssue)
-
-            remainingLine = line[line.startIndex.advancedBy(startIndex + start + length)..<line.endIndex]
-            startIndex += start + length
-            (contains, start, length) = remainingLine.contains("as!")
-        }
-    }
-}
-
-private extension String {
-    func contains(find: String) -> (Bool, Int, Int) {
-        let range = NSString(string: self).rangeOfString(find)
-        if range.location == NSNotFound {
-            return (false, 0, 0)
-        }
-        else {
-            return (true, range.location, range.length)
-        }
-    }
+    return true
+  }
 }
