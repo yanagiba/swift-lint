@@ -14,23 +14,16 @@
    limitations under the License.
 */
 
-import Foundation
+import AST
 
-import Source
-import Lint
-
-var filePaths = CommandLine.arguments
-filePaths.remove(at: 0)
-
-var sourceFiles = [SourceFile]()
-for filePath in filePaths {
-  guard let sourceFile = try? SourceReader.read(at: filePath) else {
-    print("Can't read file \(filePath)")
-    exit(-1)
-  }
-  sourceFiles.append(sourceFile)
+protocol ASTVisitorRule : Rule, ASTVisitor {
 }
 
-let driver = Driver(ruleIdentifiers: ["no_force_cast"])
-let exitCode = driver.lint(sourceFiles: sourceFiles)
-exit(exitCode)
+extension ASTVisitorRule where Self: RuleBase {
+  func inspect(_ astContext: ASTContext, configurations: [String: Any]? = nil) {
+    self.astContext = astContext
+    self.configurations = configurations
+
+    _ = try? traverse(astContext.topLevelDeclaration)
+  }
+}

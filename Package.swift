@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC
+   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,20 +17,43 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-lint",
-    targets: [
-        Target(
-            name: "swift-lint",
-            dependencies: [
-                "lint",
-            ]
-        ),
-    ],
-    dependencies: [
-        .Package(url: "https://github.com/yanagiba/swift-ast", Version(0, 1, 3)),
-        .Package(url: "https://github.com/kylef/Commander", majorVersion: 0)
-    ],
-    testDependencies: [
-        .Package(url: "https://github.com/kylef/Spectre.git", majorVersion: 0),
-    ]
+  name: "swift-lint",
+  targets: [
+    Target(
+      name: "Lint"
+    ),
+    Target(
+      name: "swift-lint",
+      dependencies: [
+        "Lint",
+      ]
+    ),
+
+    // MARK: Tests
+
+    Target(
+      name: "CanaryTests"
+    ),
+    Target(
+      name: "LintTests",
+      dependencies: [
+        "Lint",
+      ]
+    ),
+    Target(
+      name: "RuleTests",
+      dependencies: [
+        "Lint",
+      ]
+    ),
+    Target(
+      name: "ReporterTests",
+      dependencies: [
+        "Lint",
+      ]
+    ),
+  ],
+  dependencies: [
+    .Package(url: "https://github.com/yanagiba/swift-ast", Version(0, 1, 4)),
+  ]
 )

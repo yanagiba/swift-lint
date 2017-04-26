@@ -14,23 +14,16 @@
    limitations under the License.
 */
 
-import Foundation
+import XCTest
 
-import Source
-import Lint
+import CanaryTests
+import LintTests
+import RuleTests
+import ReporterTests
 
-var filePaths = CommandLine.arguments
-filePaths.remove(at: 0)
-
-var sourceFiles = [SourceFile]()
-for filePath in filePaths {
-  guard let sourceFile = try? SourceReader.read(at: filePath) else {
-    print("Can't read file \(filePath)")
-    exit(-1)
-  }
-  sourceFiles.append(sourceFile)
-}
-
-let driver = Driver(ruleIdentifiers: ["no_force_cast"])
-let exitCode = driver.lint(sourceFiles: sourceFiles)
-exit(exitCode)
+var tests = [XCTestCaseEntry]()
+tests += CanaryTests.allTests()
+tests += LintTests.allTests()
+tests += RuleTests.allTests()
+tests += ReporterTests.allTests()
+XCTMain(tests)

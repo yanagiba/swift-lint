@@ -14,23 +14,22 @@
    limitations under the License.
 */
 
-import Foundation
-
 import Source
-import Lint
 
-var filePaths = CommandLine.arguments
-filePaths.remove(at: 0)
-
-var sourceFiles = [SourceFile]()
-for filePath in filePaths {
-  guard let sourceFile = try? SourceReader.read(at: filePath) else {
-    print("Can't read file \(filePath)")
-    exit(-1)
+class TextReporter : Reporter {
+  func handle(issue: Issue) -> String {
+    return "\(issue.location): warning: \(issue.description)"
   }
-  sourceFiles.append(sourceFile)
-}
 
-let driver = Driver(ruleIdentifiers: ["no_force_cast"])
-let exitCode = driver.lint(sourceFiles: sourceFiles)
-exit(exitCode)
+  func header() -> String {
+    return "Swift Lint Report"
+  }
+
+  func footer() -> String {
+    return "[Swift Lint (http://swiftlint.org) v\(SWIFT_LINT_VERSION)]"
+  }
+
+  func separator() -> String {
+    return "\n"
+  }
+}

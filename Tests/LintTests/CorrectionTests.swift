@@ -14,23 +14,25 @@
    limitations under the License.
 */
 
-import Foundation
+import XCTest
 
-import Source
-import Lint
+@testable import Lint
 
-var filePaths = CommandLine.arguments
-filePaths.remove(at: 0)
-
-var sourceFiles = [SourceFile]()
-for filePath in filePaths {
-  guard let sourceFile = try? SourceReader.read(at: filePath) else {
-    print("Can't read file \(filePath)")
-    exit(-1)
+class CorrectionTests : XCTestCase {
+  func testOneSuggestion() {
+    let correction = Correction(suggestion: "one suggestion")
+    XCTAssertEqual(correction.suggestions.count, 1)
+    XCTAssertEqual(correction.description, "one suggestion")
   }
-  sourceFiles.append(sourceFile)
-}
 
-let driver = Driver(ruleIdentifiers: ["no_force_cast"])
-let exitCode = driver.lint(sourceFiles: sourceFiles)
-exit(exitCode)
+  func testMultipleSuggestions() {
+    let correction = Correction(suggestions: ["foo", "bar", "abc", "xyz"])
+    XCTAssertEqual(correction.suggestions.count, 4)
+    XCTAssertEqual(correction.description, "foo;bar;abc;xyz")
+  }
+
+  static var allTests = [
+    ("testOneSuggestion", testOneSuggestion),
+    ("testMultipleSuggestions", testMultipleSuggestions),
+  ]
+}

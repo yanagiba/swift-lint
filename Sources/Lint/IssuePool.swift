@@ -1,5 +1,5 @@
 /*
-   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,23 +14,22 @@
    limitations under the License.
 */
 
-import Foundation
-
 import Source
-import Lint
 
-var filePaths = CommandLine.arguments
-filePaths.remove(at: 0)
+class IssuePool {
+  static let shared = IssuePool()
 
-var sourceFiles = [SourceFile]()
-for filePath in filePaths {
-  guard let sourceFile = try? SourceReader.read(at: filePath) else {
-    print("Can't read file \(filePath)")
-    exit(-1)
+  public private(set) var issues: [Issue]
+
+  private init() {
+    issues = []
   }
-  sourceFiles.append(sourceFile)
-}
 
-let driver = Driver(ruleIdentifiers: ["no_force_cast"])
-let exitCode = driver.lint(sourceFiles: sourceFiles)
-exit(exitCode)
+  func add(issue: Issue) {
+    issues.append(issue)
+  }
+
+  func clearIssues() {
+    issues = []
+  }
+}
