@@ -1,6 +1,12 @@
 # Swift Lint
 
 [![Travis CI Status](https://api.travis-ci.org/yanagiba/swift-lint.svg?branch=master)](https://travis-ci.org/yanagiba/swift-lint)
+[![codecov](https://codecov.io/gh/yanagiba/swift-lint/branch/master/graph/badge.svg)](https://codecov.io/gh/yanagiba/swift-lint)
+![Swift 3.1](https://img.shields.io/badge/swift-3.1-brightgreen.svg)
+[![swift-ast 0.1.4](https://img.shields.io/badge/swift‐ast-0.1.4-C70025.svg)](https://github.com/yanagiba/swift-ast)
+![Swift Package Manager](https://img.shields.io/badge/SPM-ready-orange.svg)
+![Platforms](https://img.shields.io/badge/platform-%20Linux%20|%20macOS%20-red.svg)
+![License](https://img.shields.io/github/license/yanagiba/swift-lint.svg)
 
 The Swift Lint is a static code analysis tool for improving quality and reducing
 defects by inspecting [Swift](https://swift.org/about/) code and looking for
@@ -18,11 +24,11 @@ Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
 and the Swift Lint are still in early design and development. Many features are
 incomplete or partially implemented. Some with technical limitations.
 
-Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-in-progress) and [technical limitations](https://github.com/yanagiba/swift-ast#known-limitations) from [swift-ast](https://github.com/yanagiba/swift-ast).
+Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-in-progress) from [swift-ast](https://github.com/yanagiba/swift-ast).
 
 ## Requirements
 
-- [Swift 2.2 Snapshot](https://swift.org/download/)
+- [Swift 3.1](https://swift.org/download/)
 
 ## Installing
 
@@ -37,12 +43,8 @@ git clone https://github.com/yanagiba/swift-lint
 Go to the repository folder, run the following command:
 
 ```bash
-make && make install
+swift build
 ```
-
-For Mac users, it will prompt for `sudo` passcode. This will automatically finds
-the path for the current swift you are using, and install the executable to
-the correct location.
 
 ### Embed Into Your Project
 
@@ -65,15 +67,11 @@ An example project will be added soon.
 
 ### Command Line
 
+Simply append the path(s) of the file(s) to `swift-lint`:
+
 ```bash
-$ swift lint --help
-Usage:
-
-    $ /usr/bin/swift-lint <file paths>
-
-Options:
-    --report-type - Change output report type
-    --streaming - Enable streaming outputs immediately when issues are emitted
+swift-lint path/to/Awesome.swift
+swift-lint path1/to1/foo.swift path2/to2/bar.swift ... path3/to3/main.swift
 ```
 
 ## Development
@@ -94,7 +92,7 @@ swift build
 
 The dev version of the tool will be generated to `.build/debug/swift-lint`.
 
-### Running [Spectre](https://github.com/kylef/Spectre) Tests
+### Running Tests
 
 Compile and run the entire tests by:
 
