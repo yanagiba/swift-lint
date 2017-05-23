@@ -34,7 +34,7 @@ class TextReporterTests : XCTestCase {
         correction: nil)
     XCTAssertEqual(
       textReporter.handle(issue: testIssue),
-      "test/testTextReporterStart:1:2-3.4: warning: text description for testing")
+      "test/testTextReporterStart:1:2-3:4: warning: text description for testing")
   }
 
   func testHeader() {
