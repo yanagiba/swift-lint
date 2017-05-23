@@ -54,6 +54,6 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .Package(url: "https://github.com/yanagiba/swift-ast", Version(0, 1, 4)),
+    .Package(url: "https://github.com/yanagiba/swift-ast", Version(0, 2, 0)),
   ]
 )
