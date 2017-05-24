@@ -20,7 +20,13 @@ let package = Package(
   name: "swift-lint",
   targets: [
     Target(
-      name: "Lint"
+      name: "Metric"
+    ),
+    Target(
+      name: "Lint",
+      dependencies: [
+        "Metric",
+      ]
     ),
     Target(
       name: "swift-lint",
@@ -33,6 +39,12 @@ let package = Package(
 
     Target(
       name: "CanaryTests"
+    ),
+    Target(
+      name: "MetricTests",
+      dependencies: [
+        "Metric",
+      ]
     ),
     Target(
       name: "LintTests",
