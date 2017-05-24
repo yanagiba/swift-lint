@@ -48,13 +48,15 @@ public class CyclomaticComplexity : ASTVisitor {
     return true
   }
 
-  public func visit(_: GuardStatement) throws -> Bool {
+  public func visit(_ guardStmt: GuardStatement) throws -> Bool {
     _count += 1
+    calculate(guardStmt.conditionList)
     return true
   }
 
-  public func visit(_: IfStatement) throws -> Bool {
+  public func visit(_ ifStmt: IfStatement) throws -> Bool {
     _count += 1
+    calculate(ifStmt.conditionList)
     return true
   }
 
@@ -75,8 +77,9 @@ public class CyclomaticComplexity : ASTVisitor {
     return true
   }
 
-  public func visit(_: WhileStatement) throws -> Bool {
+  public func visit(_ whileStmt: WhileStatement) throws -> Bool {
     _count += 1
+    calculate(whileStmt.conditionList)
     return true
   }
 
@@ -90,7 +93,12 @@ public class CyclomaticComplexity : ASTVisitor {
     if biOp == "&&" || biOp == "||" {
       _count += 1
     }
-
     return true
+  }
+
+  private func calculate(_ conditionList: ConditionList) {
+    if conditionList.count > 1 {
+      _count += conditionList.count - 1
+    }
   }
 }
