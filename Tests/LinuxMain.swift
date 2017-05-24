@@ -17,12 +17,14 @@
 import XCTest
 
 import CanaryTests
+import MetricTests
 import LintTests
 import RuleTests
 import ReporterTests
 
 var tests = [XCTestCaseEntry]()
 tests += CanaryTests.allTests()
+tests += MetricTests.allTests()
 tests += LintTests.allTests()
 tests += RuleTests.allTests()
 tests += ReporterTests.allTests()

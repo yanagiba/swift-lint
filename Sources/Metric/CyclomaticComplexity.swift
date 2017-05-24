@@ -79,4 +79,18 @@ public class CyclomaticComplexity : ASTVisitor {
     _count += 1
     return true
   }
+
+  public func visit(_: TernaryConditionalOperatorExpression) throws -> Bool {
+    _count += 1
+    return true
+  }
+
+  public func visit(_ biOpExpr: BinaryOperatorExpression) throws -> Bool {
+    let biOp = biOpExpr.binaryOperator
+    if biOp == "&&" || biOp == "||" {
+      _count += 1
+    }
+
+    return true
+  }
 }

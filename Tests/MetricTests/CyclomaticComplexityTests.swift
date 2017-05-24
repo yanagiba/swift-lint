@@ -66,6 +66,16 @@ class CyclomaticComplexityTests : XCTestCase {
     XCTAssertEqual(getCyclomaticComplexity(for: "while bar {}"), 2)
   }
 
+  func testTernaryConditionalOperatorExpression() {
+    XCTAssertEqual(getCyclomaticComplexity(for: "bar ? t : f"), 2)
+  }
+
+  func testBinaryOperatorExpression() {
+    XCTAssertEqual(getCyclomaticComplexity(for: "bar1 && bar2"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "bar1 || bar2"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "bar1 ++ bar2"), 1)
+  }
+
   private func getCyclomaticComplexity(for content: String) -> Int {
     let fullContent = "func foo() { \(content)} }"
     let source = SourceFile(
@@ -90,5 +100,7 @@ class CyclomaticComplexityTests : XCTestCase {
     ("testRepeatWhileStatement", testRepeatWhileStatement),
     ("testSwitchStatement", testSwitchStatement),
     ("testWhileStatement", testWhileStatement),
+    ("testTernaryConditionalOperatorExpression", testTernaryConditionalOperatorExpression),
+    ("testBinaryOperatorExpression", testBinaryOperatorExpression),
   ]
 }
