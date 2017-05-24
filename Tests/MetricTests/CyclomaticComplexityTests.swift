@@ -56,10 +56,10 @@ class CyclomaticComplexityTests : XCTestCase {
   func testSwitchStatement() {
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar {}"), 1)
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break }"), 2)
-    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break case b: break }"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break\ncase b: break }"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { default: break }"), 1)
-    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break default: break }"), 2)
-    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break case b: break default: break }"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break\ndefault: break }"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break\ncase b: break\ndefault: break }"), 3)
   }
 
   func testWhileStatement() {
@@ -80,6 +80,28 @@ class CyclomaticComplexityTests : XCTestCase {
     XCTAssertEqual(getCyclomaticComplexity(for: "while a, b {}"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "if a, b, c {}"), 4)
     XCTAssertEqual(getCyclomaticComplexity(for: "guard a, b, c || d else {}"), 5)
+  }
+
+  func testMultipleDecisionPoints() {
+    let content = "switch bar {\n" +
+      "case 1:\n" +
+      "do {\n" +
+      "try d ? e : f\n" +
+      "} catch e1 {\n" +
+      "repeat {} while w\n" +
+      "} catch e2 {\n" +
+      "for f in q {}\n" +
+      "} catch {\n" +
+      "while a, b, c {}\n" +
+      "}\n" +
+      "case 2:\n" +
+      "if x || y && z {}\n" +
+      "case 3:\n" +
+      "guard o, p == q else {}\n" +
+      "default:\n" +
+      "break\n" +
+      "}\n"
+    XCTAssertEqual(getCyclomaticComplexity(for: content), 18)
   }
 
   private func getCyclomaticComplexity(for content: String) -> Int {
@@ -109,5 +131,6 @@ class CyclomaticComplexityTests : XCTestCase {
     ("testTernaryConditionalOperatorExpression", testTernaryConditionalOperatorExpression),
     ("testBinaryOperatorExpression", testBinaryOperatorExpression),
     ("testConditionList", testConditionList),
+    ("testMultipleDecisionPoints", testMultipleDecisionPoints),
   ]
 }
