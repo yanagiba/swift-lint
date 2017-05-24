@@ -23,60 +23,62 @@ import XCTest
 
 class CyclomaticComplexityTests : XCTestCase {
   func testEmptyDecl() {
-    XCTAssertEqual(getDecl(from: "deinit {}").cyclomaticComplexity, 1)
+    XCTAssertEqual(getCyclomaticComplexity(for: ""), 1)
   }
 
   func testDoStmt() {
-    XCTAssertEqual(getDecl(from: "func foo() { do { try bar() } }").cyclomaticComplexity, 1)
-    XCTAssertEqual(getDecl(from: "func foo() { do { try bar() } catch e1 {} }").cyclomaticComplexity, 2)
-    XCTAssertEqual(getDecl(from: "func foo() { do { try bar() } catch e1 {} catch e2 {} }").cyclomaticComplexity, 3)
-    XCTAssertEqual(getDecl(from: "func foo() { do { try bar() } catch e1 {} catch e2 {} catch {} }").cyclomaticComplexity, 4)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() }"), 1)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 {} catch e2 {}"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 {} catch e2 {} catch {}"), 4)
   }
 
   func testForStmt() {
-    XCTAssertEqual(getDecl(from: "func foo() { for _ in foo {} }").cyclomaticComplexity, 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "for _ in foo {}"), 2)
   }
 
   func testGuardStmt() {
-    XCTAssertEqual(getDecl(from: "func foo() { guard bar else {} }").cyclomaticComplexity, 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "guard bar else {}"), 2)
   }
 
   func testIfStmt() {
-    XCTAssertEqual(getDecl(from: "func foo() { if bar {} }").cyclomaticComplexity, 2)
-    XCTAssertEqual(getDecl(from: "func foo() { if bar {} else {} }").cyclomaticComplexity, 2)
-    XCTAssertEqual(getDecl(from: "func foo() { if bar1 {} else if bar2 {} }").cyclomaticComplexity, 3)
-    XCTAssertEqual(getDecl(from: "func foo() { if bar1 {} else if bar2 {} else if bar3 {} }").cyclomaticComplexity, 4)
-    XCTAssertEqual(getDecl(from: "func foo() { if bar1 {} else if bar2 {} else if bar3 {} else {} }").cyclomaticComplexity, 4)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if bar {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if bar {} else {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if bar1 {} else if bar2 {}"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if bar1 {} else if bar2 {} else if bar3 {}"), 4)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if bar1 {} else if bar2 {} else if bar3 {} else {}"), 4)
   }
 
   func testRepeatWhileStatement() {
-    XCTAssertEqual(getDecl(from: "func foo() { repeat {} while bar }").cyclomaticComplexity, 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "repeat {} while bar"), 2)
   }
 
   func testSwitchStatement() {
-    XCTAssertEqual(getDecl(from: "func foo() { switch bar {} }").cyclomaticComplexity, 1)
-    XCTAssertEqual(getDecl(from: "func foo() { switch bar { case a: break } }").cyclomaticComplexity, 2)
-    XCTAssertEqual(getDecl(from: "func foo() { switch bar { case a: break case b: break } }").cyclomaticComplexity, 3)
-    XCTAssertEqual(getDecl(from: "func foo() { switch bar { default: break } }").cyclomaticComplexity, 1)
-    XCTAssertEqual(getDecl(from: "func foo() { switch bar { case a: break default: break } }").cyclomaticComplexity, 2)
-    XCTAssertEqual(getDecl(from: "func foo() { switch bar { case a: break case b: break default: break } }").cyclomaticComplexity, 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar {}"), 1)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break }"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break case b: break }"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { default: break }"), 1)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break default: break }"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break case b: break default: break }"), 3)
   }
 
   func testWhileStatement() {
-    XCTAssertEqual(getDecl(from: "func foo() { while bar {} }").cyclomaticComplexity, 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "while bar {}"), 2)
   }
 
-  private func getDecl(from content: String) -> Declaration {
-    let source = SourceFile(path: "MetricTests/CyclomaticComplexityTests.swift", content: content)
+  private func getCyclomaticComplexity(for content: String) -> Int {
+    let fullContent = "func foo() { \(content)} }"
+    let source = SourceFile(
+      path: "MetricTests/CyclomaticComplexityTests.swift", content: fullContent)
     guard
       let topLevelDecl = try? Parser(source: source).parse(),
       topLevelDecl.statements.count == 1,
       let decl = topLevelDecl.statements[0] as? Declaration
     else {
       XCTFail("Failed in parsing content `\(content)`")
-      return DeinitializerDeclaration(body: CodeBlock())
+      return 0
     }
-    return decl
+    return decl.cyclomaticComplexity
   }
 
   static var allTests = [
