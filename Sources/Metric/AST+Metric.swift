@@ -22,3 +22,10 @@ public extension Declaration {
     return calculator.calculate(for: self)
   }
 }
+
+public extension CodeBlock {
+  public var nPathComplexity: Int {
+    let calculator = NPathComplexity()
+    return calculator.calculate(for: self)
+  }
+}
