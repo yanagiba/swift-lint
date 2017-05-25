@@ -33,7 +33,7 @@ public class NPathComplexity {
   }
 
   private func nPath(_ stmts: [Statement]) -> Int {
-    return stmts.reduce(1) { $0 * nPath($1) }
+    return stmts.reduce(1) { return $0 * nPath($1) }
   }
 
   private func nPath(_ stmt: Statement) -> Int {
@@ -53,15 +53,15 @@ public class NPathComplexity {
     case let repeatWhileStmt as RepeatWhileStatement:
       return nPath(repeatWhileStmt)
     case let returnStmt as ReturnStatement:
-      return 1 + (returnStmt.expression.map({ nPath($0) }) ?? 0)
+      return 1 + (returnStmt.expression.map({ nPath(forExpression: $0) }) ?? 0)
     case let switchStmt as SwitchStatement:
       return nPath(switchStmt)
     case let throwStmt as ThrowStatement:
-      return 1 + nPath(throwStmt.expression)
+      return 1 + nPath(forExpression: throwStmt.expression)
     case let whileStmt as WhileStatement:
       return nPath(whileStmt)
-    case is Expression:
-      return 0
+    case let expr as Expression:
+      return 1 + nPath(forExpression: expr)
     default:
       return 1
     }
@@ -71,7 +71,7 @@ public class NPathComplexity {
     return nPath(doStmt.codeBlock) + doStmt.catchClauses.reduce(0) {
       var npCatch = $0 + nPath($1.codeBlock)
       if let expr = $1.whereExpression {
-        npCatch += nPath(expr) + 1
+        npCatch += nPath(forExpression: expr) + 1
       }
       return npCatch
     }
@@ -80,8 +80,8 @@ public class NPathComplexity {
   private func nPath(_ forStmt: ForInStatement) -> Int {
     return 1 +
       nPath(forStmt.codeBlock) +
-      nPath(forStmt.collection) +
-      (forStmt.item.whereClause.map({ nPath($0) + 1 }) ?? 0)
+      nPath(forExpression: forStmt.collection) +
+      (forStmt.item.whereClause.map({ nPath(forExpression: $0) + 1 }) ?? 0)
   }
 
   private func nPath(_ guardStmt: GuardStatement) -> Int {
@@ -106,14 +106,24 @@ public class NPathComplexity {
   private func nPath(_ repeatWhileStmt: RepeatWhileStatement) -> Int {
     return 1 +
       nPath(repeatWhileStmt.codeBlock) +
-      nPath(repeatWhileStmt.conditionExpression)
+      nPath(forExpression: repeatWhileStmt.conditionExpression)
   }
 
   private func nPath(_ switchStmt: SwitchStatement) -> Int {
-    return nPath(switchStmt.expression) + switchStmt.cases.reduce(0) {
+    let npExpr = nPath(forExpression: switchStmt.expression)
+
+    if switchStmt.cases.isEmpty {
+      return 1 + npExpr
+    }
+
+    return npExpr + switchStmt.cases.reduce(0) {
       switch $1 {
-      case .case(_, let stmts):
-        return nPath(stmts) + $0
+      case let .case(items, stmts):
+        let npItems = items.reduce(0) { carryOver, item in
+          let npWhere = item.whereExpression.map({ nPath(forExpression: $0) + 1 }) ?? 0
+          return carryOver + npWhere
+        }
+        return npItems + nPath(stmts) + $0
       case .default(let stmts):
         return nPath(stmts) + $0
       }
@@ -126,10 +136,50 @@ public class NPathComplexity {
       nPath(whileStmt.conditionList)
   }
 
-  private func nPath(_ conditionList: ConditionList) -> Int {
-    if conditionList.count > 1 {
-      return conditionList.count - 1
+  private func nPath(forExpression expr: Expression) -> Int {
+    class NPathExpressionVisitor : ASTVisitor {
+      var _count = 0
+      func cal(_ expr: Expression) -> Int {
+        _count = 0
+        do {
+          _ = try traverse(expr)
+          return _count
+        } catch {
+          return 0
+        }
+      }
+
+      func visit(_ biOpExpr: BinaryOperatorExpression) throws -> Bool {
+        let biOp = biOpExpr.binaryOperator
+        if biOp == "&&" || biOp == "||" {
+          _count += 1
+        }
+        return true
+      }
+
+      func visit(_ ternaryExpr: TernaryConditionalOperatorExpression) throws -> Bool {
+        _count += 1
+        return true
+      }
     }
-    return 0
+
+    return NPathExpressionVisitor().cal(expr)
+  }
+
+  private func nPath(_ conditionList: ConditionList) -> Int {
+    return conditionList.reduce(0) {
+      switch $1 {
+      case .expression(let expr):
+        return $0 + 1 + nPath(forExpression: expr)
+      case .case(_, let expr):
+        return $0 + 1 + nPath(forExpression: expr)
+      case .let(_, let expr):
+        return $0 + 1 + nPath(forExpression: expr)
+      case .var(_, let expr):
+        return $0 + 1 + nPath(forExpression: expr)
+      default:
+        return $0 + 1
+      }
+    } - 1
   }
 }

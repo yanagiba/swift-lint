@@ -32,6 +32,8 @@ class NPathComplexityTests : XCTestCase {
     XCTAssertEqual(getNPathComplexity(for: "continue"), 1)
     XCTAssertEqual(getNPathComplexity(for: "continue;continue"), 1)
     XCTAssertEqual(getNPathComplexity(for: "fallthrough;fallthrough"), 1)
+    XCTAssertEqual(getNPathComplexity(for: "foo;foo"), 1)
+    XCTAssertEqual(getNPathComplexity(for: "1\n2"), 1)
   }
 
   func testDeferStatement() {
@@ -46,6 +48,7 @@ class NPathComplexityTests : XCTestCase {
     XCTAssertEqual(getNPathComplexity(for: "do {} catch {}"), 2)
     XCTAssertEqual(getNPathComplexity(for: "do {} catch e1 { if foo {} }"), 3)
     XCTAssertEqual(getNPathComplexity(for: "do {} catch e1 where bar { if foo {} }"), 4)
+    XCTAssertEqual(getNPathComplexity(for: "do {} catch e1 where bar && foo { if foo {} }"), 5)
     XCTAssertEqual(getNPathComplexity(for: "do {} catch e1 where bar { if foo {} } catch e2 {}"), 5)
     XCTAssertEqual(getNPathComplexity(for: "do {} catch e1 where bar { if foo {} } catch e2 {} catch {}"), 6)
   }
@@ -61,12 +64,12 @@ class NPathComplexityTests : XCTestCase {
     XCTAssertEqual(getNPathComplexity(for: "guard foo else {}; guard bar else {}"), 4)
     XCTAssertEqual(getNPathComplexity(for: "guard foo, bar else {}"), 3)
     XCTAssertEqual(getNPathComplexity(for: "guard foo, bar, x else {}"), 4)
-    // XCTAssertEqual(getNPathComplexity(for: "guard foo, bar, x || y else {}"), 5)
+    XCTAssertEqual(getNPathComplexity(for: "guard foo, bar, x || y else {}"), 5)
   }
 
   func testIfStatement() {
     XCTAssertEqual(getNPathComplexity(for: "if foo {}"), 2)
-    XCTAssertEqual(getNPathComplexity(for: "if foo {}; if bar {}"), 4)
+    XCTAssertEqual(getNPathComplexity(for: "if foo {}; if bar {}; foo"), 4)
     XCTAssertEqual(getNPathComplexity(for: "if foo, bar {}"), 3)
     XCTAssertEqual(getNPathComplexity(for: "if foo {} else {}"), 2)
     XCTAssertEqual(getNPathComplexity(for: "if foo {} else if bar {}"), 3)
@@ -79,27 +82,31 @@ class NPathComplexityTests : XCTestCase {
     XCTAssertEqual(getNPathComplexity(for: "foo: while foo {}"), 2)
     XCTAssertEqual(getNPathComplexity(for: "foo: repeat {} while foo"), 2)
     XCTAssertEqual(getNPathComplexity(for: "foo: if foo {}"), 2)
-    XCTAssertEqual(getNPathComplexity(for: "foo: switch foo {}"), 0)
+    XCTAssertEqual(getNPathComplexity(for: "foo: switch foo {}"), 1)
     XCTAssertEqual(getNPathComplexity(for: "foo: do {}"), 1)
   }
 
   func testRepeatWhileStatement() {
     XCTAssertEqual(getNPathComplexity(for: "repeat {} while foo"), 2)
     XCTAssertEqual(getNPathComplexity(for: "repeat { if bar {} } while foo"), 3)
-    // XCTAssertEqual(getNPathComplexity(for: "repeat { if bar {} } while foo && bar"), 4)
+    XCTAssertEqual(getNPathComplexity(for: "repeat { if bar {} } while foo && bar"), 4)
   }
 
   func testReturnStatement() {
     XCTAssertEqual(getNPathComplexity(for: "return"), 1)
     XCTAssertEqual(getNPathComplexity(for: "return foo"), 1)
-    // XCTAssertEqual(getNPathComplexity(for: "return foo && bar"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "return foo && bar"), 2)
   }
 
   func testSwitchStatement() {
-    XCTAssertEqual(getNPathComplexity(for: "switch foo {}"), 0)
+    XCTAssertEqual(getNPathComplexity(for: "switch foo {}"), 1)
     XCTAssertEqual(getNPathComplexity(for: "switch bar { case a: break }"), 1)
     XCTAssertEqual(getNPathComplexity(for: "switch bar { case a: break\ncase b: break }"), 2)
     XCTAssertEqual(getNPathComplexity(for: "switch bar { case a: if x {};if y {} }"), 4)
+    XCTAssertEqual(getNPathComplexity(for: "switch bar { case a where a == b: break }"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "switch bar { case a where a && b: break }"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "switch bar { case a, b, c: break }"), 1)
+    XCTAssertEqual(getNPathComplexity(for: "switch bar { case a where a == x, b, c where c && y: break }"), 4)
     XCTAssertEqual(getNPathComplexity(for: "switch bar { default: break }"), 1)
     XCTAssertEqual(getNPathComplexity(for: "switch bar { case a: break\ndefault: break }"), 2)
     XCTAssertEqual(getNPathComplexity(for: "switch bar { case a: break\ncase b: break\ndefault: break }"), 3)
@@ -107,15 +114,39 @@ class NPathComplexityTests : XCTestCase {
 
   func testThrowStatement() {
     XCTAssertEqual(getNPathComplexity(for: "throw foo"), 1)
-    // XCTAssertEqual(getNPathComplexity(for: "throw foo && bar"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "throw foo && bar"), 2)
   }
 
   func testWhileStatement() {
     XCTAssertEqual(getNPathComplexity(for: "while foo {}"), 2)
     XCTAssertEqual(getNPathComplexity(for: "while foo { if bar {} }"), 3)
-    // XCTAssertEqual(getNPathComplexity(for: "while foo && bar { if bar {} }"), 4)
+    XCTAssertEqual(getNPathComplexity(for: "while foo && bar { if bar {} }"), 4)
     XCTAssertEqual(getNPathComplexity(for: "while foo, bar {}"), 3)
-    // XCTAssertEqual(getNPathComplexity(for: "while foo, bar, x || y {}"), 5)
+    XCTAssertEqual(getNPathComplexity(for: "while foo, bar, x || y {}"), 5)
+  }
+
+  func testExpressions() {
+    // binary operators
+    XCTAssertEqual(getNPathComplexity(for: "foo"), 1)
+    XCTAssertEqual(getNPathComplexity(for: "foo && bar"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "foo || bar"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "x || y && z ++ p"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if foo && bar {}"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if foo || bar {}"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if x || y && z ++ p {}"), 4)
+    // function calls
+    XCTAssertEqual(getNPathComplexity(for: "foo()"), 1)
+    XCTAssertEqual(getNPathComplexity(for: "foo() && bar()"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "foo() || bar()"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "x() || y() && z() ++ p()"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if foo() && bar() {}"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if foo() || bar() {}"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if x() || y() && z() ++ p() {}"), 4)
+    // ternary conditional operators
+    XCTAssertEqual(getNPathComplexity(for: "foo ? t : f"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "foo && bar ? t : f"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if foo ? t : f {}"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if foo || bar ? t : f {}"), 4)
   }
 
 
@@ -148,5 +179,6 @@ class NPathComplexityTests : XCTestCase {
     ("testSwitchStatement", testSwitchStatement),
     ("testThrowStatement", testThrowStatement),
     ("testWhileStatement", testWhileStatement),
+    ("testExpressions", testExpressions),
   ]
 }
