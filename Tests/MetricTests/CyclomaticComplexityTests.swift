@@ -29,6 +29,9 @@ class CyclomaticComplexityTests : XCTestCase {
   func testDoStmt() {
     XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() }"), 1)
     XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 where x {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 where x || y {}"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 where x {} catch e1 where y {}"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 {} catch e2 {}"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "do { try bar() } catch e1 {} catch e2 {} catch {}"), 4)
   }
@@ -43,6 +46,7 @@ class CyclomaticComplexityTests : XCTestCase {
 
   func testIfStmt() {
     XCTAssertEqual(getCyclomaticComplexity(for: "if bar {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if bar && bar {}"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "if bar {} else {}"), 2)
     XCTAssertEqual(getCyclomaticComplexity(for: "if bar1 {} else if bar2 {}"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "if bar1 {} else if bar2 {} else if bar3 {}"), 4)
@@ -56,6 +60,9 @@ class CyclomaticComplexityTests : XCTestCase {
   func testSwitchStatement() {
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar {}"), 1)
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break }"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a, b: break }"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a, b where b: break }"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a, b where b && c: break }"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break\ncase b: break }"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { default: break }"), 1)
     XCTAssertEqual(getCyclomaticComplexity(for: "switch bar { case a: break\ndefault: break }"), 2)
