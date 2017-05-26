@@ -83,6 +83,10 @@ public class NonCommentingSourceStatements {
       return ncss(structDecl)
     case let subscriptDecl as SubscriptDeclaration:
       return ncss(subscriptDecl)
+    case let constantDecl as ConstantDeclaration:
+      return ncss(constantDecl)
+    case let variableDecl as VariableDeclaration:
+      return ncss(variableDecl)
     case let expr as Expression:
       return ncss(expr)
     default:
@@ -192,10 +196,54 @@ public class NonCommentingSourceStatements {
     switch subscriptDecl.body {
     case .codeBlock(let codeBlock):
       ncssBody = codeBlock.ncssCount
-    default:
-      ncssBody = 1
+    case .getterSetterBlock(let block):
+      ncssBody = ncss(block)
+    case .getterSetterKeywordBlock(let block):
+      ncssBody = ncss(block)
     }
     return 1 + ncssBody
+  }
+
+  private func ncss(_ constDecl: ConstantDeclaration) -> Int {
+    return 1 + ncss(constDecl.initializerList)
+  }
+
+  private func ncss(_ varDecl: VariableDeclaration) -> Int {
+    switch varDecl.body {
+    case .initializerList(let list):
+      return 1 + ncss(list)
+    case .codeBlock(_, _, let block):
+      return 1 + block.ncssCount
+    case .getterSetterBlock(_, _, let block):
+      return 1 + ncss(block)
+    case .getterSetterKeywordBlock(_, _, let block):
+      return 1 + ncss(block)
+    case let .willSetDidSetBlock(_, _, expr, block):
+      let ncssExpr = expr.map({ ncss($0) - 1 }) ?? 0
+      return 1 + ncssExpr + ncss(block)
+    }
+  }
+
+  private func ncss(_ initList: [PatternInitializer]) -> Int {
+    return initList.flatMap({ $0.initializerExpression })
+      .map({ ncss($0) - 1 })
+      .reduce(0, +)
+  }
+
+  private func ncss(_ block: GetterSetterBlock) -> Int {
+    let ncssGetter = block.getter.codeBlock.ncssCount + 1
+    let ncssSetter = block.setter.map({ $0.codeBlock.ncssCount + 1 }) ?? 0
+    return ncssGetter + ncssSetter
+  }
+
+  private func ncss(_ block: GetterSetterKeywordBlock) -> Int {
+    return 1 + (block.setter == nil ? 0 : 1)
+  }
+
+  private func ncss(_ block: WillSetDidSetBlock) -> Int {
+    let ncssWillSet = block.willSetClause.map({ $0.codeBlock.ncssCount + 1 }) ?? 0
+    let ncssDidSet = block.didSetClause.map({ $0.codeBlock.ncssCount + 1 }) ?? 0
+    return ncssWillSet + ncssDidSet
   }
 
   private func ncss(_ expr: Expression) -> Int {

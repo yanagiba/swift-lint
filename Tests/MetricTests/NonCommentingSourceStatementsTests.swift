@@ -146,7 +146,7 @@ class NonCommentingSourceStatementsTests : XCTestCase {
 
   func testSingleLineDeclarations() {
     XCTAssertEqual(getNCSS(for: "let a = 1"), 1)
-    XCTAssertEqual(getNCSS(for: "var a = 1"), 1) // TODO: need to take care when it contains a codeblock or getter/setter block etc
+    XCTAssertEqual(getNCSS(for: "var a = 1"), 1)
     XCTAssertEqual(getNCSS(for: "import foo"), 1)
     XCTAssertEqual(getNCSS(for: "prefix operator <!>"), 1)
     XCTAssertEqual(getNCSS(for: "typealias Foo = Bar"), 1)
@@ -156,6 +156,7 @@ class NonCommentingSourceStatementsTests : XCTestCase {
     XCTAssertEqual(getNCSS(for: "class foo {}"), 1)
     XCTAssertEqual(getNCSS(for: "class foo { let a = 1 }"), 2)
     XCTAssertEqual(getNCSS(for: "class foo { let a = 1\nfunc bar() {} }"), 3)
+    XCTAssertEqual(getNCSS(for: "class foo {\n#if blah\nlet a = 1\n#endif}"), 2)
   }
 
   func testInitAndDeinitDeclarations() {
@@ -177,12 +178,14 @@ class NonCommentingSourceStatementsTests : XCTestCase {
     XCTAssertEqual(getNCSS(for: "enum foo: Int { case a = 1 }"), 2)
     XCTAssertEqual(getNCSS(for: "enum foo: Int { case a = 1, b }"), 2)
     XCTAssertEqual(getNCSS(for: "enum foo: Int { case a = 1, b\ncase c }"), 3)
+    XCTAssertEqual(getNCSS(for: "enum foo {\n#if blah\nlet a = 1\n#endif}"), 2)
   }
 
   func testExtensionDeclaration() {
     XCTAssertEqual(getNCSS(for: "extension foo {}"), 1)
     XCTAssertEqual(getNCSS(for: "extension foo { let a = 1 }"), 2)
     XCTAssertEqual(getNCSS(for: "extension foo { let a = 1\nfunc bar() {} }"), 3)
+    XCTAssertEqual(getNCSS(for: "extension foo {\n#if blah\nlet a = 1\n#endif}"), 2)
   }
 
   func testFunctionDeclaration() {
@@ -202,18 +205,66 @@ class NonCommentingSourceStatementsTests : XCTestCase {
     XCTAssertEqual(getNCSS(for: "protocol foo {}"), 1)
     XCTAssertEqual(getNCSS(for: "protocol foo { var a: Int { get } }"), 2)
     XCTAssertEqual(getNCSS(for: "protocol foo { var a: Int { get } func bar() }"), 3)
+    XCTAssertEqual(getNCSS(for: "protocol foo {\n#if blah\nvar a: Int { get }\n#endif}"), 2)
   }
 
   func testStructDeclaration() {
     XCTAssertEqual(getNCSS(for: "struct foo {}"), 1)
     XCTAssertEqual(getNCSS(for: "struct foo { let a = 1 }"), 2)
     XCTAssertEqual(getNCSS(for: "struct foo { let a = 1\nfunc bar() {} }"), 3)
+    XCTAssertEqual(getNCSS(for: "struct foo {\n#if blah\nlet a = 1\n#endif}"), 2)
   }
 
   func testSubscriptDeclaration() {
     XCTAssertEqual(getNCSS(for: "subscript() -> Self {}"), 1)
     XCTAssertEqual(getNCSS(for: "subscript() -> Self { let a = 1 }"), 2)
     XCTAssertEqual(getNCSS(for: "subscript() -> Self { let a = 1\nfunc bar() {} }"), 3)
+    XCTAssertEqual(getNCSS(for: "subscript() -> Self { get { return _foo } }"), 3)
+    XCTAssertEqual(getNCSS(for: "subscript() -> Self { get { let a = 1;return _foo } }"), 4)
+    XCTAssertEqual(getNCSS(for: "subscript() -> Self { get { return _foo } set { _foo = newValue } }"), 5)
+    XCTAssertEqual(getNCSS(for: "subscript() -> Self { get { return _foo } set { let a = 1; _foo = newValue } }"), 6)
+    XCTAssertEqual(getNCSS(for: "subscript() -> Self { get }"), 2)
+    XCTAssertEqual(getNCSS(for: "subscript() -> Self { get set }"), 3)
+  }
+
+  func testConstantAndVariableDeclarations() {
+    XCTAssertEqual(getNCSS(for: "let a = foo { }"), 1)
+    XCTAssertEqual(getNCSS(for: "let a, b"), 1)
+    XCTAssertEqual(getNCSS(for: "let a = foo { }, b"), 1)
+    XCTAssertEqual(getNCSS(for: "let a = foo { }, b = bar {}"), 1)
+    XCTAssertEqual(getNCSS(for: "let a = foo { a in }"), 1)
+    XCTAssertEqual(getNCSS(for: "let a = foo { f }, b"), 2)
+    XCTAssertEqual(getNCSS(for: "let a, b = foo { f }"), 2)
+    XCTAssertEqual(getNCSS(for: "let a = foo { f }, b = bar { b }"), 3)
+    XCTAssertEqual(getNCSS(for: "let a = foo { a;b;c}"), 4)
+    XCTAssertEqual(getNCSS(for: "let a = foo { a in a;b;c}"), 4)
+    XCTAssertEqual(getNCSS(for: "var a = foo { }"), 1)
+    XCTAssertEqual(getNCSS(for: "var a, b"), 1)
+    XCTAssertEqual(getNCSS(for: "var a = foo { }, b"), 1)
+    XCTAssertEqual(getNCSS(for: "var a = foo { }, b = bar {}"), 1)
+    XCTAssertEqual(getNCSS(for: "var a = foo { a in }"), 1)
+    XCTAssertEqual(getNCSS(for: "var a = foo { f }, b"), 2)
+    XCTAssertEqual(getNCSS(for: "var a, b = foo { f }"), 2)
+    XCTAssertEqual(getNCSS(for: "var a = foo { f }, b = bar { b }"), 3)
+    XCTAssertEqual(getNCSS(for: "var a = foo { a;b;c}"), 4)
+    XCTAssertEqual(getNCSS(for: "var a = foo { a in a;b;c}"), 4)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { let a = 1 }"), 2)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { let a = 1\nfunc bar() {} }"), 3)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { get { return _foo } }"), 3)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { get { let a = 1;return _foo } }"), 4)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { get { return _foo } set { _foo = newValue } }"), 5)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { get { return _foo } set { let a = 1; _foo = newValue } }"), 6)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { get }"), 2)
+    XCTAssertEqual(getNCSS(for: "var a: Foo { get set }"), 3)
+    XCTAssertEqual(getNCSS(for: "var foo: Foo { willSet { print(newValue) } }"), 3)
+    XCTAssertEqual(getNCSS(for: "var foo: Foo { didSet { print(newValue) } }"), 3)
+    XCTAssertEqual(getNCSS(for: "var foo: Foo { willSet { print(newValue) } didSet { print(newValue) } }"), 5)
+    XCTAssertEqual(getNCSS(for: "var foo = _foo { willSet { print(newValue) } }"), 3)
+    XCTAssertEqual(getNCSS(for: "var foo = _foo { didSet { print(newValue) } }"), 3)
+    XCTAssertEqual(getNCSS(for: "var foo = _foo { willSet { print(newValue) } didSet { print(newValue) } }"), 5)
+    XCTAssertEqual(getNCSS(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } }"), 6)
+    XCTAssertEqual(getNCSS(for: "var foo = _foo { a;b;c } { didSet { print(newValue) } }"), 6)
+    XCTAssertEqual(getNCSS(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } didSet { print(newValue) } }"), 8)
   }
 
   private func getNCSS(for content: String) -> Int {
@@ -253,5 +304,6 @@ class NonCommentingSourceStatementsTests : XCTestCase {
     ("testProtocolDeclaration", testProtocolDeclaration),
     ("testStructDeclaration", testStructDeclaration),
     ("testSubscriptDeclaration", testSubscriptDeclaration),
+    ("testConstantAndVariableDeclarations", testConstantAndVariableDeclarations),
   ]
 }

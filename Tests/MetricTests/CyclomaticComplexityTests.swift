@@ -86,6 +86,9 @@ class CyclomaticComplexityTests : XCTestCase {
   func testConditionList() {
     XCTAssertEqual(getCyclomaticComplexity(for: "while a, b {}"), 3)
     XCTAssertEqual(getCyclomaticComplexity(for: "if a, b, c {}"), 4)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if case .foo = bar {}"), 2)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if let a = b, let c = d {}"), 3)
+    XCTAssertEqual(getCyclomaticComplexity(for: "if var x = y {}"), 2)
     XCTAssertEqual(getCyclomaticComplexity(for: "guard a, b, c || d else {}"), 5)
   }
 
