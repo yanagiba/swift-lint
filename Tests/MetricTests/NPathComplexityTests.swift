@@ -75,6 +75,9 @@ class NPathComplexityTests : XCTestCase {
     XCTAssertEqual(getNPathComplexity(for: "if foo {} else if bar {}"), 3)
     XCTAssertEqual(getNPathComplexity(for: "if foo {} else if bar {} else {}"), 3)
     XCTAssertEqual(getNPathComplexity(for: "if foo {} else if bar {} else if x {} else if y {} else {}"), 5)
+    XCTAssertEqual(getNPathComplexity(for: "if case .foo = bar {}"), 2)
+    XCTAssertEqual(getNPathComplexity(for: "if let a = b, let c = d {}"), 3)
+    XCTAssertEqual(getNPathComplexity(for: "if var x = y {}"), 2)
   }
 
   func testLabeledStatement() {
