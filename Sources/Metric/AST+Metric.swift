@@ -21,11 +21,28 @@ public extension Declaration {
     let calculator = CyclomaticComplexity()
     return calculator.calculate(for: self)
   }
+
+  public var ncssCount: Int {
+    let calculator = NonCommentingSourceStatements()
+    return calculator.calculate(for: self)
+  }
+}
+
+public extension TopLevelDeclaration {
+  public var ncssCount: Int {
+    let calculator = NonCommentingSourceStatements()
+    return calculator.calculate(for: self)
+  }
 }
 
 public extension CodeBlock {
   public var nPathComplexity: Int {
     let calculator = NPathComplexity()
+    return calculator.calculate(for: self)
+  }
+
+  public var ncssCount: Int {
+    let calculator = NonCommentingSourceStatements()
     return calculator.calculate(for: self)
   }
 }

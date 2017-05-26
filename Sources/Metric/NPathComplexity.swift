@@ -139,6 +139,7 @@ public class NPathComplexity {
   private func nPath(forExpression expr: Expression) -> Int {
     class NPathExpressionVisitor : ASTVisitor {
       var _count = 0
+
       func cal(_ expr: Expression) -> Int {
         _count = 0
         do {
