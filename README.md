@@ -1,9 +1,12 @@
 # Swift Lint
 
+[![swift-ast 0.2.0](https://img.shields.io/badge/swift‐ast-0.2.0-C70025.svg)](https://github.com/yanagiba/swift-ast)
+[![swift-lint master](https://img.shields.io/badge/swift‐lint-master-C70025.svg)](https://github.com/yanagiba/swift-lint)
+[![swift-format pending](https://img.shields.io/badge/swift‐format-pending-C70025.svg)](https://github.com/yanagiba/swift-format)
+
 [![Travis CI Status](https://api.travis-ci.org/yanagiba/swift-lint.svg?branch=master)](https://travis-ci.org/yanagiba/swift-lint)
 [![codecov](https://codecov.io/gh/yanagiba/swift-lint/branch/master/graph/badge.svg)](https://codecov.io/gh/yanagiba/swift-lint)
 ![Swift 3.1](https://img.shields.io/badge/swift-3.1-brightgreen.svg)
-[![swift-ast 0.2.0](https://img.shields.io/badge/swift‐ast-0.2.0-C70025.svg)](https://github.com/yanagiba/swift-ast)
 ![Swift Package Manager](https://img.shields.io/badge/SPM-ready-orange.svg)
 ![Platforms](https://img.shields.io/badge/platform-%20Linux%20|%20macOS%20-red.svg)
 ![License](https://img.shields.io/github/license/yanagiba/swift-lint.svg)

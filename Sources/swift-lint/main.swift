@@ -31,6 +31,9 @@ for filePath in filePaths {
   sourceFiles.append(sourceFile)
 }
 
-let driver = Driver(ruleIdentifiers: ["no_force_cast"])
+let driver = Driver(ruleIdentifiers: [
+  "no_force_cast", // TODO: need better approach
+  "high_cyclomatic_complexity",
+])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)
