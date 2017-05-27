@@ -45,4 +45,9 @@ public extension CodeBlock {
     let calculator = NonCommentingSourceStatements()
     return calculator.calculate(for: self)
   }
+
+  public var depth: Int {
+    let calculator = CodeBlockDepth()
+    return calculator.calculate(for: self)
+  }
 }

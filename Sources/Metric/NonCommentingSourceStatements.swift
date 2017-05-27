@@ -36,7 +36,7 @@ public class NonCommentingSourceStatements {
   }
 
   private func ncss(_ stmts: [Statement]) -> Int {
-    return stmts.reduce(0) { return $0 + ncss($1) }
+    return stmts.reduce(0) { $0 + ncss($1) }
   }
 
   private func ncss(_ stmt: Statement) -> Int {

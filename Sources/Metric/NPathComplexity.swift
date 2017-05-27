@@ -33,7 +33,7 @@ public class NPathComplexity {
   }
 
   private func nPath(_ stmts: [Statement]) -> Int {
-    return stmts.reduce(1) { return $0 * nPath($1) }
+    return stmts.reduce(1) { $0 * nPath($1) }
   }
 
   private func nPath(_ stmt: Statement) -> Int {
