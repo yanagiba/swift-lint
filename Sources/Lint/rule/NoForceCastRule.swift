@@ -19,15 +19,9 @@ import Foundation
 import AST
 
 class NoForceCastRule: RuleBase, ASTVisitorRule {
-  var name: String {
-    return "No Force Cast"
-  }
-  var description: String {
-    return ""
-  }
-  var markdown: String {
-    return ""
-  }
+  let name = "No Force Cast"
+  let description = ""
+  let markdown = ""
 
   func visit(_ typeCasting: TypeCastingOperatorExpression) throws -> Bool {
     if case .forcedCast = typeCasting.kind {
