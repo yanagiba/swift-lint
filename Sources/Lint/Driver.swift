@@ -58,7 +58,10 @@ public class Driver: NSObject {
     _outputHandle = outputHandle
   }
 
-  @discardableResult public func lint(sourceFiles: [SourceFile]) -> Int32 {
+  @discardableResult public func lint(
+    sourceFiles: [SourceFile],
+    ruleConfigurations: [String: Any]? = nil
+  ) -> Int32 {
     IssuePool.shared.clearIssues()
 
     _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
@@ -76,7 +79,7 @@ public class Driver: NSObject {
         ASTContext(sourceFile: sourceFile, topLevelDeclaration: result)
 
       for rule in _rules {
-        rule.inspect(astContext, configurations: nil)
+        rule.inspect(astContext, configurations: ruleConfigurations)
       }
     }
 

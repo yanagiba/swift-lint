@@ -22,13 +22,15 @@ import Foundation
 @testable import Lint
 
 extension String {
-  func inspect(withRule rule: Rule) -> [Issue] {
+  func inspect(withRule rule: Rule, configurations: [String: Any]? = nil) -> [Issue] {
     let issueCollector = TestIssueCollector()
     let testDriver = Driver()
     testDriver.setReporter(issueCollector)
     testDriver.registerRule(rule, ruleIdentifiers: [rule.identifier])
     testDriver.updateOutputHandle(.nullDevice)
-    testDriver.lint(sourceFiles: [SourceFile(path: "test/test", content: self)])
+    testDriver.lint(
+      sourceFiles: [SourceFile(path: "test/test", content: self)],
+      ruleConfigurations: configurations)
     return issueCollector.issues
   }
 }
