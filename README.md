@@ -13,7 +13,7 @@ defects by inspecting [Swift](https://swift.org/about/) code and looking for
 potential problems like possible bugs, unused code, complicated code, redundant
 code, code smells, bad practices, and so on.
 
-Swift Lint replies on the [abstract syntax tree](https://github.com/yanagiba/swift-ast)
+Swift Lint relies on the [abstract syntax tree](https://github.com/yanagiba/swift-ast)
 of the source code for better accuracy and efficiency.
 
 * * *

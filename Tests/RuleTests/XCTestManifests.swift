@@ -20,6 +20,7 @@ import XCTest
 public func allTests() -> [XCTestCaseEntry] {
   return [
     testCase(NoForceCastRuleTests.allTests),
+    testCase(CyclomaticComplexityRuleTests.allTests),
   ]
 }
 #endif
