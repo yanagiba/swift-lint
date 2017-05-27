@@ -1,5 +1,5 @@
 /*
-   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,16 +16,13 @@
 
 import XCTest
 
-import CanaryTests
-import MetricTests
-import LintTests
-import RuleTests
-import ReporterTests
-
-var tests = [XCTestCaseEntry]()
-tests += CanaryTests.allTests()
-tests += MetricTests.allTests()
-tests += LintTests.allTests()
-tests += RuleTests.allTests()
-tests += ReporterTests.allTests()
-XCTMain(tests)
+#if !os(macOS)
+public func allTests() -> [XCTestCaseEntry] {
+  return [
+    testCase(CyclomaticComplexityTests.allTests),
+    testCase(NPathComplexityTests.allTests),
+    testCase(NonCommentingSourceStatementsTests.allTests),
+    testCase(CodeBlockDepthTests.allTests),
+  ]
+}
+#endif
