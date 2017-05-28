@@ -20,7 +20,7 @@ import XCTest
 
 class NPathComplexityRuleTests : XCTestCase {
   func testEmptyCodeBlock() {
-    XCTAssertTrue(getIssues(from: "func foo() {}").isEmpty)
+    XCTAssertTrue(getIssues(from: "func foo()").isEmpty)
     XCTAssertTrue(getIssues(from: "init() {}").isEmpty)
     XCTAssertTrue(getIssues(from: "deinit {}").isEmpty)
     XCTAssertTrue(getIssues(from: "subscript() -> Self {}").isEmpty)
