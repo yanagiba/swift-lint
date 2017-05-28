@@ -36,6 +36,7 @@ let driver = Driver(ruleIdentifiers: [
   "high_cyclomatic_complexity",
   "high_npath_complexity",
   "high_ncss",
+  "nested_code_block_depth",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)
