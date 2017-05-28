@@ -19,7 +19,7 @@ import Foundation
 import Source
 import Parser
 
-public class Driver: NSObject {
+public class Driver {
   private var _reporter: Reporter
   private var _rules: [Rule]
   private var _outputHandle: FileHandle
@@ -38,10 +38,11 @@ public class Driver: NSObject {
     _rules = []
     _outputHandle = outputHandle
 
-    super.init()
-
     registerRule(NoForceCastRule(), ruleIdentifiers: rules) // TODO: need better approach
     registerRule(CyclomaticComplexityRule(), ruleIdentifiers: rules)
+    registerRule(NPathComplexityRule(), ruleIdentifiers: rules)
+    registerRule(NCSSRule(), ruleIdentifiers: rules)
+    registerRule(NestedCodeBlockDepthRule(), ruleIdentifiers: rules)
   }
 
 

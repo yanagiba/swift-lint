@@ -34,6 +34,9 @@ for filePath in filePaths {
 let driver = Driver(ruleIdentifiers: [
   "no_force_cast", // TODO: need better approach
   "high_cyclomatic_complexity",
+  "high_npath_complexity",
+  "high_ncss",
+  "nested_code_block_depth",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)

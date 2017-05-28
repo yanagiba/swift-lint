@@ -24,7 +24,7 @@ protocol SourceCodeRule : Rule {
   func inspect(line: String, lineNumber: Int)
 }
 
-extension SourceCodeRule where Self: RuleBase {
+extension SourceCodeRule where Self : RuleBase {
   func inspect(_ astContext: ASTContext, configurations: [String: Any]? = nil) {
     self.astContext = astContext
     self.configurations = configurations
