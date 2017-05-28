@@ -42,6 +42,7 @@ public class Driver: NSObject {
 
     registerRule(NoForceCastRule(), ruleIdentifiers: rules) // TODO: need better approach
     registerRule(CyclomaticComplexityRule(), ruleIdentifiers: rules)
+    registerRule(NPathComplexityRule(), ruleIdentifiers: rules)
   }
 
 
