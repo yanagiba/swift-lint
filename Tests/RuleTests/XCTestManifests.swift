@@ -22,6 +22,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(NoForceCastRuleTests.allTests),
     testCase(CyclomaticComplexityRuleTests.allTests),
     testCase(NPathComplexityRuleTests.allTests),
+    testCase(NCSSRuleTests.allTests),
   ]
 }
 #endif
