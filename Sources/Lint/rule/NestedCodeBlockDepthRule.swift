@@ -21,7 +21,7 @@ import AST
 import Metric
 
 class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
-  static let ThresholdKey = "NestedCodeBlockDepth"
+  static let ThresholdKey = "NESTED_CODE_BLOCK_DEPTH"
   static let DefaultThreshold = 5
 
   let name = "Nested Code Block Depth"
