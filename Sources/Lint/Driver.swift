@@ -38,20 +38,32 @@ public class Driver {
     _rules = []
     _outputHandle = outputHandle
 
-    registerRule(NoForceCastRule(), ruleIdentifiers: rules) // TODO: need better approach
-    registerRule(CyclomaticComplexityRule(), ruleIdentifiers: rules)
-    registerRule(NPathComplexityRule(), ruleIdentifiers: rules)
-    registerRule(NCSSRule(), ruleIdentifiers: rules)
-    registerRule(NestedCodeBlockDepthRule(), ruleIdentifiers: rules)
+    registerRules(basedOn: rules)
   }
-
 
   func setReporter(_ reporter: Reporter) {
     _reporter = reporter
   }
 
-  func registerRule(_ rule: Rule, ruleIdentifiers rules: [String]) {
-    if rules.contains(rule.identifier) {
+  func registerRules(basedOn ruleIdentifiers: [String]) {
+    let rules: [Rule] = [
+      NoForceCastRule(), // TODO: this is clearly an OCP violation, I would take a technical debt here, and fix it in the near future
+      CyclomaticComplexityRule(),
+      NPathComplexityRule(),
+      NCSSRule(),
+      NestedCodeBlockDepthRule(),
+    ]
+    registerRules(rules, ruleIdentifiers: ruleIdentifiers)
+  }
+
+  func registerRules(_ rules: [Rule], ruleIdentifiers: [String]) {
+    for rule in rules {
+      registerRule(rule, ruleIdentifiers: ruleIdentifiers)
+    }
+  }
+
+  func registerRule(_ rule: Rule, ruleIdentifiers: [String]) {
+    if ruleIdentifiers.contains(rule.identifier) {
       _rules.append(rule)
     }
   }

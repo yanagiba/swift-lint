@@ -32,7 +32,7 @@ class NoForceCastRuleTests : XCTestCase {
     XCTAssertEqual(issue.ruleIdentifier, "no_force_cast")
     XCTAssertEqual(issue.description, "having forced type casting is dangerous")
     XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.severity, .minor)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)

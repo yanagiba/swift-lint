@@ -45,7 +45,7 @@ fileprivate class TestDriverRule : Rule {
       location: SourceRange(
         start: SourceLocation(path: "test/testDriver", line: 0, column: 0),
         end: SourceLocation(path: "test/testDriver", line: 0, column: 0)),
-      severity: .normal,
+      severity: .major,
       correction: nil))
   }
 }
@@ -67,7 +67,7 @@ class DriverTests : XCTestCase {
     let testDriver = Driver()
     testDriver.updateOutputHandle(.nullDevice)
     testDriver.setReporter(testDriverReporter)
-    testDriver.registerRule(TestDriverRule(), ruleIdentifiers: ["test_driver"])
+    testDriver.registerRules([TestDriverRule()], ruleIdentifiers: ["test_driver"])
     testDriver.lint(sourceFiles: [
       SourceFile(path: "test/testDriver", content: "import foo"),
     ])
@@ -80,7 +80,7 @@ class DriverTests : XCTestCase {
     let testDriver = Driver()
     testDriver.updateOutputHandle(.nullDevice)
     testDriver.setReporter(testDriverReporter)
-    testDriver.registerRule(TestDriverRule(), ruleIdentifiers: ["not_implemented"])
+    testDriver.registerRules([TestDriverRule()], ruleIdentifiers: ["not_implemented"])
     testDriver.lint(sourceFiles: [
       SourceFile(path: "test/testDriver", content: "import foo"),
     ])

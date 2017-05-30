@@ -32,8 +32,8 @@ class NPathComplexityRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "high_npath_complexity")
     XCTAssertEqual(issue.description, "NPath Complexity number of 2 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .complexity)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)
@@ -49,8 +49,8 @@ class NPathComplexityRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "high_npath_complexity")
     XCTAssertEqual(issue.description, "NPath Complexity number of 4 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .complexity)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)
@@ -66,8 +66,8 @@ class NPathComplexityRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "high_npath_complexity")
     XCTAssertEqual(issue.description, "NPath Complexity number of 2 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .complexity)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)
@@ -83,8 +83,8 @@ class NPathComplexityRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "high_npath_complexity")
     XCTAssertEqual(issue.description, "NPath Complexity number of 4 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .complexity)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)

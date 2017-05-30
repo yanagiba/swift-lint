@@ -22,17 +22,14 @@ class NoForceCastRule: RuleBase, ASTVisitorRule {
   let name = "No Force Cast"
   let description = ""
   let markdown = ""
+  let severity = Issue.Severity.minor
+  let category = Issue.Category.badPractice
 
   func visit(_ typeCasting: TypeCastingOperatorExpression) throws -> Bool {
     if case .forcedCast = typeCasting.kind {
-      let foundIssue = Issue(
-        ruleIdentifier: identifier,
-        description: "having forced type casting is dangerous",
-        category: .badPractice,
-        location: typeCasting.sourceRange,
-        severity: .normal,
-        correction: nil)
-      emitIssue(foundIssue)
+      emitIssue(
+        typeCasting.sourceRange,
+        description: "having forced type casting is dangerous")
     }
 
     return true

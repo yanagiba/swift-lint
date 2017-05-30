@@ -17,6 +17,7 @@
 import Foundation
 
 import AST
+import Source
 
 protocol Rule {
   var identifier: String { get }
@@ -24,7 +25,11 @@ protocol Rule {
   var description: String { get }
   var markdown: String { get }
 
+  var severity: Issue.Severity { get }
+  var category: Issue.Category { get }
+
   func emitIssue(_: Issue)
+  func emitIssue(_: SourceRange, description: String, correction: Correction?)
   func inspect(_: ASTContext, configurations: [String: Any]?)
 }
 
@@ -33,8 +38,31 @@ extension Rule {
     return name.toIdentifier
   }
 
+  var severity: Issue.Severity {
+    return .minor
+  }
+
+  var category: Issue.Category {
+    return .uncategorized
+  }
+
   func emitIssue(_ issue: Issue) {
     IssuePool.shared.add(issue: issue)
+  }
+
+  func emitIssue(
+    _ sourceRange: SourceRange,
+    description: String,
+    correction: Correction? = nil
+  ) {
+    let foundIssue = Issue(
+      ruleIdentifier: identifier,
+      description: description,
+      category: category,
+      location: sourceRange,
+      severity: severity,
+      correction: correction)
+    emitIssue(foundIssue)
   }
 }
 

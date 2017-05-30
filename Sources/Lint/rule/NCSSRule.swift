@@ -28,27 +28,22 @@ class NCSSRule : RuleBase, ASTVisitorRule {
   let identifier = "high_ncss"
   let description = ""
   let markdown = ""
+  let severity = Issue.Severity.major
+  let category = Issue.Category.readability
 
   private var threshold: Int {
-    if let config = configurations,
-      let customThreshold = config[NCSSRule.ThresholdKey] as? Int
-    {
-      return customThreshold
-    }
-    return NCSSRule.DefaultThreshold
+    return getConfiguration(
+      for: NCSSRule.ThresholdKey,
+      orDefault: NCSSRule.DefaultThreshold)
   }
 
   private func emitIssue(_ ncss: Int, _ sourceRange: SourceRange) {
-    if ncss > threshold {
-      let foundIssue = Issue(
-        ruleIdentifier: identifier,
-        description: "Method of \(ncss) NCSS exceeds limit of \(threshold)",
-        category: .badPractice,
-        location: sourceRange,
-        severity: .normal,
-        correction: nil)
-      emitIssue(foundIssue)
+    guard ncss > threshold else {
+      return
     }
+    emitIssue(
+      sourceRange,
+      description: "Method of \(ncss) NCSS exceeds limit of \(threshold)")
   }
 
   func visit(_ funcDecl: FunctionDeclaration) throws -> Bool {

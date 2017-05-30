@@ -58,7 +58,7 @@ class SourceCodeRuleTests : XCTestCase {
               path: sourceFile.path, line: lineNumber, column: startLocation),
             end: SourceLocation(
               path: sourceFile.path, line: lineNumber, column: endLocation)),
-          severity: .normal,
+          severity: .major,
           correction: nil))
       }
     }
