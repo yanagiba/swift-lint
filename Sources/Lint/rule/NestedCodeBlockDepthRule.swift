@@ -29,12 +29,9 @@ class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
   let markdown = ""
 
   private var threshold: Int {
-    if let config = configurations,
-      let customThreshold = config[NestedCodeBlockDepthRule.ThresholdKey] as? Int
-    {
-      return customThreshold
-    }
-    return NestedCodeBlockDepthRule.DefaultThreshold
+    return getConfiguration(
+      for: NestedCodeBlockDepthRule.ThresholdKey,
+      orDefault: NestedCodeBlockDepthRule.DefaultThreshold)
   }
 
   func visit(_ codeBlock: CodeBlock) throws -> Bool {

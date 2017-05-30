@@ -30,12 +30,9 @@ class NCSSRule : RuleBase, ASTVisitorRule {
   let markdown = ""
 
   private var threshold: Int {
-    if let config = configurations,
-      let customThreshold = config[NCSSRule.ThresholdKey] as? Int
-    {
-      return customThreshold
-    }
-    return NCSSRule.DefaultThreshold
+    return getConfiguration(
+      for: NCSSRule.ThresholdKey,
+      orDefault: NCSSRule.DefaultThreshold)
   }
 
   private func emitIssue(_ ncss: Int, _ sourceRange: SourceRange) {

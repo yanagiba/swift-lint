@@ -30,12 +30,9 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
   let markdown = ""
 
   private var threshold: Int {
-    if let config = configurations,
-      let customThreshold = config[CyclomaticComplexityRule.ThresholdKey] as? Int
-    {
-      return customThreshold
-    }
-    return CyclomaticComplexityRule.DefaultThreshold
+    return getConfiguration(
+      for: CyclomaticComplexityRule.ThresholdKey,
+      orDefault: CyclomaticComplexityRule.DefaultThreshold)
   }
 
   private func emitIssue(_ ccn: Int, _ sourceRange: SourceRange) {

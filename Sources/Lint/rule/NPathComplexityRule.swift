@@ -29,12 +29,9 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
   let markdown = ""
 
   private var threshold: Int {
-    if let config = configurations,
-      let customThreshold = config[NPathComplexityRule.ThresholdKey] as? Int
-    {
-      return customThreshold
-    }
-    return NPathComplexityRule.DefaultThreshold
+    return getConfiguration(
+      for: NPathComplexityRule.ThresholdKey,
+      orDefault: NPathComplexityRule.DefaultThreshold)
   }
 
   private func emitIssue(_ npath: Int, _ sourceRange: SourceRange) {

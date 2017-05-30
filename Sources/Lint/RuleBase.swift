@@ -17,4 +17,13 @@
 class RuleBase {
   var astContext: ASTContext?
   var configurations: [String: Any]?
+
+  func getConfiguration<T>(for key: String, orDefault defaultValue: T) -> T {
+    if let configurations = configurations,
+      let customThreshold = configurations[key] as? T
+    {
+      return customThreshold
+    }
+    return defaultValue
+  }
 }
