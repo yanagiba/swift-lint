@@ -19,7 +19,7 @@ import XCTest
 @testable import Lint
 
 class RuleProtocolTests : XCTestCase {
-  func testIdentifierConversion() {
+  func testDefaultImplementations() {
     class DoNothingRule : Rule {
       var name: String {
         return "Do Nothing"
@@ -32,6 +32,8 @@ class RuleProtocolTests : XCTestCase {
 
     let doNothingRule = DoNothingRule()
     XCTAssertEqual(doNothingRule.identifier, "do_nothing")
+    XCTAssertEqual(doNothingRule.severity, .minor)
+    XCTAssertEqual(doNothingRule.category, .uncategorized)
   }
 
   func testWhiteSpaces() {
@@ -85,7 +87,7 @@ class RuleProtocolTests : XCTestCase {
   }
 
   static var allTests = [
-    ("testIdentifierConversion", testIdentifierConversion),
+    ("testDefaultImplementations", testDefaultImplementations),
     ("testWhiteSpaces", testWhiteSpaces),
     ("testIdentifierImplementation", testIdentifierImplementation),
     ("testNameContainsPunctuations", testNameContainsPunctuations),
