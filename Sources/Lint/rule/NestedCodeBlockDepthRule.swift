@@ -27,6 +27,8 @@ class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
   let name = "Nested Code Block Depth"
   let description = ""
   let markdown = ""
+  let severity = Issue.Severity.major
+  let category = Issue.Category.readability
 
   private var threshold: Int {
     return getConfiguration(
@@ -37,14 +39,9 @@ class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
   func visit(_ codeBlock: CodeBlock) throws -> Bool {
     let codeBlockDpeth = codeBlock.depth
     if codeBlockDpeth > threshold {
-      let foundIssue = Issue(
-        ruleIdentifier: identifier,
-        description: "Code block depth of \(codeBlockDpeth) exceeds limit of \(threshold)",
-        category: .badPractice,
-        location: codeBlock.sourceRange,
-        severity: .normal,
-        correction: nil)
-      emitIssue(foundIssue)
+      emitIssue(
+        codeBlock.sourceRange,
+        description: "Code block depth of \(codeBlockDpeth) exceeds limit of \(threshold)")
     }
 
     return true

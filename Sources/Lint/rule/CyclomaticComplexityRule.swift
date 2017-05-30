@@ -28,6 +28,8 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
   let name = "High Cyclomatic Complexity"
   let description = ""
   let markdown = ""
+  let severity = Issue.Severity.major
+  let category = Issue.Category.complexity
 
   private var threshold: Int {
     return getConfiguration(
@@ -36,16 +38,12 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
   }
 
   private func emitIssue(_ ccn: Int, _ sourceRange: SourceRange) {
-    if ccn > threshold {
-      let foundIssue = Issue(
-        ruleIdentifier: identifier,
-        description: "Cyclomatic Complexity number of \(ccn) exceeds limit of \(threshold)",
-        category: .badPractice,
-        location: sourceRange,
-        severity: .normal,
-        correction: nil)
-      emitIssue(foundIssue)
+    guard ccn > threshold else {
+      return
     }
+    emitIssue(
+      sourceRange,
+      description: "Cyclomatic Complexity number of \(ccn) exceeds limit of \(threshold)")
   }
 
   func visit(_ funcDecl: FunctionDeclaration) throws -> Bool {

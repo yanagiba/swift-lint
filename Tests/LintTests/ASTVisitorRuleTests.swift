@@ -50,7 +50,7 @@ class ASTVisitorRuleTests : XCTestCase {
           description: "\(pathText) is not allowed in import declaration for testing purposes",
           category: .size,
           location: importDecl.sourceRange,
-          severity: .info,
+          severity: .cosmetic,
           correction: nil))
       }
 

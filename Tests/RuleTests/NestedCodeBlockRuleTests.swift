@@ -32,8 +32,8 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "nested_code_block_depth")
     XCTAssertEqual(issue.description, "Code block depth of 2 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .readability)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)
@@ -49,8 +49,8 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "nested_code_block_depth")
     XCTAssertEqual(issue.description, "Code block depth of 4 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .readability)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)
@@ -67,8 +67,8 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     let issue1 = issues[0]
     XCTAssertEqual(issue1.ruleIdentifier, "nested_code_block_depth")
     XCTAssertEqual(issue1.description, "Code block depth of 3 exceeds limit of 1")
-    XCTAssertEqual(issue1.category, .badPractice)
-    XCTAssertEqual(issue1.severity, .normal)
+    XCTAssertEqual(issue1.category, .readability)
+    XCTAssertEqual(issue1.severity, .major)
     let range1 = issue1.location
     XCTAssertEqual(range1.start.path, "test/test")
     XCTAssertEqual(range1.start.line, 1)
@@ -80,8 +80,8 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     let issue2 = issues[1]
     XCTAssertEqual(issue2.ruleIdentifier, "nested_code_block_depth")
     XCTAssertEqual(issue2.description, "Code block depth of 2 exceeds limit of 1")
-    XCTAssertEqual(issue2.category, .badPractice)
-    XCTAssertEqual(issue2.severity, .normal)
+    XCTAssertEqual(issue2.category, .readability)
+    XCTAssertEqual(issue2.severity, .major)
     let range2 = issue2.location
     XCTAssertEqual(range2.start.path, "test/test")
     XCTAssertEqual(range2.start.line, 1)
@@ -97,8 +97,8 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "nested_code_block_depth")
     XCTAssertEqual(issue.description, "Code block depth of 2 exceeds limit of 1")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .normal)
+    XCTAssertEqual(issue.category, .readability)
+    XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
     XCTAssertEqual(range.start.line, 1)

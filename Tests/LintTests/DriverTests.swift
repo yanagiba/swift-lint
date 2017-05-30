@@ -45,7 +45,7 @@ fileprivate class TestDriverRule : Rule {
       location: SourceRange(
         start: SourceLocation(path: "test/testDriver", line: 0, column: 0),
         end: SourceLocation(path: "test/testDriver", line: 0, column: 0)),
-      severity: .normal,
+      severity: .major,
       correction: nil))
   }
 }

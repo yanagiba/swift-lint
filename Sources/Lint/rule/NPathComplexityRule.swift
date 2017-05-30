@@ -27,6 +27,8 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
   let name = "High NPath Complexity"
   let description = ""
   let markdown = ""
+  let severity = Issue.Severity.major
+  let category = Issue.Category.complexity
 
   private var threshold: Int {
     return getConfiguration(
@@ -35,16 +37,12 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
   }
 
   private func emitIssue(_ npath: Int, _ sourceRange: SourceRange) {
-    if npath > threshold {
-      let foundIssue = Issue(
-        ruleIdentifier: identifier,
-        description: "NPath Complexity number of \(npath) exceeds limit of \(threshold)",
-        category: .badPractice,
-        location: sourceRange,
-        severity: .normal,
-        correction: nil)
-      emitIssue(foundIssue)
+    guard npath > threshold else {
+      return
     }
+    emitIssue(
+      sourceRange,
+      description: "NPath Complexity number of \(npath) exceeds limit of \(threshold)")
   }
 
   func visit(_ funcDecl: FunctionDeclaration) throws -> Bool {

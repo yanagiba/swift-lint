@@ -30,7 +30,7 @@ class TextReporterTests : XCTestCase {
         location: SourceRange(
             start: SourceLocation(path: "test/testTextReporterStart", line: 1, column: 2),
             end: SourceLocation(path: "test/testTextReporterEnd", line: 3, column: 4)),
-        severity: .normal,
+        severity: .major,
         correction: nil)
     XCTAssertEqual(
       textReporter.handle(issue: testIssue),

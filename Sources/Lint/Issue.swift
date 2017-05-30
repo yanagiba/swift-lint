@@ -18,15 +18,19 @@ import Source
 
 struct Issue {
   enum Category {
+    case uncategorized
+
     case complexity
+    case readability
     case size
     case badPractice
   }
 
   enum Severity {
-    case info
-    case normal
     case critical
+    case major
+    case minor
+    case cosmetic
   }
 
   let ruleIdentifier: String
