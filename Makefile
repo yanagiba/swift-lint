@@ -15,3 +15,6 @@ test: build
 
 xcodegen:
 	swift package generate-xcodeproj --enable-code-coverage
+
+docgen: build
+	.build/debug/swift-lint-docgen

@@ -65,6 +65,12 @@ let package = Package(
         "Lint",
       ]
     ),
+    Target(
+      name: "swift-lint-docgen",
+      dependencies: [
+        "Lint",
+      ]
+    ),
 
     // MARK: Tests
 
