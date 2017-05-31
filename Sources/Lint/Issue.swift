@@ -16,8 +16,8 @@
 
 import Source
 
-struct Issue {
-  enum Category {
+public struct Issue {
+  public enum Category {
     case uncategorized
 
     case complexity
@@ -26,7 +26,7 @@ struct Issue {
     case badPractice
   }
 
-  enum Severity {
+  public enum Severity {
     case critical
     case major
     case minor

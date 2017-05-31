@@ -46,14 +46,7 @@ public class Driver {
   }
 
   func registerRules(basedOn ruleIdentifiers: [String]) {
-    let rules: [Rule] = [
-      NoForceCastRule(), // TODO: this is clearly an OCP violation, I would take a technical debt here, and fix it in the near future
-      CyclomaticComplexityRule(),
-      NPathComplexityRule(),
-      NCSSRule(),
-      NestedCodeBlockDepthRule(),
-    ]
-    registerRules(rules, ruleIdentifiers: ruleIdentifiers)
+    registerRules(RuleSet.rules, ruleIdentifiers: ruleIdentifiers)
   }
 
   func registerRules(_ rules: [Rule], ruleIdentifiers: [String]) {

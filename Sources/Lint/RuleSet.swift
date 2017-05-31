@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,20 +14,12 @@
    limitations under the License.
 */
 
-public struct Correction {
-  let suggestions: [String]
-
-  init(suggestions: [String]) {
-    self.suggestions = suggestions
-  }
-
-  init(suggestion: String) {
-    self.suggestions = [suggestion]
-  }
-}
-
-extension Correction : CustomStringConvertible {
-  public var description: String {
-    return suggestions.joined(separator: ";")
-  }
+public struct RuleSet {
+  public static var rules: [Rule] = [
+    NoForceCastRule(), // TODO: this is clearly an OCP violation, I would take a technical debt here, and fix it in the near future
+    CyclomaticComplexityRule(),
+    NPathComplexityRule(),
+    NCSSRule(),
+    NestedCodeBlockDepthRule(),
+  ]
 }

@@ -19,7 +19,7 @@ import Foundation
 import AST
 import Source
 
-protocol Rule {
+public protocol Rule {
   var identifier: String { get }
   var name: String { get }
   var description: String { get }
