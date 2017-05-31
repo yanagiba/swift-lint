@@ -74,25 +74,58 @@ func groupedRuleSet() -> [Issue.Category: [Rule]] {
   return result
 }
 
+enum Language {
+  case US
+  case JP
+  case CN
+
+  var fileSuffix: String {
+    switch self {
+    case .US:
+      return ""
+    case .JP:
+      return "_JP"
+    case .CN:
+      return "_CN"
+    }
+  }
+
+  func lookup(_ langs: (us: String, jp: String, cn: String)) -> String {
+    // TODO: 🌐 need to come up with better solutions
+    switch self {
+    case .US:
+      return langs.us
+    case .JP:
+      return langs.jp
+    case .CN:
+      return langs.cn
+    }
+  }
+}
+
+let supportedLangs = [Language.US, .JP, .CN]
+
 let pwd = FileManager.default.currentDirectoryPath
 let docRoot = "\(pwd)/Documentation/Rules"
 
 for (category, rules) in groupedRuleSet() {
-  let filePath = "\(docRoot)/\(category.fileName).md"
+  for lang in supportedLangs {
+    let filePath = "\(docRoot)/\(category.fileName)\(lang.fileSuffix).md"
 
-  let title = "# \(category.title) Rules"
+    let title = "# \(category.title) \(lang.lookup(("Rules", "ルール", "规则")))"
 
-  let rulesContent = rules.map { rule -> String in
-    var content = "## \(rule.name)\n\n"
-    content += "Identifier: `\(rule.identifier)`\n\n"
-    content += "Severity: \(rule.severity.title)\n\n"
-    content += "Category: \(rule.category.title)\n\n"
-    content += "\(rule.description)\n\n"
-    content += rule.markdown
-    return content
+    let rulesContent = rules.map { rule -> String in
+      var content = "## \(rule.name)\n\n"
+      content += "\(lang.lookup(("Identifier", "識別子", "标识名"))): `\(rule.identifier)`\n\n"
+      content += "\(lang.lookup(("Severity", "激しさ", "严重级别"))): \(rule.severity.title)\n\n"
+      content += "\(lang.lookup(("Category", "分類", "分类"))): \(rule.category.title)\n\n"
+      content += "\(rule.description)\n\n"
+      content += rule.markdown
+      return content
+    }
+
+    let content = ([title] + rulesContent).joined(separator: "\n\n")
+
+    try content.write(toFile: filePath, atomically: true, encoding: .utf8)
   }
-
-  let content = ([title] + rulesContent).joined(separator: "\n\n")
-
-  try content.write(toFile: filePath, atomically: true, encoding: .utf8)
 }
