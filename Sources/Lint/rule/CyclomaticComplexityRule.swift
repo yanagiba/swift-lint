@@ -35,7 +35,7 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
     "conclude that methods in the 3 to 7 complexity range are " +
     "quite well structured. He also suggest " +
     "the cyclomatic complexity of 10 is a reasonable upper limit."
-  let markdown = ""
+  let additionalDocument = ""
   let severity = Issue.Severity.major
   let category = Issue.Category.complexity
 

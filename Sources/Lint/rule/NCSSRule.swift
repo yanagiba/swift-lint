@@ -27,7 +27,7 @@ class NCSSRule : RuleBase, ASTVisitorRule {
   let name = "High Non-Commenting Source Statements"
   let identifier = "high_ncss"
   let description = ""
-  let markdown = ""
+  let additionalDocument = ""
   let severity = Issue.Severity.major
   let category = Issue.Category.readability
 

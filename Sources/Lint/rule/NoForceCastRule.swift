@@ -21,7 +21,7 @@ import AST
 class NoForceCastRule: RuleBase, ASTVisitorRule {
   let name = "No Force Cast"
   let description = ""
-  let markdown = ""
+  let additionalDocument = ""
   let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 

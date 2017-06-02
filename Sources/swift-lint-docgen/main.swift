@@ -119,8 +119,12 @@ for (category, rules) in groupedRuleSet() {
       content += "\(lang.lookup(("Identifier", "識別子", "标识名"))): `\(rule.identifier)`\n\n"
       content += "\(lang.lookup(("Severity", "激しさ", "严重级别"))): \(rule.severity.title)\n\n"
       content += "\(lang.lookup(("Category", "分類", "分类"))): \(rule.category.title)\n\n"
-      content += "\(rule.description)\n\n"
-      content += rule.markdown
+      if let ruleDescription = rule.description {
+        content += "\(ruleDescription)\n\n"
+      }
+      if let ruleAdditionalDocument = rule.additionalDocument {
+        content += ruleAdditionalDocument
+      }
       return content
     }
 

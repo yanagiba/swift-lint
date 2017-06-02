@@ -22,8 +22,11 @@ import Source
 public protocol Rule {
   var identifier: String { get }
   var name: String { get }
-  var description: String { get }
-  var markdown: String { get }
+  var fileName: String { get }
+  var description: String? { get }
+  var examples: [String]? { get }
+  var thresholds: [String: String]? { get }
+  var additionalDocument: String? { get }
 
   var severity: Issue.Severity { get }
   var category: Issue.Category { get }
@@ -36,6 +39,26 @@ public protocol Rule {
 extension Rule {
   var identifier: String {
     return name.toIdentifier
+  }
+
+  var fileName: String {
+    return name.toFileName
+  }
+
+  var description: String? {
+    return nil
+  }
+
+  var examples: [String]? {
+    return nil
+  }
+
+  var thresholds: [String: String]? {
+    return nil
+  }
+
+  var additionalDocument: String? {
+    return nil
   }
 
   var severity: Issue.Severity {
@@ -67,12 +90,19 @@ extension Rule {
 }
 
 fileprivate extension String {
+  fileprivate var toFileName: String {
+    let fileName = punctutationAndWhitespaceRemoved.joined()
+    return "\(fileName).swift"
+  }
+
   fileprivate var toIdentifier: String {
-    return self.lowercased()
-      .components(separatedBy: .punctuationCharacters)
+    return punctutationAndWhitespaceRemoved.joined(separator: "_").lowercased()
+  }
+
+  private var punctutationAndWhitespaceRemoved: [String] {
+    return self.components(separatedBy: .punctuationCharacters)
       .joined(separator: "")
       .components(separatedBy: .whitespaces)
       .filter { !$0.isEmpty }
-      .joined(separator: "_")
   }
 }

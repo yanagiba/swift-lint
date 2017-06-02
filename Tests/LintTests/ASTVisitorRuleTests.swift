@@ -32,8 +32,6 @@ class ASTVisitorRuleTests : XCTestCase {
     var name: String {
       return "Testing ASTVisitor"
     }
-    var description: String { return "" }
-    var markdown: String { return "" }
 
     func emitIssue(_ issue: Issue) {
       issues.append(issue)

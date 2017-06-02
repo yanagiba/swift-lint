@@ -32,7 +32,7 @@ class SourceCodeRuleTests : XCTestCase {
       return "Testing SourceCode"
     }
     var description: String { return "" }
-    var markdown: String { return "" }
+    var additionalDocument: String { return "" }
 
     func emitIssue(_ issue: Issue) {
       issues.append(issue)

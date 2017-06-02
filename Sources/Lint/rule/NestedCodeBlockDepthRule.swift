@@ -26,7 +26,7 @@ class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
 
   let name = "Nested Code Block Depth"
   let description = ""
-  let markdown = ""
+  let additionalDocument = ""
   let severity = Issue.Severity.major
   let category = Issue.Category.readability
 

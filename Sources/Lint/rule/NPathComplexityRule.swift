@@ -26,7 +26,7 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
 
   let name = "High NPath Complexity"
   let description = ""
-  let markdown = ""
+  let additionalDocument = ""
   let severity = Issue.Severity.major
   let category = Issue.Category.complexity
 
