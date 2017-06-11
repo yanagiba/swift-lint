@@ -6,7 +6,7 @@
 <dt>識別子</dt>
 <dd>high_ncss</dd>
 <dt>ファイル名</dt>
-<dd>HighNonCommentingSourceStatements.swift</dd>
+<dd>HighNonCommentingSourceStatementsRule.swift</dd>
 <dt>激しさ</dt>
 <dd>Major</dd>
 <dt>分類</dt>
@@ -20,7 +20,7 @@
 <dt>識別子</dt>
 <dd>nested_code_block_depth</dd>
 <dt>ファイル名</dt>
-<dd>NestedCodeBlockDepth.swift</dd>
+<dd>NestedCodeBlockDepthRule.swift</dd>
 <dt>激しさ</dt>
 <dd>Major</dd>
 <dt>分類</dt>

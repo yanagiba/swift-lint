@@ -6,7 +6,7 @@
 <dt>Identifier</dt>
 <dd>high_ncss</dd>
 <dt>File name</dt>
-<dd>HighNonCommentingSourceStatements.swift</dd>
+<dd>HighNonCommentingSourceStatementsRule.swift</dd>
 <dt>Severity</dt>
 <dd>Major</dd>
 <dt>Category</dt>
@@ -20,7 +20,7 @@
 <dt>Identifier</dt>
 <dd>nested_code_block_depth</dd>
 <dt>File name</dt>
-<dd>NestedCodeBlockDepth.swift</dd>
+<dd>NestedCodeBlockDepthRule.swift</dd>
 <dt>Severity</dt>
 <dd>Major</dd>
 <dt>Category</dt>

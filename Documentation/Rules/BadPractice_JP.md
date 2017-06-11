@@ -6,7 +6,7 @@
 <dt>識別子</dt>
 <dd>no_force_cast</dd>
 <dt>ファイル名</dt>
-<dd>NoForceCast.swift</dd>
+<dd>NoForceCastRule.swift</dd>
 <dt>激しさ</dt>
 <dd>Minor</dd>
 <dt>分類</dt>

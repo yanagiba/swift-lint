@@ -92,7 +92,7 @@ extension Rule {
 fileprivate extension String {
   fileprivate var toFileName: String {
     let fileName = punctutationAndWhitespaceRemoved.joined()
-    return "\(fileName).swift"
+    return "\(fileName)Rule.swift"
   }
 
   fileprivate var toIdentifier: String {
