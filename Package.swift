@@ -65,7 +65,7 @@ let package = Package(
         "Lint",
       ]
     ),
-    Target(
+    .target(
       name: "swift-lint-docgen",
       dependencies: [
         "Lint",
