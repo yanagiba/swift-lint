@@ -39,7 +39,8 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
   }
   var thresholds: [String: String]? {
     return [
-      NPathComplexityRule.ThresholdKey: "The NPath complexity reporting threshold, default value is 200."
+      NPathComplexityRule.ThresholdKey:
+        "The NPath complexity reporting threshold, default value is \(NPathComplexityRule.DefaultThreshold)."
     ]
   }
   var additionalDocument: String? {

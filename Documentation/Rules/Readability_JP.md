@@ -26,3 +26,26 @@
 <dt>分類</dt>
 <dd>Readability</dd>
 </dl>
+
+This rule indicates blocks nested more deeply than the upper limit.
+
+##### Thresholds:
+
+<dl>
+<dt>NESTED_CODE_BLOCK_DEPTH</dt>
+<dd>The depth of a code block reporting threshold, default value is 5.</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+if (1)
+{               // 1
+    {           // 2
+        {       // 3
+        }
+    }
+}
+```

@@ -76,7 +76,8 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
   }
   var thresholds: [String: String]? {
     return [
-      CyclomaticComplexityRule.ThresholdKey: "The cyclomatic complexity reporting threshold, default value is 10."
+      CyclomaticComplexityRule.ThresholdKey:
+        "The cyclomatic complexity reporting threshold, default value is \(CyclomaticComplexityRule.DefaultThreshold)."
     ]
   }
   var additionalDocument: String? {
