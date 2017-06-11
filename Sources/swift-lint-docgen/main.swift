@@ -115,12 +115,65 @@ for (category, rules) in groupedRuleSet() {
     let title = "# \(category.title) \(lang.lookup(("Rules", "ルール", "规则")))"
 
     let rulesContent = rules.map { rule -> String in
-      var content = "## \(rule.name)\n\n"
-      content += "\(lang.lookup(("Identifier", "識別子", "标识名"))): `\(rule.identifier)`\n\n"
-      content += "\(lang.lookup(("Severity", "激しさ", "严重级别"))): \(rule.severity.title)\n\n"
-      content += "\(lang.lookup(("Category", "分類", "分类"))): \(rule.category.title)\n\n"
+      var content = """
+        ## \(rule.name)
+
+        <dl>
+        <dt>\(lang.lookup(("Identifier", "識別子", "标识名")))</dt>
+        <dd>`\(rule.identifier)`</dd>
+        <dt>\(lang.lookup(("File name", "ファイル名", "文件名")))</dt>
+        <dd>`\(rule.fileName)`</dd>
+        <dt>\(lang.lookup(("Severity", "激しさ", "严重级别")))</dt>
+        <dd>\(rule.severity.title)</dd>
+        <dt>\(lang.lookup(("Category", "分類", "分类")))</dt>
+        <dd>\(rule.category.title)</dd>
+        </dl>
+
+        """
       if let ruleDescription = rule.description {
-        content += "\(ruleDescription)\n\n"
+        content += """
+
+          \(ruleDescription)
+
+          """
+      }
+      if let ruleThresholds = rule.thresholds, !ruleThresholds.isEmpty {
+        content += """
+
+        ##### Thresholds:
+
+        <dl>
+        """
+        for (thresholdKey, thresholdDescription) in ruleThresholds {
+          content += """
+
+          <dt>\(thresholdKey)</dt>
+          <dd>\(thresholdDescription)</dd>
+
+          """
+        }
+        content += """
+        </dl>
+
+        """
+      }
+      if let ruleExamples = rule.examples, !ruleExamples.isEmpty {
+        content += """
+
+        ##### Examples:
+
+        """
+        for (offset, example) in ruleExamples.enumerated() {
+          content += """
+
+          ###### Example \(offset+1)
+
+          ```
+          \(example)
+          ```
+
+          """
+        }
       }
       if let ruleAdditionalDocument = rule.additionalDocument {
         content += ruleAdditionalDocument

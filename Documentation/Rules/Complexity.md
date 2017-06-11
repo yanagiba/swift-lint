@@ -2,25 +2,84 @@
 
 ## High Cyclomatic Complexity
 
-Identifier: `high_cyclomatic_complexity`
+<dl>
+<dt>Identifier</dt>
+<dd>`high_cyclomatic_complexity`</dd>
+<dt>File name</dt>
+<dd>`CyclomaticComplexityRule.swift`</dd>
+<dt>Severity</dt>
+<dd>Major</dd>
+<dt>Category</dt>
+<dd>Complexity</dd>
+</dl>
 
-Severity: Major
+Cyclomatic complexity is determined by the number of
+linearly independent paths through a program's source code.
+In other words, cyclomatic complexity of a method is measured by
+the number of decision points, like `if`, `while`, and `for` statements,
+plus one for the method entry.
 
-Category: Complexity
+The experiments McCabe, the author of cyclomatic complexity,
+conclude that methods in the 3 to 7 complexity range are
+quite well structured. He also suggest
+the cyclomatic complexity of 10 is a reasonable upper limit.
 
-Cyclomatic complexity is determined by the number of linearly independent paths through a program's source code. In other words, cyclomatic complexity of a method is measured by the number of decision points, like `if`, `while`, and `for` statements, plus one for the method entry.
+##### Thresholds:
 
-The experiments McCabe, the author of cyclomatic complexity, conclude that methods in the 3 to 7 complexity range are quite well structured. He also suggest the cyclomatic complexity of 10 is a reasonable upper limit.
+<dl>
+<dt>CYCLOMATIC_COMPLEXITY</dt>
+<dd>The cyclomatic complexity reporting threshold, default value is 10.</dd>
+</dl>
 
+##### Examples:
+
+###### Example 1
+
+```
+func example(a: Int, b: Int, c: Int) // 1
+{
+    if (a == b)                      // 2
+    {
+        if (b == c)                  // 3
+        {
+        }
+        else if (a == c)             // 3
+        {
+        }
+        else
+        {
+        }
+    }
+    for i in 0..<c                   // 4
+    {
+    }
+    switch(c)
+    {
+        case 1:                      // 5
+            break
+        case 2:                      // 6
+            break
+        default:                     // 7
+            break
+    }
+}
+```
+
+##### References:
+
+McCabe (December 1976). ["A Complexity Measure"](http://www.literateprogramming.com/mccabe.pdf).
+*IEEE Transactions on Software Engineering: 308–320*
 
 
 ## High NPath Complexity
 
-Identifier: `high_npath_complexity`
-
-Severity: Major
-
-Category: Complexity
-
-
-
+<dl>
+<dt>Identifier</dt>
+<dd>`high_npath_complexity`</dd>
+<dt>File name</dt>
+<dd>`HighNPathComplexity.swift`</dd>
+<dt>Severity</dt>
+<dd>Major</dd>
+<dt>Category</dt>
+<dd>Complexity</dd>
+</dl>
