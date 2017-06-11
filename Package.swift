@@ -69,8 +69,7 @@ let package = Package(
     // MARK: Tests
 
     .testTarget(
-      name: "LintCanaryTests",
-      path: "Tests/CanaryTests"
+      name: "CrithagraTests"
     ),
     .testTarget(
       name: "MetricTests",
