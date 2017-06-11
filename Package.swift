@@ -1,3 +1,5 @@
+// swift-tools-version:4.0
+
 /*
    Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
@@ -18,17 +20,46 @@ import PackageDescription
 
 let package = Package(
   name: "swift-lint",
-  targets: [
-    Target(
-      name: "Metric"
+  products: [
+    .executable(
+      name: "swift-lint",
+      targets: [
+        "swift-lint",
+      ]
     ),
-    Target(
+    .library(
+      name: "SwiftMetric",
+      targets: [
+        "Metric",
+      ]
+    ),
+    .library(
+      name: "SwiftLint",
+      targets: [
+        "Lint",
+      ]
+    ),
+  ],
+  dependencies: [
+    .package(
+      url: "https://github.com/yanagiba/swift-ast",
+      .exact("0.3.1")
+    ),
+  ],
+  targets: [
+    .target(
+      name: "Metric",
+      dependencies: [
+        "SwiftAST",
+      ]
+    ),
+    .target(
       name: "Lint",
       dependencies: [
         "Metric",
       ]
     ),
-    Target(
+    .target(
       name: "swift-lint",
       dependencies: [
         "Lint",
@@ -37,35 +68,34 @@ let package = Package(
 
     // MARK: Tests
 
-    Target(
-      name: "CanaryTests"
+    .testTarget(
+      name: "LintCanaryTests",
+      path: "Tests/CanaryTests"
     ),
-    Target(
+    .testTarget(
       name: "MetricTests",
       dependencies: [
         "Metric",
       ]
     ),
-    Target(
+    .testTarget(
       name: "LintTests",
       dependencies: [
         "Lint",
       ]
     ),
-    Target(
+    .testTarget(
       name: "RuleTests",
       dependencies: [
         "Lint",
       ]
     ),
-    Target(
+    .testTarget(
       name: "ReporterTests",
       dependencies: [
         "Lint",
       ]
     ),
   ],
-  dependencies: [
-    .Package(url: "https://github.com/yanagiba/swift-ast", Version(0, 2, 0)),
-  ]
+  swiftLanguageVersions: [4]
 )

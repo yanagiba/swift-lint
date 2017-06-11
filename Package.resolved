@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-ast",
+        "repositoryURL": "https://github.com/yanagiba/swift-ast",
+        "state": {
+          "branch": null,
+          "revision": "b04a4b0e33522c856636819f7b07d7a1407b4a76",
+          "version": "0.3.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
