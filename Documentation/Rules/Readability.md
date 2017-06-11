@@ -4,9 +4,9 @@
 
 <dl>
 <dt>Identifier</dt>
-<dd>`high_ncss`</dd>
+<dd>high_ncss</dd>
 <dt>File name</dt>
-<dd>`HighNonCommentingSourceStatements.swift`</dd>
+<dd>HighNonCommentingSourceStatements.swift</dd>
 <dt>Severity</dt>
 <dd>Major</dd>
 <dt>Category</dt>
@@ -18,9 +18,9 @@
 
 <dl>
 <dt>Identifier</dt>
-<dd>`nested_code_block_depth`</dd>
+<dd>nested_code_block_depth</dd>
 <dt>File name</dt>
-<dd>`NestedCodeBlockDepth.swift`</dd>
+<dd>NestedCodeBlockDepth.swift</dd>
 <dt>Severity</dt>
 <dd>Major</dd>
 <dt>Category</dt>

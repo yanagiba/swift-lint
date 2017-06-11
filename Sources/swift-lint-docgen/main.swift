@@ -120,9 +120,9 @@ for (category, rules) in groupedRuleSet() {
 
         <dl>
         <dt>\(lang.lookup(("Identifier", "識別子", "标识名")))</dt>
-        <dd>`\(rule.identifier)`</dd>
+        <dd>\(rule.identifier)</dd>
         <dt>\(lang.lookup(("File name", "ファイル名", "文件名")))</dt>
-        <dd>`\(rule.fileName)`</dd>
+        <dd>\(rule.fileName)</dd>
         <dt>\(lang.lookup(("Severity", "激しさ", "严重级别")))</dt>
         <dd>\(rule.severity.title)</dd>
         <dt>\(lang.lookup(("Category", "分類", "分类")))</dt>

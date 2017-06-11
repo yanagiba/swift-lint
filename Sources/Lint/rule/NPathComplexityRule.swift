@@ -25,8 +25,34 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
   static let DefaultThreshold = 200
 
   let name = "High NPath Complexity"
-  let description = ""
-  let additionalDocument = ""
+  let fileName = "NPathComplexityRule.swift"
+  var description: String? {
+    return """
+    NPath complexity is determined by the number of execution paths through that method.
+    Compared to cyclomatic complexity, NPath complexity has two outstanding characteristics:
+    first, it distinguishes between different kinds of control flow structures;
+    second, it takes the various type of acyclic paths in a flow graph into consideration.
+
+    Based on studies done by the original author in AT&T Bell Lab,
+    an NPath threshold value of 200 has been established for a method.
+    """
+  }
+  var thresholds: [String: String]? {
+    return [
+      NPathComplexityRule.ThresholdKey: "The NPath complexity reporting threshold, default value is 200."
+    ]
+  }
+  var additionalDocument: String? {
+    return """
+
+    ##### References:
+
+    Brian A. Nejmeh  (1988).
+    ["NPATH: a measure of execution path complexity and its applications"](http://dl.acm.org/citation.cfm?id=42379).
+    *Communications of the ACM 31 (2) p. 188-200*
+
+    """
+  }
   let severity = Issue.Severity.major
   let category = Issue.Category.complexity
 

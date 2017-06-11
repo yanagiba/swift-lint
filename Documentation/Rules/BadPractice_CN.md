@@ -4,9 +4,9 @@
 
 <dl>
 <dt>标识名</dt>
-<dd>`no_force_cast`</dd>
+<dd>no_force_cast</dd>
 <dt>文件名</dt>
-<dd>`NoForceCast.swift`</dd>
+<dd>NoForceCast.swift</dd>
 <dt>严重级别</dt>
 <dd>Minor</dd>
 <dt>分类</dt>

@@ -4,9 +4,9 @@
 
 <dl>
 <dt>Identifier</dt>
-<dd>`no_force_cast`</dd>
+<dd>no_force_cast</dd>
 <dt>File name</dt>
-<dd>`NoForceCast.swift`</dd>
+<dd>NoForceCast.swift</dd>
 <dt>Severity</dt>
 <dd>Minor</dd>
 <dt>Category</dt>
