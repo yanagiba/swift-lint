@@ -1,12 +1,12 @@
 # Swift Lint
 
-[![swift-ast 0.2.0](https://img.shields.io/badge/swift‐ast-0.2.0-C70025.svg)](https://github.com/yanagiba/swift-ast)
+[![swift-ast 0.3.1](https://img.shields.io/badge/swift‐ast-0.3.1-C70025.svg)](https://github.com/yanagiba/swift-ast)
 [![swift-lint master](https://img.shields.io/badge/swift‐lint-master-C70025.svg)](https://github.com/yanagiba/swift-lint)
 [![swift-format pending](https://img.shields.io/badge/swift‐format-pending-C70025.svg)](https://github.com/yanagiba/swift-format)
 
 [![Travis CI Status](https://api.travis-ci.org/yanagiba/swift-lint.svg?branch=master)](https://travis-ci.org/yanagiba/swift-lint)
 [![codecov](https://codecov.io/gh/yanagiba/swift-lint/branch/master/graph/badge.svg)](https://codecov.io/gh/yanagiba/swift-lint)
-![Swift 3.1](https://img.shields.io/badge/swift-3.1-brightgreen.svg)
+![Swift 4.0-beta](https://img.shields.io/badge/swift-4.0‐beta-brightgreen.svg)
 ![Swift Package Manager](https://img.shields.io/badge/SPM-ready-orange.svg)
 ![Platforms](https://img.shields.io/badge/platform-%20Linux%20|%20macOS%20-red.svg)
 ![License](https://img.shields.io/github/license/yanagiba/swift-lint.svg)
@@ -24,14 +24,13 @@ of the source code for better accuracy and efficiency.
 ## A Work In Progress
 
 Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
-and the Swift Lint are still in early design and development. Many features are
-incomplete or partially implemented. Some with technical limitations.
+and the Swift Lint are in active development. Though many features are implemented, some with limitations.
 
 Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-in-progress) from [swift-ast](https://github.com/yanagiba/swift-ast).
 
 ## Requirements
 
-- [Swift 3.1](https://swift.org/download/)
+- [Swift 4.0-DEVELOPMENT-SNAPSHOT-2017-06-06-a](https://swift.org/download/)
 
 ## Installing
 
@@ -54,13 +53,19 @@ swift build
 Add the swift-lint dependency to your SPM dependencies in Package.swift:
 
 ```swift
+// swift-tools-version:4.0
+
 import PackageDescription
 
 let package = Package(
-  name: "MyAwesomeProject",
-  testDependencies: [
-    .Package(url: "https://github.com/yanagiba/swift-lint.git", majorVersion: 0)
-  ]
+  name: "MyPackage",
+  dependencies: [
+    .package(url: "https://github.com/yanagiba/swift-lint.git", from: "0.1.2")
+  ],
+  targets: [
+    .target(name: "MyTarget", dependencies: ["SwiftMetric", "SwiftLint"]),
+  ],
+  swiftLanguageVersions: [4]
 )
 ```
 

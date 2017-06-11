@@ -16,8 +16,10 @@
 
 import XCTest
 
-class CanaryTests: XCTestCase {
-  func testCanary() {
-    XCTAssertTrue(true)
-  }
+#if !os(macOS)
+public func allTests() -> [XCTestCaseEntry] {
+  return [
+    testCase([("testCanary", CrithagraTests.testCanary)]),
+  ]
 }
+#endif
