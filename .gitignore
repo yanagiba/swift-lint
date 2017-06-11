@@ -1,2 +1,3 @@
 .build
+swift-lint.xcodeproj
 Packages/
