@@ -26,8 +26,40 @@ class NCSSRule : RuleBase, ASTVisitorRule {
 
   let name = "High Non-Commenting Source Statements"
   let identifier = "high_ncss"
-  let description = ""
-  let additionalDocument = ""
+  let fileName = "NCSSRule.swift"
+  var description: String? {
+    return """
+    This rule counts number of lines for a method by
+    counting Non Commenting Source Statements (NCSS).
+
+    NCSS only takes actual statements into consideration,
+    in other words, ignores empty statements, empty blocks,
+    closing brackets or semicolons after closing brackets.
+
+    Meanwhile, a statement that is broken into multiple lines contribute only one count.
+    """
+  }
+  var examples: [String]? {
+    return [
+      """
+      func example()          // 1
+      {
+          if (1)              // 2
+          {
+          }
+          else                // 3
+          {
+          }
+      }
+      """,
+    ]
+  }
+  var thresholds: [String: String]? {
+    return [
+      NCSSRule.ThresholdKey:
+        "The high NCSS method reporting threshold, default value is \(NCSSRule.DefaultThreshold)."
+    ]
+  }
   let severity = Issue.Severity.major
   let category = Issue.Category.readability
 

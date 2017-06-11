@@ -6,12 +6,44 @@
 <dt>識別子</dt>
 <dd>high_ncss</dd>
 <dt>ファイル名</dt>
-<dd>HighNonCommentingSourceStatementsRule.swift</dd>
+<dd>NCSSRule.swift</dd>
 <dt>激しさ</dt>
 <dd>Major</dd>
 <dt>分類</dt>
 <dd>Readability</dd>
 </dl>
+
+This rule counts number of lines for a method by
+counting Non Commenting Source Statements (NCSS).
+
+NCSS only takes actual statements into consideration,
+in other words, ignores empty statements, empty blocks,
+closing brackets or semicolons after closing brackets.
+
+Meanwhile, a statement that is broken into multiple lines contribute only one count.
+
+##### Thresholds:
+
+<dl>
+<dt>NCSS</dt>
+<dd>The high NCSS method reporting threshold, default value is 30.</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+func example()          // 1
+{
+    if (1)              // 2
+    {
+    }
+    else                // 3
+    {
+    }
+}
+```
 
 
 ## Nested Code Block Depth
