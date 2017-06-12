@@ -14,7 +14,7 @@
    limitations under the License.
 */
 
-struct Correction {
+public struct Correction {
   let suggestions: [String]
 
   init(suggestions: [String]) {
@@ -26,8 +26,8 @@ struct Correction {
   }
 }
 
-extension Correction: CustomStringConvertible {
-  var description: String {
+extension Correction : CustomStringConvertible {
+  public var description: String {
     return suggestions.joined(separator: ";")
   }
 }

@@ -26,8 +26,70 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
   static let DefaultThreshold = 10
 
   let name = "High Cyclomatic Complexity"
-  let description = ""
-  let markdown = ""
+  let fileName = "CyclomaticComplexityRule.swift"
+  var description: String? {
+    return """
+    Cyclomatic complexity is determined by the number of
+    linearly independent paths through a program's source code.
+    In other words, cyclomatic complexity of a method is measured by
+    the number of decision points, like `if`, `while`, and `for` statements,
+    plus one for the method entry.
+
+    The experiments McCabe, the author of cyclomatic complexity,
+    conclude that methods in the 3 to 7 complexity range are
+    quite well structured. He also suggest
+    the cyclomatic complexity of 10 is a reasonable upper limit.
+    """
+  }
+  var examples: [String]? {
+    return [
+      """
+      func example(a: Int, b: Int, c: Int) // 1
+      {
+          if (a == b)                      // 2
+          {
+              if (b == c)                  // 3
+              {
+              }
+              else if (a == c)             // 3
+              {
+              }
+              else
+              {
+              }
+          }
+          for i in 0..<c                   // 4
+          {
+          }
+          switch(c)
+          {
+              case 1:                      // 5
+                  break
+              case 2:                      // 6
+                  break
+              default:                     // 7
+                  break
+          }
+      }
+      """,
+    ]
+  }
+  var thresholds: [String: String]? {
+    return [
+      CyclomaticComplexityRule.ThresholdKey:
+        "The cyclomatic complexity reporting threshold, default value is \(CyclomaticComplexityRule.DefaultThreshold)."
+    ]
+  }
+  var additionalDocument: String? {
+    return """
+
+    ##### References:
+
+    McCabe (December 1976). ["A Complexity Measure"](http://www.literateprogramming.com/mccabe.pdf).
+    *IEEE Transactions on Software Engineering: 308–320*
+
+    """
+  }
   let severity = Issue.Severity.major
   let category = Issue.Category.complexity
 

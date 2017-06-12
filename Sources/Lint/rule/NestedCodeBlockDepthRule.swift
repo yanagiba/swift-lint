@@ -25,8 +25,28 @@ class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
   static let DefaultThreshold = 5
 
   let name = "Nested Code Block Depth"
-  let description = ""
-  let markdown = ""
+  var description: String? {
+    return "This rule indicates blocks nested more deeply than the upper limit."
+  }
+  var examples: [String]? {
+    return [
+      """
+      if (1)
+      {               // 1
+          {           // 2
+              {       // 3
+              }
+          }
+      }
+      """,
+    ]
+  }
+  var thresholds: [String: String]? {
+    return [
+      NestedCodeBlockDepthRule.ThresholdKey:
+        "The depth of a code block reporting threshold, default value is \(NestedCodeBlockDepthRule.DefaultThreshold)."
+    ]
+  }
   let severity = Issue.Severity.major
   let category = Issue.Category.readability
 

@@ -1,5 +1,5 @@
 /*
-   Copyright 2016 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
    limitations under the License.
 */
 
-import XCTest
-
-#if !os(macOS)
-public func allTests() -> [XCTestCaseEntry] {
-  return [
-    testCase(ASTVisitorRuleTests.allTests),
-    testCase(CorrectionTests.allTests),
-    testCase(DriverTests.allTests),
-    testCase(RuleProtocolTests.allTests),
-    testCase(RuleBaseTests.allTests),
-    testCase(SourceCodeRuleTests.allTests),
+public struct RuleSet {
+  public static var rules: [Rule] = [
+    NoForceCastRule(), // TODO: this is clearly an OCP violation, I would take a technical debt here, and fix it in the near future
+    CyclomaticComplexityRule(),
+    NPathComplexityRule(),
+    NCSSRule(),
+    NestedCodeBlockDepthRule(),
   ]
 }
-#endif

@@ -19,19 +19,24 @@ import XCTest
 @testable import Lint
 
 class RuleProtocolTests : XCTestCase {
-  func testIdentifierConversion() {
+  func testDefaultImplementations() {
     class DoNothingRule : Rule {
       var name: String {
         return "Do Nothing"
       }
-      var description: String { return "" }
-      var markdown: String { return "" }
       func emitIssue(_: Issue) {}
       func inspect(_: ASTContext, configurations: [String: Any]?) {}
     }
 
     let doNothingRule = DoNothingRule()
     XCTAssertEqual(doNothingRule.identifier, "do_nothing")
+    XCTAssertEqual(doNothingRule.fileName, "DoNothingRule.swift")
+    XCTAssertNil(doNothingRule.description)
+    XCTAssertNil(doNothingRule.examples)
+    XCTAssertNil(doNothingRule.thresholds)
+    XCTAssertNil(doNothingRule.additionalDocument)
+    XCTAssertEqual(doNothingRule.severity, .minor)
+    XCTAssertEqual(doNothingRule.category, .uncategorized)
   }
 
   func testWhiteSpaces() {
@@ -39,14 +44,13 @@ class RuleProtocolTests : XCTestCase {
       var name: String {
         return "I   Typed     Too        Many                Spaces"
       }
-      var description: String { return "" }
-      var markdown: String { return "" }
       func emitIssue(_: Issue) {}
       func inspect(_: ASTContext, configurations: [String: Any]?) {}
     }
 
     let tooManySpacesRule = TooManySpacesRule()
     XCTAssertEqual(tooManySpacesRule.identifier, "i_typed_too_many_spaces")
+    XCTAssertEqual(tooManySpacesRule.fileName, "ITypedTooManySpacesRule.swift")
   }
 
   func testIdentifierImplementation() {
@@ -57,14 +61,16 @@ class RuleProtocolTests : XCTestCase {
       var identifier: String {
         return "rule_identifier"
       }
-      var description: String { return "" }
-      var markdown: String { return "" }
+      var fileName: String {
+        return "FileName.test"
+      }
       func emitIssue(_: Issue) {}
       func inspect(_: ASTContext, configurations: [String: Any]?) {}
     }
 
     let customIdentifierRule = WithCustomIdentifierRule()
     XCTAssertEqual(customIdentifierRule.identifier, "rule_identifier")
+    XCTAssertEqual(customIdentifierRule.fileName, "FileName.test")
   }
 
   func testNameContainsPunctuations() {
@@ -73,7 +79,7 @@ class RuleProtocolTests : XCTestCase {
         return "(I'am the one with the force) May the Force be with y'all, always!"
       }
       var description: String { return "" }
-      var markdown: String { return "" }
+      var additionalDocument: String { return "" }
       func emitIssue(_: Issue) {}
       func inspect(_: ASTContext, configurations: [String: Any]?) {}
     }
@@ -82,10 +88,13 @@ class RuleProtocolTests : XCTestCase {
     XCTAssertEqual(
       may4Rule.identifier,
       "iam_the_one_with_the_force_may_the_force_be_with_yall_always")
+    XCTAssertEqual(
+      may4Rule.fileName,
+      "IamtheonewiththeforceMaytheForcebewithyallalwaysRule.swift")
   }
 
   static var allTests = [
-    ("testIdentifierConversion", testIdentifierConversion),
+    ("testDefaultImplementations", testDefaultImplementations),
     ("testWhiteSpaces", testWhiteSpaces),
     ("testIdentifierImplementation", testIdentifierImplementation),
     ("testNameContainsPunctuations", testNameContainsPunctuations),

@@ -17,7 +17,7 @@
 import Source
 import AST
 
-struct ASTContext {
+public struct ASTContext {
   let sourceFile: SourceFile
   let topLevelDeclaration: TopLevelDeclaration
 }

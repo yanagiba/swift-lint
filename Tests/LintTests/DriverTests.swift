@@ -33,8 +33,6 @@ fileprivate class TestDriverRule : Rule {
   var name: String {
     return "Test Driver"
   }
-  var description: String { return "" }
-  var markdown: String { return "" }
 
   func inspect(_ astContext: ASTContext, configurations: [String: Any]? = nil) {
     let content = astContext.sourceFile.content
