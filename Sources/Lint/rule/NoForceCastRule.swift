@@ -20,8 +20,30 @@ import AST
 
 class NoForceCastRule: RuleBase, ASTVisitorRule {
   let name = "No Force Cast"
-  let description = ""
-  let additionalDocument = ""
+  var description: String? {
+    return """
+    Force casting `as!` should be avoided, because it could crash the program
+    when the type casting fails.
+
+    Although it is arguable that, in rare cases, having crashes may help developers
+    identify issues easier, we recommend using a `guard` statement with optional casting
+    and then handle the failed castings gently.
+    """
+  }
+  var examples: [String]? {
+    return [
+      """
+      let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! MyCustomCell
+
+      // guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as? MyCustomCell else {
+      //   print("Failed in casting to MyCustomCell.")
+      //   return UITableViewCell()
+      // }
+
+      return cell
+      """,
+    ]
+  }
   let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
