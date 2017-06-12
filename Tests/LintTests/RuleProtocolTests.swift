@@ -30,7 +30,7 @@ class RuleProtocolTests : XCTestCase {
 
     let doNothingRule = DoNothingRule()
     XCTAssertEqual(doNothingRule.identifier, "do_nothing")
-    XCTAssertEqual(doNothingRule.fileName, "DoNothing.swift")
+    XCTAssertEqual(doNothingRule.fileName, "DoNothingRule.swift")
     XCTAssertNil(doNothingRule.description)
     XCTAssertNil(doNothingRule.examples)
     XCTAssertNil(doNothingRule.thresholds)
@@ -50,7 +50,7 @@ class RuleProtocolTests : XCTestCase {
 
     let tooManySpacesRule = TooManySpacesRule()
     XCTAssertEqual(tooManySpacesRule.identifier, "i_typed_too_many_spaces")
-    XCTAssertEqual(tooManySpacesRule.fileName, "ITypedTooManySpaces.swift")
+    XCTAssertEqual(tooManySpacesRule.fileName, "ITypedTooManySpacesRule.swift")
   }
 
   func testIdentifierImplementation() {
@@ -90,7 +90,7 @@ class RuleProtocolTests : XCTestCase {
       "iam_the_one_with_the_force_may_the_force_be_with_yall_always")
     XCTAssertEqual(
       may4Rule.fileName,
-      "IamtheonewiththeforceMaytheForcebewithyallalways.swift")
+      "IamtheonewiththeforceMaytheForcebewithyallalwaysRule.swift")
   }
 
   static var allTests = [
