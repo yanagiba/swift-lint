@@ -25,6 +25,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(NPathComplexityRuleTests.allTests),
     testCase(NCSSRuleTests.allTests),
     testCase(NestedCodeBlockDepthRuleTests.allTests),
+    testCase(RemoveGetForReadOnlyComputedPropertyRuleTests.allTests),
   ]
 }
 #endif

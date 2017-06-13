@@ -22,5 +22,6 @@ public struct RuleSet {
     NPathComplexityRule(),
     NCSSRule(),
     NestedCodeBlockDepthRule(),
+    RemoveGetForReadOnlyComputedPropertyRule(),
   ]
 }

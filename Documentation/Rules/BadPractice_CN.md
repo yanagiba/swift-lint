@@ -74,3 +74,39 @@ let result = try! getResult()
 //   print("Failed in getting result.")
 // }
 ```
+
+
+## Remove Get For Read-Only Computed Property
+
+<dl>
+<dt>标识名</dt>
+<dd>remove_get_for_readonly_computed_property</dd>
+<dt>文件名</dt>
+<dd>RemoveGetForReadOnlyComputedPropertyRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+A computed property with a getter but no setter is known as
+a *read-only computed property*.
+
+You can simplify the declaration of a read-only computed property
+by removing the get keyword and its braces.
+
+##### Examples:
+
+###### Example 1
+
+```
+var foo: Int {
+  get {
+    return 1
+  }
+}
+
+// var foo: Int {
+//   return 1
+// }
+```
