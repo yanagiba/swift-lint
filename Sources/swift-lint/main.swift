@@ -40,6 +40,7 @@ let driver = Driver(ruleIdentifiers: [
   "nested_code_block_depth",
   "remove_get_for_readonly_computed_property",
   "redundant_initialization_to_nil",
+  "redundant_if_statement",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)

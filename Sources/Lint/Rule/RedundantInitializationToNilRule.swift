@@ -69,8 +69,6 @@ class RedundantInitializationToNilRule: RuleBase, ASTVisitorRule {
           description: "`nil` initialization can be safely removed for variable\(pluralS) \(nameString)"
         )
       }
-
-
     }
 
     return true

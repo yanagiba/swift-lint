@@ -136,3 +136,41 @@ its value automatically defaults to `nil` by the compiler.
 ```
 var foo: Int? = nil // var foo: Int?
 ```
+
+
+## Redundant If Statement
+
+<dl>
+<dt>Identifier</dt>
+<dd>redundant_if_statement</dd>
+<dt>File name</dt>
+<dd>RedundantIfStatementRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+if a == b {
+  return true
+} else {
+  return false
+}
+// return a == b
+```
+
+###### Example 2
+
+```
+if a == b {
+  return false
+} else {
+  return true
+}
+// return a != b
+```
