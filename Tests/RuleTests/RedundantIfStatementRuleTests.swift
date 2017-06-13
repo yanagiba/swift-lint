@@ -25,40 +25,74 @@ class RedundantIfStatementRuleTests : XCTestCase {
     XCTAssertTrue(issues.isEmpty)
   }
 
-  func testSameReturns() {
+  func testPatternMatchings() {
     let issues = """
-      if a == b { return true } else { return true }
-      if a == b { return false } else { return false }
+      if let a = b { return true } else { return false }
+      if case .a = b { return false } else { return false }
+      if var a = b { return 1 } else { return 1 }
       """
       .inspect(withRule: RedundantIfStatementRule())
     XCTAssertTrue(issues.isEmpty)
   }
 
-  func testThenTrueElseFalse() {
-    let issues = "if a == b { return true } else { return false }"
-      .inspect(withRule: RedundantIfStatementRule())
-    XCTAssertEqual(issues.count, 1)
-    let issue = issues[0]
-    XCTAssertEqual(issue.ruleIdentifier, "redundant_if_statement")
-    XCTAssertEqual(issue.description, "if statement is redundant and can be simplified")
-    XCTAssertEqual(issue.category, .badPractice)
-    XCTAssertEqual(issue.severity, .minor)
-    let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
-    XCTAssertEqual(range.start.line, 1)
-    XCTAssertEqual(range.start.column, 1)
-    XCTAssertEqual(range.end.path, "test/test")
-    XCTAssertEqual(range.end.line, 1)
-    XCTAssertEqual(range.end.column, 48)
+  func testReturnTrueFalseRespectively() {
+    let returns: [(String, String)] = [
+      ("true", "false"),
+      ("false", "true"),
+    ]
+    for (thenString, elseString) in returns {
+      let issues = "if a == b { return \(thenString) } else { return \(elseString) }"
+        .inspect(withRule: RedundantIfStatementRule())
+      XCTAssertEqual(issues.count, 1)
+      let issue = issues[0]
+      XCTAssertEqual(issue.ruleIdentifier, "redundant_if_statement")
+      XCTAssertEqual(issue.description, "if statement is redundant and can be simplified")
+      XCTAssertEqual(issue.category, .badPractice)
+      XCTAssertEqual(issue.severity, .minor)
+      let range = issue.location
+      XCTAssertEqual(range.start.path, "test/test")
+      XCTAssertEqual(range.start.line, 1)
+      XCTAssertEqual(range.start.column, 1)
+      XCTAssertEqual(range.end.path, "test/test")
+      XCTAssertEqual(range.end.line, 1)
+      XCTAssertEqual(range.end.column, 48)
+    }
   }
 
-  func testThenFalseElseTrue() {
-    let issues = "if a == b { return false } else { return true }"
+  func testReturnSameConstant() {
+    let returns: [(String, String, Int)] = [
+      ("true", "true", 47),
+      ("false", "false", 49),
+      ("1", "1", 41),
+      ("1.23", "1.23", 47),
+      ("\"foo\"", "\"foo\"", 49),
+    ]
+    for (thenString, elseString, endColumn) in returns {
+      let issues = "if a == b { return \(thenString) } else { return \(elseString) }"
+        .inspect(withRule: RedundantIfStatementRule())
+      XCTAssertEqual(issues.count, 1)
+      let issue = issues[0]
+      XCTAssertEqual(issue.ruleIdentifier, "redundant_if_statement")
+      XCTAssertEqual(issue.description, "if statement is redundant and can be removed")
+      XCTAssertEqual(issue.category, .badPractice)
+      XCTAssertEqual(issue.severity, .minor)
+      let range = issue.location
+      XCTAssertEqual(range.start.path, "test/test")
+      XCTAssertEqual(range.start.line, 1)
+      XCTAssertEqual(range.start.column, 1)
+      XCTAssertEqual(range.end.path, "test/test")
+      XCTAssertEqual(range.end.line, 1)
+      XCTAssertEqual(range.end.column, endColumn)
+    }
+  }
+
+  func testReturnSameVariable() {
+    let issues = "if a == b { return foo } else { return foo }"
       .inspect(withRule: RedundantIfStatementRule())
     XCTAssertEqual(issues.count, 1)
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "redundant_if_statement")
-    XCTAssertEqual(issue.description, "if statement is redundant and can be simplified")
+    XCTAssertEqual(issue.description, "if statement is redundant and can be removed")
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .minor)
     let range = issue.location
@@ -67,7 +101,7 @@ class RedundantIfStatementRuleTests : XCTestCase {
     XCTAssertEqual(range.start.column, 1)
     XCTAssertEqual(range.end.path, "test/test")
     XCTAssertEqual(range.end.line, 1)
-    XCTAssertEqual(range.end.column, 48)
+    XCTAssertEqual(range.end.column, 45)
   }
 
   func testExtraStatements() {
@@ -76,15 +110,22 @@ class RedundantIfStatementRuleTests : XCTestCase {
       if a == b { return true } else { a = 1; return false }
       if a == b { a = 1; return true } else { return false }
       if a == b { return false } else { a = 1; return true }
+      if a == b { a = 1; return true } else { return true }
+      if a == b { return false } else { a = 1; return false }
+      if a == b { a = 1; return 1 } else { return 1 }
+      if a == b { return 1.23 } else { a = 1; return 1.23 }
+      if a == b { a = 1; return "foo" } else { return "foo" }
+      if a == b { return foo } else { a = 1; return foo }
       """.inspect(withRule: RedundantIfStatementRule())
     XCTAssertTrue(issues.isEmpty)
   }
 
   static var allTests = [
     ("testNoElseBlock", testNoElseBlock),
-    ("testSameReturns", testSameReturns),
-    ("testThenTrueElseFalse", testThenTrueElseFalse),
-    ("testThenFalseElseTrue", testThenFalseElseTrue),
+    ("testPatternMatchings", testPatternMatchings),
+    ("testReturnTrueFalseRespectively", testReturnTrueFalseRespectively),
+    ("testReturnSameConstant", testReturnSameConstant),
+    ("testReturnSameVariable", testReturnSameVariable),
     ("testExtraStatements", testExtraStatements),
   ]
 }

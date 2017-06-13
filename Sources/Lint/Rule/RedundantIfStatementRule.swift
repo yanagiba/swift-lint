@@ -43,7 +43,23 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
+  private func emitIssue(_ ifStmt: IfStatement, _ suggestion: String) {
+    emitIssue(
+      ifStmt.sourceRange,
+      description: "if statement is redundant and can be \(suggestion)")
+  }
+
   func visit(_ ifStmt: IfStatement) throws -> Bool {
+    let patternMatchingConditions = ifStmt.conditionList.filter({
+      if case .expression = $0 {
+        return false
+      }
+      return true
+    })
+    guard patternMatchingConditions.isEmpty else {
+      return true
+    }
+
     // check if both then-block and else-block exist and have one and only one statement
     guard ifStmt.codeBlock.statements.count == 1,
       let elseClause = ifStmt.elseClause,
@@ -65,24 +81,34 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
       return true
     }
 
-    // check if they are all boolean values
-    guard let thenLiteral = thenExpr as? LiteralExpression,
-      let elseLiteral = elseExpr as? LiteralExpression,
-      case .boolean(let thenBool) = thenLiteral.kind,
-      case .boolean(let elseBool) = elseLiteral.kind
-    else {
+    switch (thenExpr, elseExpr) {
+    case let (thenLiteral as LiteralExpression, elseLiteral as LiteralExpression):
+      switch (thenLiteral.kind, elseLiteral.kind) {
+      case let (.boolean(thenBool), .boolean(elseBool)):
+        if thenBool == elseBool {
+          emitIssue(ifStmt, "removed")
+        } else {
+          emitIssue(ifStmt, "simplified")
+        }
+      case let (.integer(thenInt), .integer(elseInt)) where thenInt == elseInt:
+        emitIssue(ifStmt, "removed")
+      case let (.floatingPoint(thenDouble), .floatingPoint(elseDouble)) where thenDouble == elseDouble:
+        emitIssue(ifStmt, "removed")
+      case let (.staticString(thenStr), .staticString(elseStr)) where thenStr == elseStr:
+        emitIssue(ifStmt, "removed")
+      default:
+        return true
+      }
+    case let (thenIdExpr as IdentifierExpression, elseIdExpr as IdentifierExpression):
+      if case .identifier(let thenId, nil) = thenIdExpr.kind,
+        case .identifier(let elseId, nil) = elseIdExpr.kind,
+        thenId == elseId
+      {
+        emitIssue(ifStmt, "removed")
+      }
+    default:
       return true
     }
-
-    // now if they are the same, we ignore this case, otherwise, we emit issue
-    guard thenBool != elseBool else {
-      return true
-    }
-
-    emitIssue(
-      ifStmt.sourceRange,
-      description: "if statement is redundant and can be simplified"
-    )
 
     return true
   }
