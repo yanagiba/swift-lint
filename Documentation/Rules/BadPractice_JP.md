@@ -34,3 +34,43 @@ let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: 
 
 return cell
 ```
+
+
+## No Forced Try
+
+<dl>
+<dt>識別子</dt>
+<dd>no_forced_try</dd>
+<dt>ファイル名</dt>
+<dd>NoForcedTryRule.swift</dd>
+<dt>激しさ</dt>
+<dd>Minor</dd>
+<dt>分類</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+Forced-try expression `try!` should be avoided, because it could crash the program
+at the runtime when the expression throws an error.
+
+We recommend using a `do-catch` statement with `try` operator and handle the errors
+in `catch` blocks accordingly; or a `try?` operator with `nil`-checking.
+
+##### Examples:
+
+###### Example 1
+
+```
+let result = try! getResult()
+
+// do {
+//   let result = try getResult()
+// } catch {
+//   print("Failed in getting result with error: \(error).")
+// }
+//
+// or
+//
+// guard let result = try? getResult() else {
+//   print("Failed in getting result.")
+// }
+```

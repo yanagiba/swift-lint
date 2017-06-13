@@ -33,6 +33,7 @@ for filePath in filePaths {
 
 let driver = Driver(ruleIdentifiers: [
   "no_force_cast", // TODO: need better approach
+  "no_forced_try",
   "high_cyclomatic_complexity",
   "high_npath_complexity",
   "high_ncss",
