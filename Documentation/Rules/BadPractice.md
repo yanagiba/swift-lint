@@ -110,3 +110,29 @@ var foo: Int {
 //   return 1
 // }
 ```
+
+
+## Redundant Initialization to Nil
+
+<dl>
+<dt>Identifier</dt>
+<dd>redundant_initialization_to_nil</dd>
+<dt>File name</dt>
+<dd>RedundantInitializationtoNilRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+It is redundant to initialize an optional variable to `nil`,
+because if you don’t provide an initial value when you declare an optional variable or property,
+its value automatically defaults to `nil` by the compiler.
+
+##### Examples:
+
+###### Example 1
+
+```
+var foo: Int? = nil // var foo: Int?
+```

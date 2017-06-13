@@ -39,6 +39,7 @@ let driver = Driver(ruleIdentifiers: [
   "high_ncss",
   "nested_code_block_depth",
   "remove_get_for_readonly_computed_property",
+  "redundant_initialization_to_nil",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)

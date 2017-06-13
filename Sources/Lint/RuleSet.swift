@@ -23,5 +23,6 @@ public struct RuleSet {
     NCSSRule(),
     NestedCodeBlockDepthRule(),
     RemoveGetForReadOnlyComputedPropertyRule(),
+    RedundantInitializationToNilRule(),
   ]
 }

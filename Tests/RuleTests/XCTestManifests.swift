@@ -26,6 +26,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(NCSSRuleTests.allTests),
     testCase(NestedCodeBlockDepthRuleTests.allTests),
     testCase(RemoveGetForReadOnlyComputedPropertyRuleTests.allTests),
+    testCase(RedundantInitializationToNilRuleTests.allTests),
   ]
 }
 #endif
