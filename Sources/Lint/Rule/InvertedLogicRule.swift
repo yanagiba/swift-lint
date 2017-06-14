@@ -41,6 +41,8 @@ class InvertedLogicRule: RuleBase, ASTVisitorRule {
       return binaryOpExpr.binaryOperator == "!="
     case let prefixOpExpr as PrefixOperatorExpression:
       return prefixOpExpr.prefixOperator == "!"
+    case let parenExpr as ParenthesizedExpression:
+      return isExpressionLogicInverted(parenExpr.expression)
     default:
       return false
     }

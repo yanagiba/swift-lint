@@ -94,7 +94,7 @@ class InvertedLogicRuleTests : XCTestCase {
   }
 
   func testConditionalOperatorWithNotEqualOperator() {
-    let issues = "a != b ? true : false"
+    let issues = "(a != b) ? true : false"
       .inspect(withRule: InvertedLogicRule())
     XCTAssertEqual(issues.count, 1)
     let issue = issues[0]
@@ -108,7 +108,7 @@ class InvertedLogicRuleTests : XCTestCase {
     XCTAssertEqual(range.start.column, 1)
     XCTAssertEqual(range.end.path, "test/test")
     XCTAssertEqual(range.end.line, 1)
-    XCTAssertEqual(range.end.column, 22)
+    XCTAssertEqual(range.end.column, 24)
   }
 
   static var allTests = [
