@@ -468,3 +468,34 @@ if (x) {
 // or
 // if x, y { foo() }
 ```
+
+
+## Redundant Variable Declaration Keyword
+
+<dl>
+<dt>标识名</dt>
+<dd>redundant_variable_declaration_keyword</dd>
+<dt>文件名</dt>
+<dd>RedundantVariableDeclarationKeywordRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+When the result of a function call or computed property is discarded by
+a wildcard variable `_`, its `let` or `var` keyword can be safely removed.
+
+##### Examples:
+
+###### Example 1
+
+```
+let _ = foo() // _ = foo()
+```
+
+###### Example 2
+
+```
+var _ = bar // _ = bar
+```

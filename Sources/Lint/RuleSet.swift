@@ -32,5 +32,6 @@ public struct RuleSet {
     InvertedLogicRule(),
     DoubleNegativeRule(),
     CollapsibleIfStatementsRule(),
+    RedundantVariableDeclarationKeywordRule(),
   ]
 }
