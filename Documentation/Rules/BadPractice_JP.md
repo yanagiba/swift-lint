@@ -294,7 +294,47 @@ if 1 == 0 { // always false
 ###### Example 3
 
 ```
-if 1 > 0, true { // always true
+if 1 != 0, true { // always true
+  return true
+}
+```
+
+
+## Constant Guard Statement Condition
+
+<dl>
+<dt>識別子</dt>
+<dd>constant_guard_statement_condition</dd>
+<dt>ファイル名</dt>
+<dd>ConstantGuardStatementConditionRule.swift</dd>
+<dt>激しさ</dt>
+<dd>Minor</dd>
+<dt>分類</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+guard true else { // always true
+  return true
+}
+```
+
+###### Example 2
+
+```
+guard 1 == 0 else { // always false
+  return false
+}
+```
+
+###### Example 3
+
+```
+guard 1 != 0, true else { // always true
   return true
 }
 ```

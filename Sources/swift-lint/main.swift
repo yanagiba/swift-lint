@@ -43,6 +43,7 @@ let driver = Driver(ruleIdentifiers: [
   "redundant_if_statement",
   "redundant_conditional_operator",
   "constant_if_statement_condition",
+  "constant_guard_statement_condition",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)
