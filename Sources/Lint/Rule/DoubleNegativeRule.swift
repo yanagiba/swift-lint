@@ -32,19 +32,6 @@ class DoubleNegativeRule: RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
-  private func isExpressionLogicNegative(_ expression: Expression) -> Bool {
-    switch expression {
-    case let binaryOpExpr as BinaryOperatorExpression:
-      return binaryOpExpr.binaryOperator == "!="
-    case let prefixOpExpr as PrefixOperatorExpression:
-      return prefixOpExpr.prefixOperator == "!"
-    case let parenExpr as ParenthesizedExpression:
-      return isExpressionLogicNegative(parenExpr.expression)
-    default:
-      return false
-    }
-  }
-
   func visit(_ prefixOpExpr: PrefixOperatorExpression) throws -> Bool {
     let doubleExclams = prefixOpExpr.prefixOperator == "!!"
     let doubleNegatives = isExpressionLogicNegative(prefixOpExpr) &&

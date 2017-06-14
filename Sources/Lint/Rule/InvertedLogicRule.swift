@@ -35,19 +35,6 @@ class InvertedLogicRule: RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
-  private func isExpressionLogicInverted(_ expression: Expression) -> Bool {
-    switch expression {
-    case let binaryOpExpr as BinaryOperatorExpression:
-      return binaryOpExpr.binaryOperator == "!="
-    case let prefixOpExpr as PrefixOperatorExpression:
-      return prefixOpExpr.prefixOperator == "!"
-    case let parenExpr as ParenthesizedExpression:
-      return isExpressionLogicInverted(parenExpr.expression)
-    default:
-      return false
-    }
-  }
-
   func visit(_ ifStmt: IfStatement) throws -> Bool {
     guard ifStmt.elseClause != nil,
       ifStmt.conditionList.count == 1,
@@ -56,7 +43,7 @@ class InvertedLogicRule: RuleBase, ASTVisitorRule {
       return true
     }
 
-    if isExpressionLogicInverted(expr) {
+    if isExpressionLogicNegative(expr) {
       emitIssue(
         ifStmt.sourceRange,
         description: "If statement with inverted condition is confusing")
@@ -66,7 +53,7 @@ class InvertedLogicRule: RuleBase, ASTVisitorRule {
   }
 
   func visit(_ condOpExpr: TernaryConditionalOperatorExpression) throws -> Bool {
-    if isExpressionLogicInverted(condOpExpr.conditionExpression) {
+    if isExpressionLogicNegative(condOpExpr.conditionExpression) {
       emitIssue(
         condOpExpr.sourceRange,
         description: "Conditional operator with inverted condition is confusing")

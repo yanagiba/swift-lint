@@ -97,4 +97,17 @@ extension RuleBase {
 
     return conditionExprs.filter({ !isExpressionConstant($0) }).isEmpty
   }
+
+  func isExpressionLogicNegative(_ expression: Expression) -> Bool {
+    switch expression {
+    case let binaryOpExpr as BinaryOperatorExpression:
+      return binaryOpExpr.binaryOperator == "!="
+    case let prefixOpExpr as PrefixOperatorExpression:
+      return prefixOpExpr.prefixOperator == "!"
+    case let parenExpr as ParenthesizedExpression:
+      return isExpressionLogicNegative(parenExpr.expression)
+    default:
+      return false
+    }
+  }
 }
