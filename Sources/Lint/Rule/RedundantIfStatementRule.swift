@@ -108,33 +108,10 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
       return true
     }
 
-    switch (thenExpr, elseExpr) {
-    case let (thenLiteral as LiteralExpression, elseLiteral as LiteralExpression):
-      switch (thenLiteral.kind, elseLiteral.kind) {
-      case let (.boolean(thenBool), .boolean(elseBool)):
-        if thenBool == elseBool {
-          emitIssue(ifStmt, "removed")
-        } else {
-          emitIssue(ifStmt, "simplified")
-        }
-      case let (.integer(thenInt), .integer(elseInt)) where thenInt == elseInt:
-        emitIssue(ifStmt, "removed")
-      case let (.floatingPoint(thenDouble), .floatingPoint(elseDouble)) where thenDouble == elseDouble:
-        emitIssue(ifStmt, "removed")
-      case let (.staticString(thenStr), .staticString(elseStr)) where thenStr == elseStr:
-        emitIssue(ifStmt, "removed")
-      default:
-        return true
-      }
-    case let (thenIdExpr as IdentifierExpression, elseIdExpr as IdentifierExpression):
-      if case .identifier(let thenId, nil) = thenIdExpr.kind,
-        case .identifier(let elseId, nil) = elseIdExpr.kind,
-        thenId == elseId
-      {
-        emitIssue(ifStmt, "removed")
-      }
-    default:
-      return true
+    if let suggestion = checkRedundant(
+      trueExpression: thenExpr, falseExpression: elseExpr)
+    {
+      emitIssue(ifStmt, suggestion)
     }
 
     return true

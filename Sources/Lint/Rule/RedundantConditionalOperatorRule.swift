@@ -53,33 +53,11 @@ class RedundantConditionalOperatorRule: RuleBase, ASTVisitorRule {
   }
 
   func visit(_ condOpExpr: TernaryConditionalOperatorExpression) throws -> Bool {
-    switch (condOpExpr.trueExpression, condOpExpr.falseExpression) {
-    case let (thenLiteral as LiteralExpression, elseLiteral as LiteralExpression):
-      switch (thenLiteral.kind, elseLiteral.kind) {
-      case let (.boolean(thenBool), .boolean(elseBool)):
-        if thenBool == elseBool {
-          emitIssue(condOpExpr, "removed")
-        } else {
-          emitIssue(condOpExpr, "simplified")
-        }
-      case let (.integer(thenInt), .integer(elseInt)) where thenInt == elseInt:
-        emitIssue(condOpExpr, "removed")
-      case let (.floatingPoint(thenDouble), .floatingPoint(elseDouble)) where thenDouble == elseDouble:
-        emitIssue(condOpExpr, "removed")
-      case let (.staticString(thenStr), .staticString(elseStr)) where thenStr == elseStr:
-        emitIssue(condOpExpr, "removed")
-      default:
-        return true
-      }
-    case let (thenIdExpr as IdentifierExpression, elseIdExpr as IdentifierExpression):
-      if case .identifier(let thenId, nil) = thenIdExpr.kind,
-        case .identifier(let elseId, nil) = elseIdExpr.kind,
-        thenId == elseId
-      {
-        emitIssue(condOpExpr, "removed")
-      }
-    default:
-      return true
+    if let suggestion = checkRedundant(
+      trueExpression: condOpExpr.trueExpression,
+      falseExpression: condOpExpr.falseExpression)
+    {
+      emitIssue(condOpExpr, suggestion)
     }
 
     return true
