@@ -18,35 +18,23 @@ import Foundation
 
 import AST
 
-class ConstantIfStatementConditionRule: RuleBase, ASTVisitorRule {
-  let name = "Constant If Statement Condition"
+class ConstantConditionalOperatorConditionRule: RuleBase, ASTVisitorRule {
+  let name = "Constant Conditional Operator"
   var examples: [String]? {
     return [
-      """
-      if true { // always true
-        return true
-      }
-      """,
-      """
-      if 1 == 0 { // always false
-        return false
-      }
-      """,
-      """
-      if 1 != 0, true { // always true
-        return true
-      }
-      """,
+      "1 == 1 ? 1 : 0",
+      "true ? 1 : 0",
+      "false ? 1 : 0",
     ]
   }
   let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
-  func visit(_ ifStmt: IfStatement) throws -> Bool {
-    if isConditionListConstant(ifStmt.conditionList) {
+  func visit(_ condOpExpr: TernaryConditionalOperatorExpression) throws -> Bool {
+    if isExpressionConstant(condOpExpr.conditionExpression) {
       emitIssue(
-        ifStmt.sourceRange,
-        description: "If statement with constant condition is confusing")
+        condOpExpr.sourceRange,
+        description: "Conditional operator with constant condition is confusing")
     }
 
     return true

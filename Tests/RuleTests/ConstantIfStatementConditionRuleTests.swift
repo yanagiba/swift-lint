@@ -53,7 +53,7 @@ class ConstantIfStatementConditionRuleTests : XCTestCase {
       XCTAssertEqual(issues.count, 1)
       let issue = issues[0]
       XCTAssertEqual(issue.ruleIdentifier, "constant_if_statement_condition")
-      XCTAssertEqual(issue.description, "if statement with constant condition is confusing")
+      XCTAssertEqual(issue.description, "If statement with constant condition is confusing")
       XCTAssertEqual(issue.category, .badPractice)
       XCTAssertEqual(issue.severity, .minor)
       let range = issue.location
@@ -81,7 +81,7 @@ class ConstantIfStatementConditionRuleTests : XCTestCase {
       XCTAssertEqual(issues.count, 1)
       let issue = issues[0]
       XCTAssertEqual(issue.ruleIdentifier, "constant_if_statement_condition")
-      XCTAssertEqual(issue.description, "if statement with constant condition is confusing")
+      XCTAssertEqual(issue.description, "If statement with constant condition is confusing")
       XCTAssertEqual(issue.category, .badPractice)
       XCTAssertEqual(issue.severity, .minor)
       let range = issue.location
@@ -119,7 +119,7 @@ class ConstantIfStatementConditionRuleTests : XCTestCase {
       XCTAssertEqual(issues.count, 1)
       let issue = issues[0]
       XCTAssertEqual(issue.ruleIdentifier, "constant_if_statement_condition")
-      XCTAssertEqual(issue.description, "if statement with constant condition is confusing")
+      XCTAssertEqual(issue.description, "If statement with constant condition is confusing")
       XCTAssertEqual(issue.category, .badPractice)
       XCTAssertEqual(issue.severity, .minor)
       let range = issue.location

@@ -338,3 +338,37 @@ guard 1 != 0, true else { // always true
   return true
 }
 ```
+
+
+## Constant Conditional Operator
+
+<dl>
+<dt>标识名</dt>
+<dd>constant_conditional_operator</dd>
+<dt>文件名</dt>
+<dd>ConstantConditionalOperatorRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+1 == 1 ? 1 : 0
+```
+
+###### Example 2
+
+```
+true ? 1 : 0
+```
+
+###### Example 3
+
+```
+false ? 1 : 0
+```

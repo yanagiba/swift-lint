@@ -28,5 +28,6 @@ public struct RuleSet {
     RedundantConditionalOperatorRule(),
     ConstantIfStatementConditionRule(),
     ConstantGuardStatementConditionRule(),
+    ConstantConditionalOperatorConditionRule(),
   ]
 }

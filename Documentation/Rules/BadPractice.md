@@ -338,3 +338,37 @@ guard 1 != 0, true else { // always true
   return true
 }
 ```
+
+
+## Constant Conditional Operator
+
+<dl>
+<dt>Identifier</dt>
+<dd>constant_conditional_operator</dd>
+<dt>File name</dt>
+<dd>ConstantConditionalOperatorRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+1 == 1 ? 1 : 0
+```
+
+###### Example 2
+
+```
+true ? 1 : 0
+```
+
+###### Example 3
+
+```
+false ? 1 : 0
+```

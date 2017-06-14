@@ -31,6 +31,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(RedundantConditionalOperatorRuleTests.allTests),
     testCase(ConstantIfStatementConditionRuleTests.allTests),
     testCase(ConstantGuardStatementConditionRuleTests.allTests),
+    testCase(ConstantConditionalOperatorConditionRuleTests.allTests),
   ]
 }
 #endif
