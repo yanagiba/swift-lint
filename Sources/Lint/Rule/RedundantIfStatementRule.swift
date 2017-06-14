@@ -20,6 +20,17 @@ import AST
 
 class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
   let name = "Redundant If Statement"
+  var description: String? {
+    return """
+    This rule detects three types of redundant if statements:
+
+    - then-block and else-block are returning true/false or false/true respectively;
+    - then-block and else-block are the same constant;
+    - then-block and else-block are the same variable expression.
+
+    They are usually introduced by mistake, and should be simplified or removed.
+    """
+  }
   var examples: [String]? {
     return [
       """
@@ -37,6 +48,22 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
         return true
       }
       // return a != b
+      """,
+      """
+      if a == b {
+        return true
+      } else {
+        return true
+      }
+      // return true
+      """,
+      """
+      if a == b {
+        return foo
+      } else {
+        return foo
+      }
+      // return foo
       """,
     ]
   }

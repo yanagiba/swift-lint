@@ -151,6 +151,14 @@ var foo: Int? = nil // var foo: Int?
 <dd>Bad Practice</dd>
 </dl>
 
+This rule detects three types of redundant if statements:
+
+- then-block and else-block are returning true/false or false/true respectively;
+- then-block and else-block are the same constant;
+- then-block and else-block are the same variable expression.
+
+They are usually introduced by mistake, and should be simplified or removed.
+
 ##### Examples:
 
 ###### Example 1
@@ -173,4 +181,80 @@ if a == b {
   return true
 }
 // return a != b
+```
+
+###### Example 3
+
+```
+if a == b {
+  return true
+} else {
+  return true
+}
+// return true
+```
+
+###### Example 4
+
+```
+if a == b {
+  return foo
+} else {
+  return foo
+}
+// return foo
+```
+
+
+## Redundant Conditional Operator
+
+<dl>
+<dt>識別子</dt>
+<dd>redundant_conditional_operator</dd>
+<dt>ファイル名</dt>
+<dd>RedundantConditionalOperatorRule.swift</dd>
+<dt>激しさ</dt>
+<dd>Minor</dd>
+<dt>分類</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+This rule detects three types of redundant conditional operators:
+
+- true-expression and false-expression are returning true/false or false/true respectively;
+- true-expression and false-expression are the same constant;
+- true-expression and false-expression are the same variable expression.
+
+They are usually introduced by mistake, and should be simplified or removed.
+
+##### Examples:
+
+###### Example 1
+
+```
+return a > b ? true : false // return a > b
+```
+
+###### Example 2
+
+```
+return a == b ? false : true // return a != b
+```
+
+###### Example 3
+
+```
+return a > b ? true : true // return true
+```
+
+###### Example 4
+
+```
+return a < b ? "foo" : "foo" // return "foo"
+```
+
+###### Example 5
+
+```
+return a != b ? c : c // return c
 ```

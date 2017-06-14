@@ -28,6 +28,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(RemoveGetForReadOnlyComputedPropertyRuleTests.allTests),
     testCase(RedundantInitializationToNilRuleTests.allTests),
     testCase(RedundantIfStatementRuleTests.allTests),
+    testCase(RedundantConditionalOperatorRuleTests.allTests),
   ]
 }
 #endif

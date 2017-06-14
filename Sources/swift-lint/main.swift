@@ -41,6 +41,7 @@ let driver = Driver(ruleIdentifiers: [
   "remove_get_for_readonly_computed_property",
   "redundant_initialization_to_nil",
   "redundant_if_statement",
+  "redundant_conditional_operator",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)

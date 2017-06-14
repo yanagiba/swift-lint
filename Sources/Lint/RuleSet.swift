@@ -25,5 +25,6 @@ public struct RuleSet {
     RemoveGetForReadOnlyComputedPropertyRule(),
     RedundantInitializationToNilRule(),
     RedundantIfStatementRule(),
+    RedundantConditionalOperatorRule(),
   ]
 }
