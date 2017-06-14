@@ -499,3 +499,37 @@ let _ = foo() // _ = foo()
 ```
 var _ = bar // _ = bar
 ```
+
+
+## Redundant Enum-Case String Value
+
+<dl>
+<dt>識別子</dt>
+<dd>redundant_enumcase_string_value</dd>
+<dt>ファイル名</dt>
+<dd>RedundantEnumCaseStringValueRule.swift</dd>
+<dt>激しさ</dt>
+<dd>Minor</dd>
+<dt>分類</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+For cases of a raw-value typed enumeration declaration,
+if the raw-value type is specified as `String` and
+no values are assigned to the cases explicitly,
+each unassigned case is implicitly assigned a string with
+the same text as the name of that case.
+
+So the string literal can be omitted when it is the same as the case name.
+
+##### Examples:
+
+###### Example 1
+
+```
+enum Foo: String {
+  case a = "a"    // case a
+  case b, c = "c" // case b, c
+  case d
+}
+```

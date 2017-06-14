@@ -33,5 +33,6 @@ public struct RuleSet {
     DoubleNegativeRule(),
     CollapsibleIfStatementsRule(),
     RedundantVariableDeclarationKeywordRule(),
+    RedundantEnumCaseStringValueRule(),
   ]
 }

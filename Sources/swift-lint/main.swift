@@ -49,6 +49,7 @@ let driver = Driver(ruleIdentifiers: [
   "double_negative",
   "collapsible_if_statements",
   "redundant_variable_declaration_keyword",
+  "redundant_enumcase_string_value",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
 exit(exitCode)
