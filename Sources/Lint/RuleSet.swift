@@ -29,5 +29,6 @@ public struct RuleSet {
     ConstantIfStatementConditionRule(),
     ConstantGuardStatementConditionRule(),
     ConstantConditionalOperatorConditionRule(),
+    InvertedLogicRule(),
   ]
 }

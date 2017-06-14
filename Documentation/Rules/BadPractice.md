@@ -372,3 +372,35 @@ true ? 1 : 0
 ```
 false ? 1 : 0
 ```
+
+
+## Inverted Logic
+
+<dl>
+<dt>Identifier</dt>
+<dd>inverted_logic</dd>
+<dt>File name</dt>
+<dd>InvertedLogicRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+if a != 0 {  // if a == 0 {
+  i = 1      //   i = -1
+} else {     // } else {
+  i = -1     //   i = 1
+}            // }
+```
+
+###### Example 2
+
+```
+!foo ? -1 : 1  // foo ? 1 : -1
+```

@@ -372,3 +372,35 @@ true ? 1 : 0
 ```
 false ? 1 : 0
 ```
+
+
+## Inverted Logic
+
+<dl>
+<dt>标识名</dt>
+<dd>inverted_logic</dd>
+<dt>文件名</dt>
+<dd>InvertedLogicRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+if a != 0 {  // if a == 0 {
+  i = 1      //   i = -1
+} else {     // } else {
+  i = -1     //   i = 1
+}            // }
+```
+
+###### Example 2
+
+```
+!foo ? -1 : 1  // foo ? 1 : -1
+```

@@ -32,6 +32,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(ConstantIfStatementConditionRuleTests.allTests),
     testCase(ConstantGuardStatementConditionRuleTests.allTests),
     testCase(ConstantConditionalOperatorConditionRuleTests.allTests),
+    testCase(InvertedLogicRuleTests.allTests),
   ]
 }
 #endif
