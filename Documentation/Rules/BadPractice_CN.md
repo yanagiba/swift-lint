@@ -404,3 +404,33 @@ if a != 0 {  // if a == 0 {
 ```
 !foo ? -1 : 1  // foo ? 1 : -1
 ```
+
+
+## Double Negative
+
+<dl>
+<dt>标识名</dt>
+<dd>double_negative</dd>
+<dt>文件名</dt>
+<dd>DoubleNegativeRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+Logically, double negative is positive. So prefer to write positively.
+
+##### Examples:
+
+###### Example 1
+
+```
+!!foo // foo
+```
+
+###### Example 2
+
+```
+!(a != b) // a == b
+```
