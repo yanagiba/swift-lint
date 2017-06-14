@@ -34,6 +34,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(ConstantConditionalOperatorConditionRuleTests.allTests),
     testCase(InvertedLogicRuleTests.allTests),
     testCase(DoubleNegativeRuleTests.allTests),
+    testCase(CollapsibleIfStatementsRuleTests.allTests),
   ]
 }
 #endif

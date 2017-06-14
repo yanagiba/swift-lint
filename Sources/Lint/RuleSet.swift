@@ -31,5 +31,6 @@ public struct RuleSet {
     ConstantConditionalOperatorConditionRule(),
     InvertedLogicRule(),
     DoubleNegativeRule(),
+    CollapsibleIfStatementsRule(),
   ]
 }

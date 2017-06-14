@@ -434,3 +434,37 @@ Logically, double negative is positive. So prefer to write positively.
 ```
 !(a != b) // a == b
 ```
+
+
+## Collapsible If Statements
+
+<dl>
+<dt>Identifier</dt>
+<dd>collapsible_if_statements</dd>
+<dt>File name</dt>
+<dd>CollapsibleIfStatementsRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+This rule detects instances where the conditions of
+two consecutive if statements can be combined into one
+in order to increase code cleanness and readability.
+
+##### Examples:
+
+###### Example 1
+
+```
+if (x) {
+  if (y) {
+    foo()
+  }
+}
+// depends on the situation, could be collapsed into
+// if x && y { foo() }
+// or
+// if x, y { foo() }
+```
