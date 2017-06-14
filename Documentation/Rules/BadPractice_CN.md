@@ -258,3 +258,43 @@ return a < b ? "foo" : "foo" // return "foo"
 ```
 return a != b ? c : c // return c
 ```
+
+
+## Constant If Statement Condition
+
+<dl>
+<dt>标识名</dt>
+<dd>constant_if_statement_condition</dd>
+<dt>文件名</dt>
+<dd>ConstantIfStatementConditionRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+if true { // always true
+  return true
+}
+```
+
+###### Example 2
+
+```
+if 1 == 0 { // always false
+  return false
+}
+```
+
+###### Example 3
+
+```
+if 1 > 0, true { // always true
+  return true
+}
+```

@@ -26,5 +26,6 @@ public struct RuleSet {
     RedundantInitializationToNilRule(),
     RedundantIfStatementRule(),
     RedundantConditionalOperatorRule(),
+    ConstantIfStatementConditionRule(),
   ]
 }

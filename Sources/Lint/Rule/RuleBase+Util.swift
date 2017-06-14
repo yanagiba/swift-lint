@@ -52,4 +52,49 @@ extension RuleBase {
     }
     return nil
   }
+
+  func isExpressionConstant(_ expression: Expression) -> Bool {
+    switch expression {
+    case let literalExpr as LiteralExpression:
+      switch literalExpr.kind {
+      case .nil, .boolean, .integer, .floatingPoint, .staticString:
+        return true
+      default:
+        return false
+      }
+    case let binaryOpExpr as BinaryOperatorExpression:
+      guard binaryOpExpr.binaryOperator == "==" ||
+        binaryOpExpr.binaryOperator == "!="
+      else {
+        return false
+      }
+      return isExpressionConstant(binaryOpExpr.leftExpression) &&
+        isExpressionConstant(binaryOpExpr.rightExpression)
+    case let parenExpr as ParenthesizedExpression:
+      return isExpressionConstant(parenExpr.expression)
+    default:
+      return false
+    }
+  }
+
+  func isConditionListConstant(_ conditionList: ConditionList) -> Bool {
+    let patternMatchingConditions = conditionList.filter({
+      if case .expression = $0 {
+        return false
+      }
+      return true
+    })
+    guard patternMatchingConditions.isEmpty else {
+      return false
+    }
+
+    let conditionExprs = conditionList.flatMap({ condition -> Expression? in
+      if case .expression(let expr) = condition {
+        return expr
+      }
+      return nil
+    })
+
+    return conditionExprs.filter({ !isExpressionConstant($0) }).isEmpty
+  }
 }
