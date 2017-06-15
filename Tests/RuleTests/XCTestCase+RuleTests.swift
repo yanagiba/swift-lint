@@ -28,9 +28,12 @@ extension String {
     testDriver.setReporter(issueCollector)
     testDriver.registerRule(rule, ruleIdentifiers: [rule.identifier])
     testDriver.updateOutputHandle(.nullDevice)
-    testDriver.lint(
+    let lintResult = testDriver.lint(
       sourceFiles: [SourceFile(path: "test/test", content: self)],
       ruleConfigurations: configurations)
+    if lintResult != 0 {
+      fatalError("Failed in linting file.")
+    }
     return issueCollector.issues
   }
 }

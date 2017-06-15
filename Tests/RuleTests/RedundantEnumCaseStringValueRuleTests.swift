@@ -21,9 +21,9 @@ import XCTest
 class RedundantEnumCaseStringValueRuleTests : XCTestCase {
   func testNotStringRawValueType() {
     let issues = """
-      enum interger: Int { case foo = 1, bar = 2 }
-      enum floating: Double { case foo = 1.23, bar = 4.56 }
-      enum boolean: Bool { case foo = true, bar = false }
+      enum i: Int { case foo = 1, bar = 2 }
+      enum f: Double { case foo = 1.23, bar = 4.56 }
+      enum b: Bool { case foo = true, bar = false }
       """.inspect(withRule: RedundantEnumCaseStringValueRule())
     XCTAssertTrue(issues.isEmpty)
   }

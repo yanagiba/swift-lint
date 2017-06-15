@@ -22,9 +22,9 @@ class CollapsibleIfStatementsRuleTests : XCTestCase {
   func testWithElses() {
     let issues = """
       if foo { if bar {} } else {}
-      if foo { if bar {} } else if {}
+      if foo { if bar {} } else if x {}
       if foo { if bar {} else {} }
-      if foo { if bar {} else if {} }
+      if foo { if bar {} else if x {} }
       if foo { if bar {} else {} } else {}
       """
       .inspect(withRule: CollapsibleIfStatementsRule())
