@@ -20,10 +20,23 @@ import XCTest
 public func allTests() -> [XCTestCaseEntry] {
   return [
     testCase(NoForceCastRuleTests.allTests),
+    testCase(NoForcedTryRuleTests.allTests),
     testCase(CyclomaticComplexityRuleTests.allTests),
     testCase(NPathComplexityRuleTests.allTests),
     testCase(NCSSRuleTests.allTests),
     testCase(NestedCodeBlockDepthRuleTests.allTests),
+    testCase(RemoveGetForReadOnlyComputedPropertyRuleTests.allTests),
+    testCase(RedundantInitializationToNilRuleTests.allTests),
+    testCase(RedundantIfStatementRuleTests.allTests),
+    testCase(RedundantConditionalOperatorRuleTests.allTests),
+    testCase(ConstantIfStatementConditionRuleTests.allTests),
+    testCase(ConstantGuardStatementConditionRuleTests.allTests),
+    testCase(ConstantConditionalOperatorConditionRuleTests.allTests),
+    testCase(InvertedLogicRuleTests.allTests),
+    testCase(DoubleNegativeRuleTests.allTests),
+    testCase(CollapsibleIfStatementsRuleTests.allTests),
+    testCase(RedundantVariableDeclarationKeywordRuleTests.allTests),
+    testCase(RedundantEnumCaseStringValueRuleTests.allTests),
   ]
 }
 #endif
