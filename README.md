@@ -1,6 +1,6 @@
 # Swift Lint
 
-[![swift-ast 0.3.1](https://img.shields.io/badge/swift‐ast-0.3.1-C70025.svg)](https://github.com/yanagiba/swift-ast)
+[![swift-ast 0.3.3](https://img.shields.io/badge/swift‐ast-0.3.3-C70025.svg)](https://github.com/yanagiba/swift-ast)
 [![swift-lint master](https://img.shields.io/badge/swift‐lint-master-C70025.svg)](https://github.com/yanagiba/swift-lint)
 [![swift-format pending](https://img.shields.io/badge/swift‐format-pending-C70025.svg)](https://github.com/yanagiba/swift-format)
 
