@@ -40,10 +40,94 @@ extension RuleBase {
     return astContext.topLevelDeclaration.comments
       .map({ ($0.location.line, $0.content) })
       .filter({ $0.1.contains("swift-lint") && $0.1.contains("suppress") })
+      .map({ lineContent -> (Int, [String]) in
+        let line = lineContent.0
+        let configurations = lineContent.1.extractedConfigurations
+          .filter({ $0.0 == "suppress" })
+          .map({ $0.1 })
+
+        var suppressionConf: [String] = []
+        for conf in configurations {
+          guard let selectedSuppressions = conf else {
+            return (line, [])
+          }
+          if selectedSuppressions.isEmpty {
+            return (line, [])
+          }
+
+          let ruleIds = selectedSuppressions.components(separatedBy: ",")
+          suppressionConf += ruleIds
+        }
+
+        return (line, suppressionConf)
+      })
       .reduce([:]) { carryOver, e in
         var mutableDict = carryOver
-        mutableDict[e.0] = [e.1]
+        mutableDict[e.0] = e.1
         return mutableDict
       }
+  }
+}
+
+fileprivate extension String {
+  var extractedConfigurations: [(name: String, args: String?)] {
+    guard let swiftLintKeywordRange = range(of: "swift-lint") else {
+      return []
+    }
+
+    let remainingString = String(self[swiftLintKeywordRange.upperBound...])
+    var configurations: [(String, String?)] = []
+
+    enum State {
+      case head
+      case keyword
+      case argument
+      case tail
+    }
+
+    var state = State.head
+    var currentString = ""
+    var currentKey = ""
+    for c in remainingString {
+      switch c {
+      case ":":
+        if state == .head || (state == .tail && (currentString == "" || currentString.hasSuffix("swift-lint"))) {
+          currentString = ""
+          currentKey = ""
+          state = .keyword
+        } else if state == .keyword {
+          configurations.append((currentString, nil))
+          currentString = ""
+          currentKey = ""
+        } else {
+          currentString += String(c)
+        }
+      case "(":
+        if state == .keyword {
+          currentKey = currentString
+          currentString = ""
+          state = .argument
+        } else {
+          currentString += String(c)
+        }
+      case ")":
+        if state == .argument {
+          configurations.append((currentKey, currentString))
+          currentString = ""
+          currentKey = ""
+          state = .tail
+        }
+      default:
+        if c != " " {
+          currentString += String(c)
+        }
+      }
+    }
+
+    if state == .keyword && !currentString.isEmpty {
+      configurations.append((currentString, nil))
+    }
+
+    return configurations
   }
 }
