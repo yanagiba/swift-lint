@@ -39,7 +39,7 @@ public class NonCommentingSourceStatements {
     return stmts.reduce(0) { $0 + ncss($1) }
   }
 
-  private func ncss(_ stmt: Statement) -> Int {
+  private func ncss(_ stmt: Statement) -> Int { // swift-lint:suppress(high_cyclomatic_complexity,high_ncss)
     switch stmt {
     case let deferStmt as DeferStatement:
       return 1 + deferStmt.codeBlock.ncssCount
@@ -246,7 +246,7 @@ public class NonCommentingSourceStatements {
     return ncssWillSet + ncssDidSet
   }
 
-  private func ncss(_ expr: Expression) -> Int {
+  private func ncss(_ expr: Expression) -> Int { // swift-lint:suppress(nested_code_block_depth)
     class NPathExpressionVisitor : ASTVisitor {
       var _count = 0
       var _isTrailingClosure = false

@@ -36,7 +36,7 @@ public class NPathComplexity {
     return stmts.reduce(1) { $0 * nPath($1) }
   }
 
-  private func nPath(_ stmt: Statement) -> Int {
+  private func nPath(_ stmt: Statement) -> Int { // swift-lint:suppress(high_cyclomatic_complexity)
     switch stmt {
     case let deferStmt as DeferStatement:
       return nPath(deferStmt.codeBlock)

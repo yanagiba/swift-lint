@@ -227,7 +227,7 @@ class NonCommentingSourceStatementsTests : XCTestCase {
     XCTAssertEqual(getNCSS(for: "subscript() -> Self { get set }"), 3)
   }
 
-  func testConstantAndVariableDeclarations() {
+  func testConstantAndVariableDeclarations() { // swift-lint:suppress()
     XCTAssertEqual(getNCSS(for: "let a = foo { }"), 1)
     XCTAssertEqual(getNCSS(for: "let a, b"), 1)
     XCTAssertEqual(getNCSS(for: "let a = foo { }, b"), 1)

@@ -108,7 +108,7 @@ let supportedLangs = [Language.US, .JP, .CN]
 let pwd = FileManager.default.currentDirectoryPath
 let docRoot = "\(pwd)/Documentation/Rules"
 
-for (category, rules) in groupedRuleSet() {
+for (category, rules) in groupedRuleSet() { // swift-lint:suppress(nested_code_block_depth)
   for lang in supportedLangs {
     let filePath = "\(docRoot)/\(category.fileName)\(lang.fileSuffix).md"
 
