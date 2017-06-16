@@ -16,6 +16,8 @@
 
 import XCTest
 
+@testable import Source
+@testable import Parser
 @testable import Lint
 
 class RuleBaseTests : XCTestCase {
@@ -60,8 +62,42 @@ class RuleBaseTests : XCTestCase {
     XCTAssertEqual(defaultDict["foo"] as? String, "bar")
   }
 
+  func testCommentBasedSuppressions() {
+    let ruleBase = parse("""
+      // line doesn't have the looked keyword
+      /* swift-lint:suppress() */
+      // swift-lint:suppress(A)
+      // swift-lint:suppress(A,B)
+      /*
+       swift-lint:suppress(A,B,C):suppress(D)
+       swift-lint:suppress(E)
+       */
+      //swift-lint:suppress(A):suppress()
+      //swift-lint:suppress():suppress(A)
+      /* swift-lint:only_other_flags() */
+      //  swift-lint:suppress(A):other_flags(a):other_flags_no_args():suppress(B)
+      """)
+    // print(ruleBase.commentBasedSuppressions)
+    XCTAssertEqual(ruleBase.commentBasedSuppressions.count, 7)
+  }
+
+  private func parse(_ str: String) -> RuleBase {
+    let sourceFile = SourceFile(
+      path: "LintTests/RuleBaseTests", content: str)
+    let parser = Parser(source: sourceFile)
+    guard let topLevelDecl = try? parser.parse() else {
+      fatalError("Failed in parsing content: \(str)")
+    }
+
+    let ruleBase = RuleBase()
+    ruleBase.astContext =
+      ASTContext(sourceFile: sourceFile, topLevelDeclaration: topLevelDecl)
+    return ruleBase
+  }
+
   static var allTests = [
     ("testEmptyConfigurations", testEmptyConfigurations),
     ("testRetriveFromCustomConfigurations", testRetriveFromCustomConfigurations),
+    ("testCommentBasedSuppressions", testCommentBasedSuppressions),
   ]
 }

@@ -17,7 +17,9 @@
 class RuleBase {
   var astContext: ASTContext?
   var configurations: [String: Any]?
+}
 
+extension RuleBase {
   func getConfiguration<T>(for key: String, orDefault defaultValue: T) -> T {
     if let configurations = configurations,
       let customThreshold = configurations[key] as? T
@@ -25,5 +27,23 @@ class RuleBase {
       return customThreshold
     }
     return defaultValue
+  }
+}
+
+extension RuleBase {
+  typealias CommentBasedSuppression = [Int: [String]]
+
+  var commentBasedSuppressions: CommentBasedSuppression {
+    guard let astContext = astContext else {
+      return [:]
+    }
+    return astContext.topLevelDeclaration.comments
+      .map({ ($0.location.line, $0.content) })
+      .filter({ $0.1.contains("swift-lint") && $0.1.contains("suppress") })
+      .reduce([:]) { carryOver, e in
+        var mutableDict = carryOver
+        mutableDict[e.0] = [e.1]
+        return mutableDict
+      }
   }
 }
