@@ -36,12 +36,11 @@ extension RuleBase {
   typealias CommentBasedRuleConfiguration = [Int: [String: String]]
 
   var commentBasedSuppressions: CommentBasedSuppression {
-    return commentBasedConfigurations(forKey: "suppress")
+    let suppressConfigTuples = commentBasedConfigurations(forKey: "suppress")
       .map({ lineConfig -> (Int, [String]) in
         let line = lineConfig.0
-        let configurations = lineConfig.1
         var suppressionConf: [String] = []
-        for conf in configurations {
+        for conf in lineConfig.1 {
           guard let selectedSuppressions = conf else {
             return (line, [])
           }
@@ -55,20 +54,15 @@ extension RuleBase {
 
         return (line, suppressionConf)
       })
-      .reduce([:]) { carryOver, e in
-        var mutableDict = carryOver
-        mutableDict[e.0] = e.1
-        return mutableDict
-      }
+    return toDictionary(fromTuples: suppressConfigTuples)
   }
 
   var commentBasedRuleConfigurations: CommentBasedRuleConfiguration {
-    return commentBasedConfigurations(forKey: "rule_configure")
+    let ruleConfigTuples = commentBasedConfigurations(forKey: "rule_configure")
       .map({ lineConfig -> (Int, [String: String]) in
         let line = lineConfig.0
-        let configurations = lineConfig.1
         var ruleConfig: [String: String] = [:]
-        for conf in configurations {
+        for conf in lineConfig.1 {
           guard let ruleConf = conf else {
             continue
           }
@@ -87,11 +81,7 @@ extension RuleBase {
 
         return (line, ruleConfig)
       })
-      .reduce([:]) { carryOver, e in
-        var mutableDict = carryOver
-        mutableDict[e.0] = e.1
-        return mutableDict
-      }
+    return toDictionary(fromTuples: ruleConfigTuples)
   }
 
   private func commentBasedConfigurations(
@@ -100,7 +90,7 @@ extension RuleBase {
     guard let astContext = astContext else {
       return [:]
     }
-    return astContext.topLevelDeclaration.comments
+    let configTuples = astContext.topLevelDeclaration.comments
       .map({ ($0.location.line, $0.content) })
       .filter({ $0.1.contains("swift-lint") && $0.1.contains(key) })
       .map({ lineContent -> (Int, [String?]) in
@@ -110,12 +100,14 @@ extension RuleBase {
           .map({ $0.args })
         return (line, configurations)
       })
-      .reduce([:]) { carryOver, e in
-        var mutableDict = carryOver
-        mutableDict[e.0] = e.1
-        return mutableDict
-      }
+    return toDictionary(fromTuples: configTuples)
   }
+}
+
+fileprivate func toDictionary<K, V>(fromTuples tuples: [(K, V)]) -> [K: V] {
+  var dict:[K: V] = [K: V]()
+  tuples.forEach { dict[$0.0] = $0.1 }
+  return dict
 }
 
 fileprivate extension String {
