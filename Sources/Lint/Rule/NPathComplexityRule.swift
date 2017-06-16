@@ -57,13 +57,15 @@ class NPathComplexityRule : RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.major
   let category = Issue.Category.complexity
 
-  private var threshold: Int {
+  private func getThreshold(of sourceRange: SourceRange) -> Int {
     return getConfiguration(
-      for: NPathComplexityRule.ThresholdKey,
+      forKey: NPathComplexityRule.ThresholdKey,
+      atLineNumber: sourceRange.start.line,
       orDefault: NPathComplexityRule.DefaultThreshold)
   }
 
   private func emitIssue(_ npath: Int, _ sourceRange: SourceRange) {
+    let threshold = getThreshold(of: sourceRange)
     guard npath > threshold else {
       return
     }

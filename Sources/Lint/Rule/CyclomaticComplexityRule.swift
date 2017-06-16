@@ -93,13 +93,15 @@ class CyclomaticComplexityRule : RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.major
   let category = Issue.Category.complexity
 
-  private var threshold: Int {
+  private func getThreshold(of sourceRange: SourceRange) -> Int {
     return getConfiguration(
-      for: CyclomaticComplexityRule.ThresholdKey,
+      forKey: CyclomaticComplexityRule.ThresholdKey,
+      atLineNumber: sourceRange.start.line,
       orDefault: CyclomaticComplexityRule.DefaultThreshold)
   }
 
   private func emitIssue(_ ccn: Int, _ sourceRange: SourceRange) {
+    let threshold = getThreshold(of: sourceRange)
     guard ccn > threshold else {
       return
     }

@@ -24,15 +24,15 @@ class RuleBaseTests : XCTestCase {
   func testEmptyConfigurations() {
     let ruleBase = RuleBase()
     let integer: Int = 1
-    XCTAssertEqual(ruleBase.getConfiguration(for: "integer", orDefault: integer), integer)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", orDefault: integer), integer)
     let double: Double = 1.23
-    XCTAssertEqual(ruleBase.getConfiguration(for: "double", orDefault: double), double)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", orDefault: double), double)
     let string: String = "string"
-    XCTAssertEqual(ruleBase.getConfiguration(for: "string", orDefault: string), string)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", orDefault: string), string)
     let array: [Int] = [1, 2, 3]
-    XCTAssertEqual(ruleBase.getConfiguration(for: "array", orDefault: array), array)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "array", orDefault: array), array)
     let dictionary: [String: Any] = ["foo": 1, "bar": (2.34, "👌")]
-    let defaultDict = ruleBase.getConfiguration(for: "dictionary", orDefault: dictionary)
+    let defaultDict = ruleBase.getConfiguration(forKey: "dictionary", orDefault: dictionary)
     XCTAssertEqual(defaultDict.count, 2)
     XCTAssertEqual(defaultDict["foo"] as? Int, 1)
     guard let barValue = defaultDict["bar"] as? (Double, String) else {
@@ -52,12 +52,12 @@ class RuleBaseTests : XCTestCase {
       "array": [3, 2, 1],
       "dictionary": ["foo": "bar"]
     ]
-    XCTAssertEqual(ruleBase.getConfiguration(for: "integer", orDefault: 1), -1)
-    XCTAssertEqual(ruleBase.getConfiguration(for: "double", orDefault: 1.23), -1.23)
-    XCTAssertEqual(ruleBase.getConfiguration(for: "string", orDefault: "string"), "foobar")
-    XCTAssertEqual(ruleBase.getConfiguration(for: "array", orDefault: [1, 2, 3]), [3, 2, 1])
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", orDefault: 1), -1)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", orDefault: 1.23), -1.23)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", orDefault: "string"), "foobar")
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "array", orDefault: [1, 2, 3]), [3, 2, 1])
     let dictionary: [String: Any] = ["foo": 1, "bar": (2.34, "👌")]
-    let defaultDict = ruleBase.getConfiguration(for: "dictionary", orDefault: dictionary)
+    let defaultDict = ruleBase.getConfiguration(forKey: "dictionary", orDefault: dictionary)
     XCTAssertEqual(defaultDict.count, 1)
     XCTAssertEqual(defaultDict["foo"] as? String, "bar")
   }

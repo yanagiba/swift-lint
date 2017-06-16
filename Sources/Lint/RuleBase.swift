@@ -20,7 +20,27 @@ class RuleBase {
 }
 
 extension RuleBase {
-  func getConfiguration<T>(for key: String, orDefault defaultValue: T) -> T {
+  func getConfiguration<T>(
+    forKey key: String, atLineNumber line: Int, orDefault defaultValue: T
+  ) -> T {
+    if let commentConfig = getCommentBasedConfiguration(forKey: key, atLineNumber: line) {
+      switch defaultValue {
+      case is String:
+        if let strConfig = commentConfig as? T {
+          return strConfig
+        }
+      case is Int:
+        if let intConfig = Int(commentConfig), let tConfig = intConfig as? T {
+          return tConfig
+        }
+      default:
+        break
+      }
+    }
+    return getConfiguration(forKey: key, orDefault: defaultValue)
+  }
+
+  func getConfiguration<T>(forKey key: String, orDefault defaultValue: T) -> T {
     if let configurations = configurations,
       let customThreshold = configurations[key] as? T
     {
@@ -45,6 +65,9 @@ extension RuleBase {
   typealias CommentBasedSuppression = [Int: [String]]
   typealias CommentBasedConfiguration = [Int: [String: String]]
 
+  // TODO: oppurtunity for performance improvements
+  // these computations can be calculated once and cached per source file
+
   var commentBasedSuppressions: CommentBasedSuppression {
     let suppressConfigTuples = commentBasedConfigurations(forKey: "suppress")
       .map({ lineConfig -> (Int, [String]) in
@@ -67,7 +90,7 @@ extension RuleBase {
     return toDictionary(fromTuples: suppressConfigTuples)
   }
 
-  var commentBasedConfigurations: CommentBasedConfiguration {
+  var commentBasedConfigurations: CommentBasedConfiguration {  // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
     let ruleConfigTuples = commentBasedConfigurations(forKey: "rule_configure")
       .map({ lineConfig -> (Int, [String: String]) in
         let line = lineConfig.0
