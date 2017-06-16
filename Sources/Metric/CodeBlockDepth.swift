@@ -23,7 +23,7 @@ public class CodeBlockDepth {
     return depth(codeBlock)
   }
 
-  private func depth(_ stmt: Statement) -> Int {
+  private func depth(_ stmt: Statement) -> Int { // swift-lint:suppress(high_cyclomatic_complexity,high_ncss)
     switch stmt {
     case let deferStmt as DeferStatement:
       return deferStmt.codeBlock.depth
@@ -145,7 +145,7 @@ public class CodeBlockDepth {
     return max(depthCodeBlock, depthElseClause)
   }
 
-  private func depth(_ switchStmt: SwitchStatement) -> Int {
+  private func depth(_ switchStmt: SwitchStatement) -> Int { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
     return 1 + switchStmt.cases.reduce(0) {
       switch $1 {
       case .case(_, let stmts):

@@ -16,6 +16,8 @@
 
 import XCTest
 
+@testable import Source
+@testable import Parser
 @testable import Lint
 
 class RuleBaseTests : XCTestCase {
@@ -60,8 +62,86 @@ class RuleBaseTests : XCTestCase {
     XCTAssertEqual(defaultDict["foo"] as? String, "bar")
   }
 
+  func testCommentBasedSuppressions() { // swift-lint:suppress
+    let ruleBase = parse("""
+      // line doesn't have the looked keyword
+      /* swift-lint:suppress() */
+      // swift-lint:suppress(A)
+      // swift-lint:suppress(A,B)
+      /*
+       swift-lint:suppress(A,B,C):suppress(D)
+       swift-lint:suppress(E)
+       */
+      //swift-lint:suppress(A):suppress
+      //swift-lint:suppress:suppress(A)
+      /* swift-lint:only_other_flags() */
+      //  swift-lint:suppress(A):other_flags(a):other_flags_no_args:suppress(B)
+      """)
+    let suppressions = ruleBase.commentBasedSuppressions
+    XCTAssertEqual(suppressions.count, 7)
+    XCTAssertNil(suppressions[0])
+    XCTAssertNil(suppressions[1])
+    guard let suppression2 = suppressions[2] else {
+      XCTFail("Failed in getting the suppression settings from line 2.")
+      return
+    }
+    XCTAssertTrue(suppression2.isEmpty)
+    guard let suppression3 = suppressions[3] else {
+      XCTFail("Failed in getting the suppression settings from line 3.")
+      return
+    }
+    XCTAssertEqual(suppression3, ["A"])
+    guard let suppression4 = suppressions[4] else {
+      XCTFail("Failed in getting the suppression settings from line 4.")
+      return
+    }
+    XCTAssertEqual(suppression4, ["A", "B"])
+    guard let suppression5 = suppressions[5] else {
+      XCTFail("Failed in getting the suppression settings from line 5.")
+      return
+    }
+    XCTAssertEqual(suppression5, ["A", "B", "C", "D", "E"])
+    XCTAssertNil(suppressions[6])
+    XCTAssertNil(suppressions[7])
+    XCTAssertNil(suppressions[8])
+    guard let suppression9 = suppressions[9] else {
+      XCTFail("Failed in getting the suppression settings from line 9.")
+      return
+    }
+    XCTAssertTrue(suppression9.isEmpty)
+    guard let suppression10 = suppressions[10] else {
+      XCTFail("Failed in getting the suppression settings from line 10.")
+      return
+    }
+    XCTAssertTrue(suppression10.isEmpty)
+    XCTAssertNil(suppressions[11])
+    guard let suppression12 = suppressions[12] else {
+      XCTFail("Failed in getting the suppression settings from line 12.")
+      return
+    }
+    XCTAssertEqual(suppression12, ["A", "B"])
+    XCTAssertNil(suppressions[13])
+    XCTAssertNil(suppressions[14])
+    XCTAssertNil(suppressions[15])
+  }
+
+  private func parse(_ str: String) -> RuleBase {
+    let sourceFile = SourceFile(
+      path: "LintTests/RuleBaseTests", content: str)
+    let parser = Parser(source: sourceFile)
+    guard let topLevelDecl = try? parser.parse() else {
+      fatalError("Failed in parsing content: \(str)")
+    }
+
+    let ruleBase = RuleBase()
+    ruleBase.astContext =
+      ASTContext(sourceFile: sourceFile, topLevelDeclaration: topLevelDecl)
+    return ruleBase
+  }
+
   static var allTests = [
     ("testEmptyConfigurations", testEmptyConfigurations),
     ("testRetriveFromCustomConfigurations", testRetriveFromCustomConfigurations),
+    ("testCommentBasedSuppressions", testCommentBasedSuppressions),
   ]
 }

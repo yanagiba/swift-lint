@@ -76,28 +76,12 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
       description: "if statement is redundant and can be \(suggestion)")
   }
 
-  func visit(_ ifStmt: IfStatement) throws -> Bool {
-    let patternMatchingConditions = ifStmt.conditionList.filter({
-      if case .expression = $0 {
-        return false
-      }
-      return true
-    })
-    guard patternMatchingConditions.isEmpty else {
-      return true
-    }
-
-    // check if both then-block and else-block exist and have one and only one statement
-    guard ifStmt.codeBlock.statements.count == 1,
-      let elseClause = ifStmt.elseClause,
-      case .else(let elseBlock) = elseClause,
-      elseBlock.statements.count == 1
+  func visit(_ ifStmt: IfStatement) throws -> Bool { // swift-lint:configure CYCLOMATIC_COMPLEXITY=12
+    guard ifStmt.areAllConditionsExpressions,
+      let (thenStmt, elseStmt) = ifStmt.thenElseStmts
     else {
       return true
     }
-
-    let thenStmt = ifStmt.codeBlock.statements[0]
-    let elseStmt = elseBlock.statements[0]
 
     // check then and else block each has one return statement that has expression
     guard let thenReturn = thenStmt as? ReturnStatement,
@@ -115,5 +99,32 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
     }
 
     return true
+  }
+}
+
+fileprivate extension IfStatement {
+  fileprivate var thenElseStmts: (Statement, Statement)? {
+    // check if both then-block and else-block exist and have one and only one statement
+    guard codeBlock.statements.count == 1,
+      let elseClause = elseClause,
+      case .else(let elseBlock) = elseClause,
+      elseBlock.statements.count == 1
+    else {
+      return nil
+    }
+
+    let thenStmt = codeBlock.statements[0]
+    let elseStmt = elseBlock.statements[0]
+
+    return (thenStmt, elseStmt)
+  }
+
+  fileprivate var areAllConditionsExpressions: Bool {
+    return conditionList.filter({
+      if case .expression = $0 {
+        return false
+      }
+      return true
+    }).isEmpty
   }
 }

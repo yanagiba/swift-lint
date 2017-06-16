@@ -37,40 +37,53 @@ class RedundantInitializationToNilRule: RuleBase, ASTVisitorRule {
 
   func visit(_ varDecl: VariableDeclaration) throws -> Bool {
     if case .initializerList(let inits) = varDecl.body {
-      let foundVariableNames = inits.flatMap { pttrnInit in
-        if let initExpr = pttrnInit.initializerExpression as? LiteralExpression,
-          case .nil = initExpr.kind,
-          let idPattern = pttrnInit.pattern as? IdentifierPattern,
-          let idTypeAnnotation = idPattern.typeAnnotation,
-          idTypeAnnotation.type is OptionalType
-        {
-          return idPattern.identifier
-        } else {
-          return nil
-        }
-      }
-
-      let foundVariableCount = foundVariableNames.count
-      if foundVariableCount > 0 {
-        let pluralS = foundVariableNames.count > 1 ? "s" : ""
-        var nameString = ""
-        for (index, name) in foundVariableNames.enumerated() {
-          if foundVariableCount > 1 && index == foundVariableCount-1 {
-            nameString += " and "
-          } else if index > 0 {
-            nameString += ", "
-          }
-
-          nameString += "`\(name)`"
-        }
+      let foundVariableNames = inits.flatMap { $0.identifier }
+      if foundVariableNames.count > 0 {
+        let variableText = getVariableForm(foundVariableNames)
+        let nameString = getNameText(foundVariableNames)
 
         emitIssue(
           varDecl.sourceRange,
-          description: "`nil` initialization can be safely removed for variable\(pluralS) \(nameString)"
+          description: "`nil` initialization can be safely removed for \(variableText) \(nameString)"
         )
       }
     }
 
     return true
+  }
+
+  private func getVariableForm(_ names: [String]) -> String {
+    let pluralS = names.count > 1 ? "s" : ""
+    return "variable\(pluralS)"
+  }
+
+  private func getNameText(_ names: [String]) -> String {
+    let nameCount = names.count
+    var nameString = ""
+    for (index, name) in names.enumerated() {
+      if nameCount > 1 && index == nameCount-1 {
+        nameString += " and "
+      } else if index > 0 {
+        nameString += ", "
+      }
+
+      nameString += "`\(name)`"
+    }
+    return nameString
+  }
+}
+
+fileprivate extension PatternInitializer {
+  var identifier: Identifier? {
+    if let initExpr = initializerExpression as? LiteralExpression,
+      case .nil = initExpr.kind,
+      let idPattern = pattern as? IdentifierPattern,
+      let idTypeAnnotation = idPattern.typeAnnotation,
+      idTypeAnnotation.type is OptionalType
+    {
+      return idPattern.identifier
+    }
+
+    return nil
   }
 }

@@ -19,7 +19,6 @@ import Foundation
 import AST
 import Source
 
-
 protocol SourceCodeRule : Rule {
   func inspect(line: String, lineNumber: Int)
 }

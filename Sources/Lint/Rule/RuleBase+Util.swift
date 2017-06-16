@@ -19,7 +19,7 @@ import Foundation
 import AST
 
 extension RuleBase {
-  func checkRedundant(
+  func checkRedundant( // swift-lint:suppress(high_cyclomatic_complexity)
     trueExpression: Expression, falseExpression: Expression
   ) -> String? {
     switch (trueExpression, falseExpression) {

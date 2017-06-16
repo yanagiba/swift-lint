@@ -62,7 +62,7 @@ class CodeBlockDepthTests : XCTestCase {
     XCTAssertEqual(getDepth(for: "subscript() -> Self { get set }"), 3)
   }
 
-  func testConstantAndVariableDeclarations() {
+  func testConstantAndVariableDeclarations() { // swift-lint:suppress()
     XCTAssertEqual(getDepth(for: "let a = 1"), 2)
     XCTAssertEqual(getDepth(for: "let a = foo { }"), 2)
     XCTAssertEqual(getDepth(for: "let a, b"), 2)
