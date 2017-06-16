@@ -18,11 +18,19 @@ typealias CommentBasedSetting = [Int: [String?]]
 typealias CommentBasedSuppression = [Int: [String]]
 typealias CommentBasedConfiguration = [Int: [String: String]]
 
-extension ASTContext {
-  // TODO: oppurtunity for performance improvements
-  // these computations can be calculated once and cached per source file
+fileprivate class CommentSettingCache {
+  fileprivate static let shared = CommentSettingCache()
 
+  fileprivate var suppressions: [String: CommentBasedSuppression] = [:]
+  fileprivate var configurations: [String: CommentBasedConfiguration] = [:]
+}
+
+extension ASTContext {
   var commentBasedSuppressions: CommentBasedSuppression {
+    if let cachedSuppressions = cache.suppressions[filePath] {
+      return cachedSuppressions
+    }
+
     let suppressConfigTuples = commentBasedConfigurations(forKey: "suppress")
       .map({ lineConfig -> (Int, [String]) in
         let line = lineConfig.0
@@ -41,10 +49,17 @@ extension ASTContext {
 
         return (line, suppressionConf)
       })
-    return toDictionary(fromTuples: suppressConfigTuples)
+
+    let suppressions = toDictionary(fromTuples: suppressConfigTuples)
+    cache.suppressions[filePath] = suppressions
+    return suppressions
   }
 
   var commentBasedConfigurations: CommentBasedConfiguration {  // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
+    if let cachedConfigurations = cache.configurations[filePath] {
+      return cachedConfigurations
+    }
+
     let ruleConfigTuples = commentBasedConfigurations(forKey: "rule_configure")
       .map({ lineConfig -> (Int, [String: String]) in
         let line = lineConfig.0
@@ -68,7 +83,10 @@ extension ASTContext {
 
         return (line, ruleConfig)
       })
-    return toDictionary(fromTuples: ruleConfigTuples)
+
+    let configurations = toDictionary(fromTuples: ruleConfigTuples)
+    cache.configurations[filePath] = configurations
+    return configurations
   }
 
   private func commentBasedConfigurations(
@@ -85,6 +103,14 @@ extension ASTContext {
         return (line, configurations)
       })
     return toDictionary(fromTuples: configTuples)
+  }
+
+  private var filePath: String {
+    return sourceFile.path
+  }
+
+  private var cache: CommentSettingCache {
+    return CommentSettingCache.shared
   }
 }
 

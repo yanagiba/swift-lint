@@ -226,7 +226,7 @@ class RuleBaseTests : XCTestCase {
 
   private func parse(_ str: String) -> RuleBase {
     let sourceFile = SourceFile(
-      path: "LintTests/RuleBaseTests", content: str)
+      path: "LintTests/RuleBaseTests_\(UUID().uuidString)", content: str)
     let parser = Parser(source: sourceFile)
     guard let topLevelDecl = try? parser.parse() else {
       fatalError("Failed in parsing content: \(str)")
