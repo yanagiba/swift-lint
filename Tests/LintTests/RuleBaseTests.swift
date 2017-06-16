@@ -65,6 +65,29 @@ class RuleBaseTests : XCTestCase {
   func testRetrieveFromCommentBasedConfigurations() {
     let ruleBase = parse("""
       /*
+       swift-lint:rule_configure(integer=1,double=1.23):rule_configure(string=bar_foo)
+       swift-lint:rule_configure(boolean=false)
+       */
+      """)
+    ruleBase.configurations = [
+      "integer": -1,
+      "double": -1.23,
+      "string": "foobar",
+      "boolean": true
+    ]
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", atLineNumber: 1, orDefault: 0), 1)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", atLineNumber: 2, orDefault: 0), -1)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", atLineNumber: 1, orDefault: 0.0), 1.23)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", atLineNumber: 2, orDefault: 0.0), -1.23)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", atLineNumber: 1, orDefault: "defualt"), "bar_foo")
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", atLineNumber: 2, orDefault: "defualt"), "foobar")
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean", atLineNumber: 1, orDefault: true), false)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean", atLineNumber: 2, orDefault: false), true)
+  }
+
+  func testRetrieveFromCalculatedConfigurations() {
+    let ruleBase = parse("""
+      /*
        swift-lint:rule_configure(A=a,B=b):rule_configure(C=c)
        */
       """)
@@ -219,6 +242,7 @@ class RuleBaseTests : XCTestCase {
     ("testEmptyConfigurations", testEmptyConfigurations),
     ("testRetriveFromCustomConfigurations", testRetriveFromCustomConfigurations),
     ("testRetrieveFromCommentBasedConfigurations", testRetrieveFromCommentBasedConfigurations),
+    ("testRetrieveFromCalculatedConfigurations", testRetrieveFromCalculatedConfigurations),
     ("testCommentBasedSuppressions", testCommentBasedSuppressions),
     ("testCommentBasedRuleConfigurations", testCommentBasedRuleConfigurations),
   ]

@@ -20,7 +20,7 @@ class RuleBase {
 }
 
 extension RuleBase {
-  func getConfiguration<T>(
+  func getConfiguration<T>( // swift-lint:suppress(high_cyclomatic_complexity)
     forKey key: String, atLineNumber line: Int, orDefault defaultValue: T
   ) -> T {
     if let commentConfig = getCommentBasedConfiguration(forKey: key, atLineNumber: line) {
@@ -31,6 +31,20 @@ extension RuleBase {
         }
       case is Int:
         if let intConfig = Int(commentConfig), let tConfig = intConfig as? T {
+          return tConfig
+        }
+      case is Double:
+        if let doubleConfig = Double(commentConfig), let tConfig = doubleConfig as? T {
+          return tConfig
+        }
+      case is Bool where commentConfig == "true":
+        let boolConfig = true
+        if let tConfig = boolConfig as? T {
+          return tConfig
+        }
+      case is Bool where commentConfig == "false":
+        let boolConfig = false
+        if let tConfig = boolConfig as? T {
           return tConfig
         }
       default:
