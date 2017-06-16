@@ -32,7 +32,6 @@ public protocol Rule {
   var category: Issue.Category { get }
 
   func emitIssue(_: Issue)
-  func emitIssue(_: SourceRange, description: String, correction: Correction?)
   func inspect(_: ASTContext, configurations: [String: Any]?)
 }
 
@@ -72,12 +71,22 @@ extension Rule {
   func emitIssue(_ issue: Issue) {
     IssuePool.shared.add(issue: issue)
   }
+}
 
+extension Rule where Self: RuleBase {
   func emitIssue(
     _ sourceRange: SourceRange,
     description: String,
     correction: Correction? = nil
   ) {
+    if let suppressedRules = commentBasedSuppressions[sourceRange.start.line] {
+      if suppressedRules.isEmpty {
+        return
+      } else if suppressedRules.contains(identifier) {
+        return
+      }
+    }
+
     let foundIssue = Issue(
       ruleIdentifier: identifier,
       description: description,

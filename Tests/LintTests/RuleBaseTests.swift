@@ -62,7 +62,7 @@ class RuleBaseTests : XCTestCase {
     XCTAssertEqual(defaultDict["foo"] as? String, "bar")
   }
 
-  func testCommentBasedSuppressions() {
+  func testCommentBasedSuppressions() { // swift-lint:suppress
     let ruleBase = parse("""
       // line doesn't have the looked keyword
       /* swift-lint:suppress() */
@@ -77,7 +77,6 @@ class RuleBaseTests : XCTestCase {
       /* swift-lint:only_other_flags() */
       //  swift-lint:suppress(A):other_flags(a):other_flags_no_args:suppress(B)
       """)
-    // print(ruleBase.commentBasedSuppressions)
     let suppressions = ruleBase.commentBasedSuppressions
     XCTAssertEqual(suppressions.count, 7)
     XCTAssertNil(suppressions[0])

@@ -70,7 +70,7 @@ extension RuleBase {
 }
 
 fileprivate extension String {
-  var extractedConfigurations: [(name: String, args: String?)] {
+  var extractedConfigurations: [(name: String, args: String?)] { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
     guard let swiftLintKeywordRange = range(of: "swift-lint") else {
       return []
     }
@@ -91,7 +91,10 @@ fileprivate extension String {
     for c in remainingString {
       switch c {
       case ":":
-        if state == .head || (state == .tail && (currentString == "" || currentString.hasSuffix("swift-lint"))) {
+        if state == .head ||
+          (state == .tail &&
+            (currentString == "" || currentString.hasSuffix("swift-lint")))
+        {
           currentString = ""
           currentKey = ""
           state = .keyword

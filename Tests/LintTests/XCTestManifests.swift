@@ -25,6 +25,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(RuleProtocolTests.allTests),
     testCase(RuleBaseTests.allTests),
     testCase(SourceCodeRuleTests.allTests),
+    testCase(CommentBasedSuppressionTests.allTests),
   ]
 }
 #endif
