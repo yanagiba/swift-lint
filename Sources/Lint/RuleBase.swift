@@ -28,12 +28,22 @@ extension RuleBase {
     }
     return defaultValue
   }
+
+  func getCommentBasedConfiguration(
+    forKey key: String, atLineNumber line: Int
+  ) -> String?
+  {
+    guard let configurations = commentBasedConfigurations[line] else {
+      return nil
+    }
+    return configurations[key]
+  }
 }
 
 extension RuleBase {
-  typealias CommentBasedConfiguration = [Int: [String?]]
+  typealias CommentBasedSetting = [Int: [String?]]
   typealias CommentBasedSuppression = [Int: [String]]
-  typealias CommentBasedRuleConfiguration = [Int: [String: String]]
+  typealias CommentBasedConfiguration = [Int: [String: String]]
 
   var commentBasedSuppressions: CommentBasedSuppression {
     let suppressConfigTuples = commentBasedConfigurations(forKey: "suppress")
@@ -57,7 +67,7 @@ extension RuleBase {
     return toDictionary(fromTuples: suppressConfigTuples)
   }
 
-  var commentBasedRuleConfigurations: CommentBasedRuleConfiguration {
+  var commentBasedConfigurations: CommentBasedConfiguration {
     let ruleConfigTuples = commentBasedConfigurations(forKey: "rule_configure")
       .map({ lineConfig -> (Int, [String: String]) in
         let line = lineConfig.0
@@ -86,13 +96,13 @@ extension RuleBase {
 
   private func commentBasedConfigurations(
     forKey key: String
-  ) -> CommentBasedConfiguration {
+  ) -> CommentBasedSetting {
     guard let astContext = astContext else {
       return [:]
     }
     let configTuples = astContext.topLevelDeclaration.comments
       .map({ ($0.location.line, $0.content) })
-      .filter({ $0.1.contains("swift-lint") && $0.1.contains(key) })
+      .filter({ $0.1.contains(SWIFT_LINT) && $0.1.contains(key) })
       .map({ lineContent -> (Int, [String?]) in
         let line = lineContent.0
         let configurations = lineContent.1.extractedConfigurations
@@ -112,7 +122,7 @@ fileprivate func toDictionary<K, V>(fromTuples tuples: [(K, V)]) -> [K: V] {
 
 fileprivate extension String {
   var extractedConfigurations: [(name: String, args: String?)] { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
-    guard let swiftLintKeywordRange = range(of: "swift-lint") else {
+    guard let swiftLintKeywordRange = range(of: SWIFT_LINT) else {
       return []
     }
 
@@ -134,7 +144,7 @@ fileprivate extension String {
       case ":":
         if state == .head ||
           (state == .tail &&
-            (currentString == "" || currentString.hasSuffix("swift-lint")))
+            (currentString == "" || currentString.hasSuffix(SWIFT_LINT)))
         {
           currentString = ""
           currentKey = ""

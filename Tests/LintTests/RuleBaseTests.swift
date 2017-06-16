@@ -62,6 +62,19 @@ class RuleBaseTests : XCTestCase {
     XCTAssertEqual(defaultDict["foo"] as? String, "bar")
   }
 
+  func testRetrieveFromCommentBasedConfigurations() {
+    let ruleBase = parse("""
+      /*
+       swift-lint:rule_configure(A=a,B=b):rule_configure(C=c)
+       */
+      """)
+    XCTAssertEqual(ruleBase.getCommentBasedConfiguration(forKey: "A", atLineNumber: 1), "a")
+    XCTAssertEqual(ruleBase.getCommentBasedConfiguration(forKey: "B", atLineNumber: 1), "b")
+    XCTAssertEqual(ruleBase.getCommentBasedConfiguration(forKey: "C", atLineNumber: 1), "c")
+    XCTAssertNil(ruleBase.getCommentBasedConfiguration(forKey: "D", atLineNumber: 1))
+    XCTAssertNil(ruleBase.getCommentBasedConfiguration(forKey: "A", atLineNumber: 2))
+  }
+
   func testCommentBasedSuppressions() { // swift-lint:suppress
     let ruleBase = parse("""
       // line doesn't have the looked keyword
@@ -140,7 +153,7 @@ class RuleBaseTests : XCTestCase {
       /* swift-lint:only_other_flags() */
       //  swift-lint:rule_configure(A=a):other_flags(a):other_flags_no_args:rule_configure(B=b)
       """)
-    let ruleConfigurations = ruleBase.commentBasedRuleConfigurations
+    let ruleConfigurations = ruleBase.commentBasedConfigurations
     XCTAssertEqual(ruleConfigurations.count, 7)
     XCTAssertNil(ruleConfigurations[0])
     XCTAssertNil(ruleConfigurations[1])
@@ -205,6 +218,8 @@ class RuleBaseTests : XCTestCase {
   static var allTests = [
     ("testEmptyConfigurations", testEmptyConfigurations),
     ("testRetriveFromCustomConfigurations", testRetriveFromCustomConfigurations),
+    ("testRetrieveFromCommentBasedConfigurations", testRetrieveFromCommentBasedConfigurations),
     ("testCommentBasedSuppressions", testCommentBasedSuppressions),
+    ("testCommentBasedRuleConfigurations", testCommentBasedRuleConfigurations),
   ]
 }
