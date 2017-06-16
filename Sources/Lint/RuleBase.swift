@@ -31,21 +31,15 @@ extension RuleBase {
 }
 
 extension RuleBase {
+  typealias CommentBasedConfiguration = [Int: [String?]]
   typealias CommentBasedSuppression = [Int: [String]]
+  typealias CommentBasedRuleConfiguration = [Int: [String: String]]
 
   var commentBasedSuppressions: CommentBasedSuppression {
-    guard let astContext = astContext else {
-      return [:]
-    }
-    return astContext.topLevelDeclaration.comments
-      .map({ ($0.location.line, $0.content) })
-      .filter({ $0.1.contains("swift-lint") && $0.1.contains("suppress") })
-      .map({ lineContent -> (Int, [String]) in
-        let line = lineContent.0
-        let configurations = lineContent.1.extractedConfigurations
-          .filter({ $0.0 == "suppress" })
-          .map({ $0.1 })
-
+    return commentBasedConfigurations(forKey: "suppress")
+      .map({ lineConfig -> (Int, [String]) in
+        let line = lineConfig.0
+        let configurations = lineConfig.1
         var suppressionConf: [String] = []
         for conf in configurations {
           guard let selectedSuppressions = conf else {
@@ -60,6 +54,61 @@ extension RuleBase {
         }
 
         return (line, suppressionConf)
+      })
+      .reduce([:]) { carryOver, e in
+        var mutableDict = carryOver
+        mutableDict[e.0] = e.1
+        return mutableDict
+      }
+  }
+
+  var commentBasedRuleConfigurations: CommentBasedRuleConfiguration {
+    return commentBasedConfigurations(forKey: "rule_configure")
+      .map({ lineConfig -> (Int, [String: String]) in
+        let line = lineConfig.0
+        let configurations = lineConfig.1
+        var ruleConfig: [String: String] = [:]
+        for conf in configurations {
+          guard let ruleConf = conf else {
+            continue
+          }
+          if ruleConf.isEmpty {
+            continue
+          }
+
+          for e in ruleConf.components(separatedBy: ",") {
+            let keyValuePair = e.components(separatedBy: "=")
+            guard keyValuePair.count == 2 else {
+              continue
+            }
+            ruleConfig[keyValuePair[0]] = keyValuePair[1]
+          }
+        }
+
+        return (line, ruleConfig)
+      })
+      .reduce([:]) { carryOver, e in
+        var mutableDict = carryOver
+        mutableDict[e.0] = e.1
+        return mutableDict
+      }
+  }
+
+  private func commentBasedConfigurations(
+    forKey key: String
+  ) -> CommentBasedConfiguration {
+    guard let astContext = astContext else {
+      return [:]
+    }
+    return astContext.topLevelDeclaration.comments
+      .map({ ($0.location.line, $0.content) })
+      .filter({ $0.1.contains("swift-lint") && $0.1.contains(key) })
+      .map({ lineContent -> (Int, [String?]) in
+        let line = lineContent.0
+        let configurations = lineContent.1.extractedConfigurations
+          .filter({ $0.name == key })
+          .map({ $0.args })
+        return (line, configurations)
       })
       .reduce([:]) { carryOver, e in
         var mutableDict = carryOver

@@ -125,6 +125,69 @@ class RuleBaseTests : XCTestCase {
     XCTAssertNil(suppressions[15])
   }
 
+  func testCommentBasedRuleConfigurations() { // swift-lint:suppress
+    let ruleBase = parse("""
+      // line doesn't have the looked keyword
+      /* swift-lint:rule_configure() */
+      // swift-lint:rule_configure(A=a)
+      // swift-lint:rule_configure(A=a, B = b)
+      /*
+       swift-lint:rule_configure(A=a,B=b,C=c):rule_configure(D=d)
+       swift-lint:rule_configure(E=e)
+       */
+      //swift-lint:rule_configure(A=a):rule_configure
+      //swift-lint:rule_configure:rule_configure(A=a)
+      /* swift-lint:only_other_flags() */
+      //  swift-lint:rule_configure(A=a):other_flags(a):other_flags_no_args:rule_configure(B=b)
+      """)
+    let ruleConfigurations = ruleBase.commentBasedRuleConfigurations
+    XCTAssertEqual(ruleConfigurations.count, 7)
+    XCTAssertNil(ruleConfigurations[0])
+    XCTAssertNil(ruleConfigurations[1])
+    guard let ruleConfiguration2 = ruleConfigurations[2] else {
+      XCTFail("Failed in getting the rule configuration settings from line 2.")
+      return
+    }
+    XCTAssertTrue(ruleConfiguration2.isEmpty)
+    guard let ruleConfiguration3 = ruleConfigurations[3] else {
+      XCTFail("Failed in getting the rule configuration settings from line 3.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration3, ["A": "a"])
+    guard let ruleConfiguration4 = ruleConfigurations[4] else {
+      XCTFail("Failed in getting the rule configuration settings from line 4.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration4, ["A": "a", "B": "b"])
+    guard let ruleConfiguration5 = ruleConfigurations[5] else {
+      XCTFail("Failed in getting the rule configuration settings from line 5.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration5, ["A": "a", "B": "b", "C": "c", "D": "d", "E": "e"])
+    XCTAssertNil(ruleConfigurations[6])
+    XCTAssertNil(ruleConfigurations[7])
+    XCTAssertNil(ruleConfigurations[8])
+    guard let ruleConfiguration9 = ruleConfigurations[9] else {
+      XCTFail("Failed in getting the rule configuration settings from line 9.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration9, ["A": "a"])
+    guard let ruleConfiguration10 = ruleConfigurations[10] else {
+      XCTFail("Failed in getting the rule configuration settings from line 10.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration10, ["A": "a"])
+    XCTAssertNil(ruleConfigurations[11])
+    guard let ruleConfiguration12 = ruleConfigurations[12] else {
+      XCTFail("Failed in getting the rule configuration settings from line 12.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration12, ["A": "a", "B": "b"])
+    XCTAssertNil(ruleConfigurations[13])
+    XCTAssertNil(ruleConfigurations[14])
+    XCTAssertNil(ruleConfigurations[15])
+  }
+
   private func parse(_ str: String) -> RuleBase {
     let sourceFile = SourceFile(
       path: "LintTests/RuleBaseTests", content: str)
