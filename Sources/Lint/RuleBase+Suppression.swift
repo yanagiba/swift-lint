@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@
    limitations under the License.
 */
 
-class RuleBase {
-  var astContext: ASTContext?
-  var configurations: [String: Any]?
+extension RuleBase {
+  var commentBasedSuppressions: CommentBasedSuppression {
+    return astContext?.commentBasedSuppressions ?? [:]
+  }
 }
