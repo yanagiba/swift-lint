@@ -136,6 +136,8 @@ if let customRuleConfigOption = readOption("rule-configure") {
     }
 }
 
+let reportType = readOption("report-type") ?? "text"
+
 let filePaths = cliArgs
 var sourceFiles = [SourceFile]()
 for filePath in filePaths {
@@ -146,6 +148,6 @@ for filePath in filePaths {
   sourceFiles.append(sourceFile)
 }
 
-let driver = Driver(ruleIdentifiers: enabledRules)
+let driver = Driver(ruleIdentifiers: enabledRules, reportType: reportType)
 let exitCode = driver.lint(sourceFiles: sourceFiles, ruleConfigurations: ruleConfigurations)
 exit(exitCode.rawValue)
