@@ -22,7 +22,11 @@ import Lint
 var cliArgs = CommandLine.arguments
 cliArgs.remove(at: 0)
 
-if !cliArgs.filter({ $0 == "-help" || $0 == "--help" }).isEmpty {
+func argumentsContain(_ option: String) -> Bool {
+  return !cliArgs.filter({ $0 == "-\(option)" || $0 == "--\(option)" }).isEmpty
+}
+
+if argumentsContain("help") {
   print("""
   swift-lint [options] <source0> [... <sourceN>]
 
@@ -53,6 +57,17 @@ if !cliArgs.filter({ $0 == "-help" || $0 == "--help" }).isEmpty {
     Cosmetic is default to 50
 
   For more information, please visit http://yanagiba.org/swift-lint
+  """)
+  exit(0)
+}
+
+if argumentsContain("version") {
+  print("""
+  Yanagiba's swift-lint (http://yanagiba.org/swift-lint):
+    version \(SWIFT_LINT_VERSION).
+
+  Yanagiba's swift-ast (http://yanagiba.org/swift-ast):
+    version \(SWIFT_AST_VERSION).
   """)
   exit(0)
 }
