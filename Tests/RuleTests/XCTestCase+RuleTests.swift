@@ -31,8 +31,8 @@ extension String {
     let lintResult = testDriver.lint(
       sourceFiles: [SourceFile(path: "test/test", content: self)],
       ruleConfigurations: configurations)
-    if lintResult != 0 {
-      fatalError("Failed in linting file.")
+    if lintResult == .failedInParsingFile {
+      fatalError("Failed in parsing file.")
     }
     return issueCollector.issues
   }

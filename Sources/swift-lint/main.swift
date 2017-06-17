@@ -52,4 +52,4 @@ let driver = Driver(ruleIdentifiers: [
   "redundant_enumcase_string_value",
 ])
 let exitCode = driver.lint(sourceFiles: sourceFiles)
-exit(exitCode)
+exit(exitCode.rawValue)
