@@ -19,9 +19,45 @@ import Foundation
 import Source
 import Lint
 
-var filePaths = CommandLine.arguments
-filePaths.remove(at: 0)
+var cliArgs = CommandLine.arguments
+cliArgs.remove(at: 0)
 
+if !cliArgs.filter({ $0 == "-help" || $0 == "--help" }).isEmpty {
+  print("""
+  swift-lint [options] <source0> [... <sourceN>]
+
+  <source0> ... specify the paths of source files.
+
+  -help, --help
+    Display available options
+  -version, --version
+    Display the version
+
+  --enable-rules <rule_identifier0>[,...,<rule_identifierN>]
+    Enable rules, default to all rules
+  --disable-rules <rule_identifier0>[,...,<rule_identifierN>]
+    Disable rules, default to empty
+  --rule-configure <parameter0>=<value0>[,...,<parameterN>=<valueN>]
+    Override the default rule configurations
+
+  --report-type <report_identifier>
+    Change output report type, default to `text`
+  -o, --output <path>
+    Write output to <path>, default to console
+
+  --severity-thresholds <severity0>=<threshold0>[,...,<severityN>=<thresholdN>]
+    The max allowed number of issues of each severity level.
+    Critical is default to 0
+    Major is default to 10
+    Minor is default to 20
+    Cosmetic is default to 50
+
+  For more information, please visit http://yanagiba.org/swift-lint
+  """)
+  exit(0)
+}
+
+let filePaths = cliArgs
 var sourceFiles = [SourceFile]()
 for filePath in filePaths {
   guard let sourceFile = try? SourceReader.read(at: filePath) else {
