@@ -55,7 +55,7 @@ extension ASTContext {
     return suppressions
   }
 
-  var commentBasedConfigurations: CommentBasedConfiguration {  // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
+  var commentBasedConfigurations: CommentBasedConfiguration {
     if let cachedConfigurations = cache.configurations[filePath] {
       return cachedConfigurations
     }
@@ -121,7 +121,7 @@ fileprivate func toDictionary<K, V>(fromTuples tuples: [(K, V)]) -> [K: V] {
 }
 
 fileprivate extension String {
-  var extractedConfigurations: [(name: String, args: String?)] { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
+  var extractedConfigurations: [(name: String, args: String?)] {
     guard let swiftLintKeywordRange = range(of: SWIFT_LINT) else {
       return []
     }

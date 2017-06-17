@@ -26,6 +26,21 @@ func argumentsContain(_ option: String) -> Bool {
   return !cliArgs.filter({ $0 == "-\(option)" || $0 == "--\(option)" }).isEmpty
 }
 
+func readOption(_ option: String) -> String? {
+  guard let argIndex = cliArgs.index(of: "--\(option)") else {
+    return nil
+  }
+
+  let argValueIndex = cliArgs.index(after: argIndex)
+  guard argValueIndex < cliArgs.count else {
+    return nil
+  }
+
+  let option = cliArgs[argValueIndex]
+  cliArgs.removeSubrange(argIndex...argValueIndex)
+  return option
+}
+
 if argumentsContain("help") {
   print("""
   swift-lint [options] <source0> [... <sourceN>]
@@ -72,17 +87,7 @@ if argumentsContain("version") {
   exit(0)
 }
 
-let filePaths = cliArgs
-var sourceFiles = [SourceFile]()
-for filePath in filePaths {
-  guard let sourceFile = try? SourceReader.read(at: filePath) else {
-    print("Can't read file \(filePath)")
-    exit(-1)
-  }
-  sourceFiles.append(sourceFile)
-}
-
-let driver = Driver(ruleIdentifiers: [
+var enabledRules = [
   "no_force_cast", // TODO: need better approach
   "no_forced_try",
   "high_cyclomatic_complexity",
@@ -101,6 +106,46 @@ let driver = Driver(ruleIdentifiers: [
   "collapsible_if_statements",
   "redundant_variable_declaration_keyword",
   "redundant_enumcase_string_value",
-])
-let exitCode = driver.lint(sourceFiles: sourceFiles)
+]
+if let enableRulesOption = readOption("enable-rules") {
+  enabledRules = enableRulesOption.components(separatedBy: ",")
+}
+if let disableRulesOption = readOption("disable-rules") {
+  let disabledRuleIdentifiers = disableRulesOption.components(separatedBy: ",")
+  enabledRules = enabledRules.filter({ !disabledRuleIdentifiers.contains($0) })
+}
+
+var ruleConfigurations: [String: Any]?
+if let customRuleConfigOption = readOption("rule-configure") {
+  ruleConfigurations = customRuleConfigOption.components(separatedBy: ",")
+    .flatMap({ opt -> (String, Int)? in // TODO: need to support other types
+      let keyValuePair = opt.components(separatedBy: "=")
+      guard keyValuePair.count == 2 else {
+        return nil
+      }
+      let key = keyValuePair[0]
+      let valueString = keyValuePair[1]
+      guard let valueInt = Int(valueString) else {
+        return nil
+      }
+      return (key, valueInt)
+    }).reduce([:]) { (carryOver, arg) -> [String: Any] in
+      var mutableDict = carryOver
+      mutableDict[arg.0] = arg.1
+      return mutableDict
+    }
+}
+
+let filePaths = cliArgs
+var sourceFiles = [SourceFile]()
+for filePath in filePaths {
+  guard let sourceFile = try? SourceReader.read(at: filePath) else {
+    print("Can't read file \(filePath)")
+    exit(-1)
+  }
+  sourceFiles.append(sourceFile)
+}
+
+let driver = Driver(ruleIdentifiers: enabledRules)
+let exitCode = driver.lint(sourceFiles: sourceFiles, ruleConfigurations: ruleConfigurations)
 exit(exitCode.rawValue)
