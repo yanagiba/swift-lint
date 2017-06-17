@@ -1,5 +1,5 @@
 /*
-   Copyright 2016 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
    limitations under the License.
 */
 
-import XCTest
+struct IssueSummary {
+  private let issues: [Issue]
 
-#if !os(macOS)
-public func allTests() -> [XCTestCaseEntry] {
-  return [
-    testCase(ASTVisitorRuleTests.allTests),
-    testCase(CorrectionTests.allTests),
-    testCase(DriverTests.allTests),
-    testCase(RuleProtocolTests.allTests),
-    testCase(RuleBaseTests.allTests),
-    testCase(SourceCodeRuleTests.allTests),
-    testCase(CommentBasedSuppressionTests.allTests),
-    testCase(IssueSummaryTests.allTests),
-  ]
+  init(issues: [Issue]) {
+    self.issues = issues
+  }
+
+  var numberOfFiles: Int {
+    let filePaths = issues.map({ $0.location.start.path })
+    let uniqueFilePaths = Array(Set(filePaths))
+    return uniqueFilePaths.count
+  }
+
+  func numberOfIssues(withSeverity severity: Issue.Severity) -> Int {
+    return issues.filter({ $0.severity == severity }).count
+  }
 }
-#endif
