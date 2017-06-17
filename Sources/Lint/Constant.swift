@@ -17,4 +17,4 @@
 import Foundation
 
 public let SWIFT_LINT = "swift-lint"
-public let SWIFT_LINT_VERSION = "0.1.2"
+public let SWIFT_LINT_VERSION = "0.1.3"
