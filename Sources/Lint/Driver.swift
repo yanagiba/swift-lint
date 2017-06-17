@@ -68,7 +68,7 @@ public class Driver {
   @discardableResult public func lint(
     sourceFiles: [SourceFile],
     ruleConfigurations: [String: Any]? = nil
-  ) -> Int32 {
+  ) -> ExitStatus {
     IssuePool.shared.clearIssues()
 
     _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
@@ -79,7 +79,7 @@ public class Driver {
       guard let result = try? parser.parse() else {
         print("Failed in parsing file \(sourceFile.path)")
         // Ignore the errors for now
-        return -2
+        return .failedInParsingFile
       }
 
       let astContext =
@@ -98,7 +98,31 @@ public class Driver {
     _outputHandle.puts("", separator: _reporter.separator())
     _outputHandle.puts(_reporter.footer(), separator: _reporter.separator())
 
-    return 0
+    return IssueSummary(issues: IssuePool.shared.issues).exitCode
+  }
+}
+
+public enum ExitStatus : Int32 {
+  case success = 0
+  case failedInParsingFile = -10
+  case tooManyIssues = -20
+}
+
+private extension IssueSummary {
+  var exitCode: ExitStatus {
+    if numberOfIssues(withSeverity: .critical) > 0 {
+      return .tooManyIssues
+    }
+    if numberOfIssues(withSeverity: .major) > 10 {
+      return .tooManyIssues
+    }
+    if numberOfIssues(withSeverity: .minor) > 20 {
+      return .tooManyIssues
+    }
+    if numberOfIssues(withSeverity: .cosmetic) > 50 {
+      return .tooManyIssues
+    }
+    return .success
   }
 }
 
