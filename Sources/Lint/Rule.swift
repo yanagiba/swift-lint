@@ -73,31 +73,6 @@ extension Rule {
   }
 }
 
-extension Rule where Self: RuleBase {
-  func emitIssue(
-    _ sourceRange: SourceRange,
-    description: String,
-    correction: Correction? = nil
-  ) {
-    if let suppressedRules = commentBasedSuppressions[sourceRange.start.line] {
-      if suppressedRules.isEmpty {
-        return
-      } else if suppressedRules.contains(identifier) {
-        return
-      }
-    }
-
-    let foundIssue = Issue(
-      ruleIdentifier: identifier,
-      description: description,
-      category: category,
-      location: sourceRange,
-      severity: severity,
-      correction: correction)
-    emitIssue(foundIssue)
-  }
-}
-
 fileprivate extension String {
   fileprivate var toFileName: String {
     let fileName = punctutationAndWhitespaceRemoved.joined()

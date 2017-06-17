@@ -63,13 +63,15 @@ class NCSSRule : RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.major
   let category = Issue.Category.readability
 
-  private var threshold: Int {
+  private func getThreshold(of sourceRange: SourceRange) -> Int {
     return getConfiguration(
-      for: NCSSRule.ThresholdKey,
+      forKey: NCSSRule.ThresholdKey,
+      atLineNumber: sourceRange.start.line,
       orDefault: NCSSRule.DefaultThreshold)
   }
 
   private func emitIssue(_ ncss: Int, _ sourceRange: SourceRange) {
+    let threshold = getThreshold(of: sourceRange)
     guard ncss > threshold else {
       return
     }

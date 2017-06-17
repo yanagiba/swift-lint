@@ -45,7 +45,7 @@ class CommentBasedSuppressionTests : XCTestCase {
 
   private func inspect(_ str: String, configurations: [String: Any]? = nil) {
     let sourceFile = SourceFile(
-      path: "LintTests/CommentBasedSuppressionTests", content: str)
+      path: "LintTests/CommentBasedSuppressionTests_\(UUID().uuidString)", content: str)
     let parser = Parser(source: sourceFile)
     guard let topLevelDecl = try? parser.parse() else {
       fatalError("Failed in parsing content: \(str)")

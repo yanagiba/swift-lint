@@ -24,15 +24,15 @@ class RuleBaseTests : XCTestCase {
   func testEmptyConfigurations() {
     let ruleBase = RuleBase()
     let integer: Int = 1
-    XCTAssertEqual(ruleBase.getConfiguration(for: "integer", orDefault: integer), integer)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", orDefault: integer), integer)
     let double: Double = 1.23
-    XCTAssertEqual(ruleBase.getConfiguration(for: "double", orDefault: double), double)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", orDefault: double), double)
     let string: String = "string"
-    XCTAssertEqual(ruleBase.getConfiguration(for: "string", orDefault: string), string)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", orDefault: string), string)
     let array: [Int] = [1, 2, 3]
-    XCTAssertEqual(ruleBase.getConfiguration(for: "array", orDefault: array), array)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "array", orDefault: array), array)
     let dictionary: [String: Any] = ["foo": 1, "bar": (2.34, "👌")]
-    let defaultDict = ruleBase.getConfiguration(for: "dictionary", orDefault: dictionary)
+    let defaultDict = ruleBase.getConfiguration(forKey: "dictionary", orDefault: dictionary)
     XCTAssertEqual(defaultDict.count, 2)
     XCTAssertEqual(defaultDict["foo"] as? Int, 1)
     guard let barValue = defaultDict["bar"] as? (Double, String) else {
@@ -52,14 +52,50 @@ class RuleBaseTests : XCTestCase {
       "array": [3, 2, 1],
       "dictionary": ["foo": "bar"]
     ]
-    XCTAssertEqual(ruleBase.getConfiguration(for: "integer", orDefault: 1), -1)
-    XCTAssertEqual(ruleBase.getConfiguration(for: "double", orDefault: 1.23), -1.23)
-    XCTAssertEqual(ruleBase.getConfiguration(for: "string", orDefault: "string"), "foobar")
-    XCTAssertEqual(ruleBase.getConfiguration(for: "array", orDefault: [1, 2, 3]), [3, 2, 1])
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", orDefault: 1), -1)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", orDefault: 1.23), -1.23)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", orDefault: "string"), "foobar")
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "array", orDefault: [1, 2, 3]), [3, 2, 1])
     let dictionary: [String: Any] = ["foo": 1, "bar": (2.34, "👌")]
-    let defaultDict = ruleBase.getConfiguration(for: "dictionary", orDefault: dictionary)
+    let defaultDict = ruleBase.getConfiguration(forKey: "dictionary", orDefault: dictionary)
     XCTAssertEqual(defaultDict.count, 1)
     XCTAssertEqual(defaultDict["foo"] as? String, "bar")
+  }
+
+  func testRetrieveFromCommentBasedConfigurations() {
+    let ruleBase = parse("""
+      /*
+       swift-lint:rule_configure(integer=1,double=1.23):rule_configure(string=bar_foo)
+       swift-lint:rule_configure(boolean=false)
+       */
+      """)
+    ruleBase.configurations = [
+      "integer": -1,
+      "double": -1.23,
+      "string": "foobar",
+      "boolean": true
+    ]
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", atLineNumber: 1, orDefault: 0), 1)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", atLineNumber: 2, orDefault: 0), -1)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", atLineNumber: 1, orDefault: 0.0), 1.23)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "double", atLineNumber: 2, orDefault: 0.0), -1.23)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", atLineNumber: 1, orDefault: "defualt"), "bar_foo")
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", atLineNumber: 2, orDefault: "defualt"), "foobar")
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean", atLineNumber: 1, orDefault: true), false)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean", atLineNumber: 2, orDefault: false), true)
+  }
+
+  func testRetrieveFromCalculatedConfigurations() {
+    let ruleBase = parse("""
+      /*
+       swift-lint:rule_configure(A=a,B=b):rule_configure(C=c)
+       */
+      """)
+    XCTAssertEqual(ruleBase.getCommentBasedConfiguration(forKey: "A", atLineNumber: 1), "a")
+    XCTAssertEqual(ruleBase.getCommentBasedConfiguration(forKey: "B", atLineNumber: 1), "b")
+    XCTAssertEqual(ruleBase.getCommentBasedConfiguration(forKey: "C", atLineNumber: 1), "c")
+    XCTAssertNil(ruleBase.getCommentBasedConfiguration(forKey: "D", atLineNumber: 1))
+    XCTAssertNil(ruleBase.getCommentBasedConfiguration(forKey: "A", atLineNumber: 2))
   }
 
   func testCommentBasedSuppressions() { // swift-lint:suppress
@@ -125,9 +161,72 @@ class RuleBaseTests : XCTestCase {
     XCTAssertNil(suppressions[15])
   }
 
+  func testCommentBasedRuleConfigurations() { // swift-lint:suppress
+    let ruleBase = parse("""
+      // line doesn't have the looked keyword
+      /* swift-lint:rule_configure() */
+      // swift-lint:rule_configure(A=a)
+      // swift-lint:rule_configure(A=a, B = b)
+      /*
+       swift-lint:rule_configure(A=a,B=b,C=c):rule_configure(D=d)
+       swift-lint:rule_configure(E=e)
+       */
+      //swift-lint:rule_configure(A=a):rule_configure
+      //swift-lint:rule_configure:rule_configure(A=a)
+      /* swift-lint:only_other_flags() */
+      //  swift-lint:rule_configure(A=a):other_flags(a):other_flags_no_args:rule_configure(B=b)
+      """)
+    let ruleConfigurations = ruleBase.commentBasedConfigurations
+    XCTAssertEqual(ruleConfigurations.count, 7)
+    XCTAssertNil(ruleConfigurations[0])
+    XCTAssertNil(ruleConfigurations[1])
+    guard let ruleConfiguration2 = ruleConfigurations[2] else {
+      XCTFail("Failed in getting the rule configuration settings from line 2.")
+      return
+    }
+    XCTAssertTrue(ruleConfiguration2.isEmpty)
+    guard let ruleConfiguration3 = ruleConfigurations[3] else {
+      XCTFail("Failed in getting the rule configuration settings from line 3.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration3, ["A": "a"])
+    guard let ruleConfiguration4 = ruleConfigurations[4] else {
+      XCTFail("Failed in getting the rule configuration settings from line 4.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration4, ["A": "a", "B": "b"])
+    guard let ruleConfiguration5 = ruleConfigurations[5] else {
+      XCTFail("Failed in getting the rule configuration settings from line 5.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration5, ["A": "a", "B": "b", "C": "c", "D": "d", "E": "e"])
+    XCTAssertNil(ruleConfigurations[6])
+    XCTAssertNil(ruleConfigurations[7])
+    XCTAssertNil(ruleConfigurations[8])
+    guard let ruleConfiguration9 = ruleConfigurations[9] else {
+      XCTFail("Failed in getting the rule configuration settings from line 9.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration9, ["A": "a"])
+    guard let ruleConfiguration10 = ruleConfigurations[10] else {
+      XCTFail("Failed in getting the rule configuration settings from line 10.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration10, ["A": "a"])
+    XCTAssertNil(ruleConfigurations[11])
+    guard let ruleConfiguration12 = ruleConfigurations[12] else {
+      XCTFail("Failed in getting the rule configuration settings from line 12.")
+      return
+    }
+    XCTAssertEqual(ruleConfiguration12, ["A": "a", "B": "b"])
+    XCTAssertNil(ruleConfigurations[13])
+    XCTAssertNil(ruleConfigurations[14])
+    XCTAssertNil(ruleConfigurations[15])
+  }
+
   private func parse(_ str: String) -> RuleBase {
     let sourceFile = SourceFile(
-      path: "LintTests/RuleBaseTests", content: str)
+      path: "LintTests/RuleBaseTests_\(UUID().uuidString)", content: str)
     let parser = Parser(source: sourceFile)
     guard let topLevelDecl = try? parser.parse() else {
       fatalError("Failed in parsing content: \(str)")
@@ -142,6 +241,9 @@ class RuleBaseTests : XCTestCase {
   static var allTests = [
     ("testEmptyConfigurations", testEmptyConfigurations),
     ("testRetriveFromCustomConfigurations", testRetriveFromCustomConfigurations),
+    ("testRetrieveFromCommentBasedConfigurations", testRetrieveFromCommentBasedConfigurations),
+    ("testRetrieveFromCalculatedConfigurations", testRetrieveFromCalculatedConfigurations),
     ("testCommentBasedSuppressions", testCommentBasedSuppressions),
+    ("testCommentBasedRuleConfigurations", testCommentBasedRuleConfigurations),
   ]
 }

@@ -50,17 +50,20 @@ class NestedCodeBlockDepthRule : RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.major
   let category = Issue.Category.readability
 
-  private var threshold: Int {
+  private func getThreshold(of sourceRange: SourceRange) -> Int {
     return getConfiguration(
-      for: NestedCodeBlockDepthRule.ThresholdKey,
+      forKey: NestedCodeBlockDepthRule.ThresholdKey,
+      atLineNumber: sourceRange.start.line,
       orDefault: NestedCodeBlockDepthRule.DefaultThreshold)
   }
 
   func visit(_ codeBlock: CodeBlock) throws -> Bool {
     let codeBlockDpeth = codeBlock.depth
+    let codeBlockRange = codeBlock.sourceRange
+    let threshold = getThreshold(of: codeBlockRange)
     if codeBlockDpeth > threshold {
       emitIssue(
-        codeBlock.sourceRange,
+        codeBlockRange,
         description: "Code block depth of \(codeBlockDpeth) exceeds limit of \(threshold)")
     }
 
