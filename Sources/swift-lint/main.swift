@@ -41,6 +41,30 @@ func readOption(_ option: String) -> String? {
   return option
 }
 
+func readOptionAsDictionary(_ option: String) -> [String: Any]? {
+  guard let optionString = readOption(option) else {
+    return nil
+  }
+
+  return optionString.components(separatedBy: ",")
+    .flatMap({ opt -> (String, Int)? in // TODO: need to support other types
+      let keyValuePair = opt.components(separatedBy: "=")
+      guard keyValuePair.count == 2 else {
+        return nil
+      }
+      let key = keyValuePair[0]
+      let valueString = keyValuePair[1]
+      guard let valueInt = Int(valueString) else {
+        return nil
+      }
+      return (key, valueInt)
+    }).reduce([:]) { (carryOver, arg) -> [String: Any] in
+      var mutableDict = carryOver
+      mutableDict[arg.0] = arg.1
+      return mutableDict
+    }
+}
+
 if argumentsContain("help") {
   print("""
   swift-lint [options] <source0> [... <sourceN>]
@@ -116,24 +140,8 @@ if let disableRulesOption = readOption("-disable-rules") {
 }
 
 var ruleConfigurations: [String: Any]?
-if let customRuleConfigOption = readOption("-rule-configure") {
-  ruleConfigurations = customRuleConfigOption.components(separatedBy: ",")
-    .flatMap({ opt -> (String, Int)? in // TODO: need to support other types
-      let keyValuePair = opt.components(separatedBy: "=")
-      guard keyValuePair.count == 2 else {
-        return nil
-      }
-      let key = keyValuePair[0]
-      let valueString = keyValuePair[1]
-      guard let valueInt = Int(valueString) else {
-        return nil
-      }
-      return (key, valueInt)
-    }).reduce([:]) { (carryOver, arg) -> [String: Any] in
-      var mutableDict = carryOver
-      mutableDict[arg.0] = arg.1
-      return mutableDict
-    }
+if let customRuleConfigurations = readOptionAsDictionary("-rule-configure") {
+  ruleConfigurations = customRuleConfigurations
 }
 
 let reportType = readOption("-report-type") ?? "text"
@@ -146,6 +154,15 @@ if let outputPath = readOption("o") ?? readOption("-output") {
   }
   if let fileHandle = FileHandle(forWritingAtPath: outputPath) {
     outputHandle = fileHandle
+  }
+}
+
+var severityThresholds: [String: Int] = [:]
+if let customSeverityThresholds = readOptionAsDictionary("-severity-thresholds") {
+  for (key, value) in customSeverityThresholds {
+    if let intValue = value as? Int {
+      severityThresholds[key] = intValue
+    }
   }
 }
 
@@ -163,5 +180,8 @@ let driver = Driver(
   ruleIdentifiers: enabledRules,
   reportType: reportType,
   outputHandle: outputHandle)
-let exitCode = driver.lint(sourceFiles: sourceFiles, ruleConfigurations: ruleConfigurations)
+let exitCode = driver.lint(
+  sourceFiles: sourceFiles,
+  ruleConfigurations: ruleConfigurations,
+  severityThresholds: severityThresholds)
 exit(exitCode.rawValue)

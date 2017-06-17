@@ -26,7 +26,7 @@ public struct Issue {
     case badPractice
   }
 
-  public enum Severity {
+  public enum Severity: String {
     case critical
     case major
     case minor
