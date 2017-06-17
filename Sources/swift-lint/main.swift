@@ -27,7 +27,7 @@ func argumentsContain(_ option: String) -> Bool {
 }
 
 func readOption(_ option: String) -> String? {
-  guard let argIndex = cliArgs.index(of: "--\(option)") else {
+  guard let argIndex = cliArgs.index(of: "-\(option)") else {
     return nil
   }
 
@@ -107,16 +107,16 @@ var enabledRules = [
   "redundant_variable_declaration_keyword",
   "redundant_enumcase_string_value",
 ]
-if let enableRulesOption = readOption("enable-rules") {
+if let enableRulesOption = readOption("-enable-rules") {
   enabledRules = enableRulesOption.components(separatedBy: ",")
 }
-if let disableRulesOption = readOption("disable-rules") {
+if let disableRulesOption = readOption("-disable-rules") {
   let disabledRuleIdentifiers = disableRulesOption.components(separatedBy: ",")
   enabledRules = enabledRules.filter({ !disabledRuleIdentifiers.contains($0) })
 }
 
 var ruleConfigurations: [String: Any]?
-if let customRuleConfigOption = readOption("rule-configure") {
+if let customRuleConfigOption = readOption("-rule-configure") {
   ruleConfigurations = customRuleConfigOption.components(separatedBy: ",")
     .flatMap({ opt -> (String, Int)? in // TODO: need to support other types
       let keyValuePair = opt.components(separatedBy: "=")
@@ -136,7 +136,18 @@ if let customRuleConfigOption = readOption("rule-configure") {
     }
 }
 
-let reportType = readOption("report-type") ?? "text"
+let reportType = readOption("-report-type") ?? "text"
+
+var outputHandle: FileHandle = .standardOutput
+if let outputPath = readOption("o") ?? readOption("-output") {
+  let fileManager = FileManager.default
+  if !fileManager.fileExists(atPath: outputPath) {
+    fileManager.createFile(atPath: outputPath, contents: nil)
+  }
+  if let fileHandle = FileHandle(forWritingAtPath: outputPath) {
+    outputHandle = fileHandle
+  }
+}
 
 let filePaths = cliArgs
 var sourceFiles = [SourceFile]()
@@ -148,6 +159,9 @@ for filePath in filePaths {
   sourceFiles.append(sourceFile)
 }
 
-let driver = Driver(ruleIdentifiers: enabledRules, reportType: reportType)
+let driver = Driver(
+  ruleIdentifiers: enabledRules,
+  reportType: reportType,
+  outputHandle: outputHandle)
 let exitCode = driver.lint(sourceFiles: sourceFiles, ruleConfigurations: ruleConfigurations)
 exit(exitCode.rawValue)
