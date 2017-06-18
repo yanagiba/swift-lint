@@ -26,7 +26,7 @@ struct DotYanagibaLint {
 }
 
 extension DotYanagibaLint {
-  mutating func merge(with other: DotYanagibaLint) {
+  fileprivate mutating func merge(with other: DotYanagibaLint) {
     if let otherEnableRules = other.enableRules {
       var mergedEnableRules = enableRules ?? []
       mergedEnableRules += otherEnableRules
@@ -166,5 +166,24 @@ struct DotYanagibaLintReader {
     }
 
     return dotYanagibaLint
+  }
+
+  static func read() -> DotYanagibaLint? {
+    var homeDotYanagibaLint: DotYanagibaLint?
+    if let homeEnv = getenv("HOME"), let homePath = String(utf8String: homeEnv) {
+      homeDotYanagibaLint = read(from: "\(homePath)/.yanagiba")
+    }
+
+    let pwd = FileManager.default.currentDirectoryPath
+    guard let currentDotYanagibaLint = read(from: "\(pwd)/.yanagiba") else {
+      return homeDotYanagibaLint
+    }
+
+    if var dotYanagibaLint = homeDotYanagibaLint {
+      dotYanagibaLint.merge(with: currentDotYanagibaLint)
+      return dotYanagibaLint
+    }
+
+    return currentDotYanagibaLint
   }
 }
