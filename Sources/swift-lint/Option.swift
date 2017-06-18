@@ -100,7 +100,7 @@ func computeOutputHandle(
   if let outputPath = outputPath {
     let fileManager = FileManager.default
     if !fileManager.fileExists(atPath: outputPath) {
-      fileManager.createFile(atPath: outputPath, contents: nil)
+      _ = fileManager.createFile(atPath: outputPath, contents: nil)
     }
     if let fileHandle = FileHandle(forWritingAtPath: outputPath) {
       outputHandle = fileHandle
