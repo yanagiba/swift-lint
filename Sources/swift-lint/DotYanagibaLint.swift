@@ -150,7 +150,7 @@ struct DotYanagibaLintReader {
       switch key {
       case "enable-rules":
         dotYanagibaLint.enableRules = option
-      case "diable-rules":
+      case "disable-rules":
         dotYanagibaLint.disableRules = option
       case "rule-configurations":
         dotYanagibaLint.ruleConfigurations = extractKeyValuePair(from: option)
