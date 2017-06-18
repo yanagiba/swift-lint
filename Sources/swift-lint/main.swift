@@ -19,6 +19,8 @@ import Foundation
 import Source
 import Lint
 
+let dotYanagibaLint = DotYanagibaLintReader.read()
+
 var cliArgs = CommandLine.arguments
 cliArgs.remove(at: 0)
 
@@ -80,7 +82,7 @@ if argumentsContain("help") {
     Enable rules, default to all rules
   --disable-rules <rule_identifier0>[,...,<rule_identifierN>]
     Disable rules, default to empty
-  --rule-configure <parameter0>=<value0>[,...,<parameterN>=<valueN>]
+  --rule-configurations <parameter0>=<value0>[,...,<parameterN>=<valueN>]
     Override the default rule configurations
 
   --report-type <report_identifier>
@@ -111,60 +113,15 @@ if argumentsContain("version") {
   exit(0)
 }
 
-var enabledRules = [
-  "no_force_cast", // TODO: need better approach
-  "no_forced_try",
-  "high_cyclomatic_complexity",
-  "high_npath_complexity",
-  "high_ncss",
-  "nested_code_block_depth",
-  "remove_get_for_readonly_computed_property",
-  "redundant_initialization_to_nil",
-  "redundant_if_statement",
-  "redundant_conditional_operator",
-  "constant_if_statement_condition",
-  "constant_guard_statement_condition",
-  "constant_conditional_operator",
-  "inverted_logic",
-  "double_negative",
-  "collapsible_if_statements",
-  "redundant_variable_declaration_keyword",
-  "redundant_enumcase_string_value",
-]
-if let enableRulesOption = readOption("-enable-rules") {
-  enabledRules = enableRulesOption.components(separatedBy: ",")
-}
-if let disableRulesOption = readOption("-disable-rules") {
-  let disabledRuleIdentifiers = disableRulesOption.components(separatedBy: ",")
-  enabledRules = enabledRules.filter({ !disabledRuleIdentifiers.contains($0) })
-}
-
-var ruleConfigurations: [String: Any]?
-if let customRuleConfigurations = readOptionAsDictionary("-rule-configure") {
-  ruleConfigurations = customRuleConfigurations
-}
-
-let reportType = readOption("-report-type") ?? "text"
-
-var outputHandle: FileHandle = .standardOutput
-if let outputPath = readOption("o") ?? readOption("-output") {
-  let fileManager = FileManager.default
-  if !fileManager.fileExists(atPath: outputPath) {
-    fileManager.createFile(atPath: outputPath, contents: nil)
-  }
-  if let fileHandle = FileHandle(forWritingAtPath: outputPath) {
-    outputHandle = fileHandle
-  }
-}
-
-var severityThresholds: [String: Int] = [:]
-if let customSeverityThresholds = readOptionAsDictionary("-severity-thresholds") {
-  for (key, value) in customSeverityThresholds {
-    if let intValue = value as? Int {
-      severityThresholds[key] = intValue
-    }
-  }
-}
+let enabledRules = computeEnabledRules(
+  dotYanagibaLint, readOption("-enable-rules"), readOption("-disable-rules"))
+let ruleConfigurations = computeRuleConfigurations(
+  dotYanagibaLint, readOptionAsDictionary("-rule-configurations"))
+let reportType = computeReportType(dotYanagibaLint, readOption("-report-type"))
+let outputHandle =
+  computeOutputHandle(dotYanagibaLint, readOption("o") ?? readOption("-output"))
+let severityThresholds = computeSeverityThresholds(
+  dotYanagibaLint, readOptionAsDictionary("-severity-thresholds"))
 
 let filePaths = cliArgs
 var sourceFiles = [SourceFile]()
