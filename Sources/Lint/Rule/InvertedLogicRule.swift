@@ -36,7 +36,8 @@ class InvertedLogicRule: RuleBase, ASTVisitorRule {
   let category = Issue.Category.badPractice
 
   func visit(_ ifStmt: IfStatement) throws -> Bool {
-    guard ifStmt.elseClause != nil,
+    guard let elseClause = ifStmt.elseClause,
+      case .else = elseClause,
       ifStmt.conditionList.count == 1,
       case .expression(let expr) = ifStmt.conditionList[0]
     else {

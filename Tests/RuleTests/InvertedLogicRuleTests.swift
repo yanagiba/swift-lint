@@ -75,6 +75,12 @@ class InvertedLogicRuleTests : XCTestCase {
     XCTAssertTrue(issues.isEmpty)
   }
 
+  func testIfWithElseIf() {
+    let issues = "if a != nil { return true } else if a != b { return false }"
+      .inspect(withRule: InvertedLogicRule())
+    XCTAssertTrue(issues.isEmpty)
+  }
+
   func testConditionalOperatorWithLogicalNotOperator() {
     let issues = "!foo ? true : false"
       .inspect(withRule: InvertedLogicRule())
@@ -116,6 +122,7 @@ class InvertedLogicRuleTests : XCTestCase {
     ("testIfWithLogicalNotOperator", testIfWithLogicalNotOperator),
     ("testIfWithNotEqualOperator", testIfWithNotEqualOperator),
     ("testIfWithoutElseBlock", testIfWithoutElseBlock),
+    ("testIfWithElseIf", testIfWithElseIf),
     ("testConditionalOperatorWithLogicalNotOperator", testConditionalOperatorWithLogicalNotOperator),
     ("testConditionalOperatorWithNotEqualOperator", testConditionalOperatorWithNotEqualOperator),
   ]
