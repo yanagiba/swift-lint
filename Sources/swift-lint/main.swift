@@ -19,6 +19,24 @@ import Foundation
 import Source
 import Lint
 
+// configurations from .yanagiba files
+
+let fileManager = FileManager.default
+
+var dotYanagibaLint: DotYanagibaLint?
+if let homeEnv = getenv("HOME"), let homePath = String(utf8String: homeEnv) {
+  dotYanagibaLint = DotYanagibaLintReader.read(from: "\(homePath)/.yanagiba")
+}
+if let currentDotYanagibaLint = DotYanagibaLintReader.read(from: "\(fileManager.currentDirectoryPath)/.yanagiba") {
+  if dotYanagibaLint == nil {
+    dotYanagibaLint = currentDotYanagibaLint
+  } else {
+    dotYanagibaLint?.merge(with: currentDotYanagibaLint)
+  }
+}
+
+// merge configurations from command line options
+
 var cliArgs = CommandLine.arguments
 cliArgs.remove(at: 0)
 
@@ -80,7 +98,7 @@ if argumentsContain("help") {
     Enable rules, default to all rules
   --disable-rules <rule_identifier0>[,...,<rule_identifierN>]
     Disable rules, default to empty
-  --rule-configure <parameter0>=<value0>[,...,<parameterN>=<valueN>]
+  --rule-configurations <parameter0>=<value0>[,...,<parameterN>=<valueN>]
     Override the default rule configurations
 
   --report-type <report_identifier>
@@ -131,24 +149,45 @@ var enabledRules = [
   "redundant_variable_declaration_keyword",
   "redundant_enumcase_string_value",
 ]
+if let dotYanagibaLint = dotYanagibaLint, let enableRules = dotYanagibaLint.enableRules {
+  enabledRules = enableRules
+}
 if let enableRulesOption = readOption("-enable-rules") {
   enabledRules = enableRulesOption.components(separatedBy: ",")
 }
 if let disableRulesOption = readOption("-disable-rules") {
   let disabledRuleIdentifiers = disableRulesOption.components(separatedBy: ",")
   enabledRules = enabledRules.filter({ !disabledRuleIdentifiers.contains($0) })
+} else if let disabledRuleIdentifiers = dotYanagibaLint?.disableRules {
+  enabledRules = enabledRules.filter({ !disabledRuleIdentifiers.contains($0) })
 }
 
 var ruleConfigurations: [String: Any]?
-if let customRuleConfigurations = readOptionAsDictionary("-rule-configure") {
+if let dotYanagibaLint = dotYanagibaLint, let customRuleConfigurations = dotYanagibaLint.ruleConfigurations {
+  ruleConfigurations = customRuleConfigurations
+}
+if let customRuleConfigurations = readOptionAsDictionary("-rule-configurations") {
   ruleConfigurations = customRuleConfigurations
 }
 
-let reportType = readOption("-report-type") ?? "text"
+var reportType = "text"
+if let dotYanagibaLint = dotYanagibaLint, let reportTypeOption = dotYanagibaLint.reportType {
+  reportType = reportTypeOption
+}
+if let reportTypeOption = readOption("-report-type") {
+  reportType = reportTypeOption
+}
+
+var outputPath: String?
+if let dotYanagibaLint = dotYanagibaLint, let outputPathOption = dotYanagibaLint.outputPath {
+  outputPath = outputPathOption
+}
+if let outputPathOption = readOption("o") ?? readOption("-output") {
+  outputPath = outputPathOption
+}
 
 var outputHandle: FileHandle = .standardOutput
-if let outputPath = readOption("o") ?? readOption("-output") {
-  let fileManager = FileManager.default
+if let outputPath = outputPath {
   if !fileManager.fileExists(atPath: outputPath) {
     fileManager.createFile(atPath: outputPath, contents: nil)
   }
@@ -158,6 +197,9 @@ if let outputPath = readOption("o") ?? readOption("-output") {
 }
 
 var severityThresholds: [String: Int] = [:]
+if let dotYanagibaLint = dotYanagibaLint, let customSeverityThresholds = dotYanagibaLint.severityThresholds {
+  severityThresholds = customSeverityThresholds
+}
 if let customSeverityThresholds = readOptionAsDictionary("-severity-thresholds") {
   for (key, value) in customSeverityThresholds {
     if let intValue = value as? Int {
@@ -165,6 +207,8 @@ if let customSeverityThresholds = readOptionAsDictionary("-severity-thresholds")
     }
   }
 }
+
+// parse the source files
 
 let filePaths = cliArgs
 var sourceFiles = [SourceFile]()
@@ -175,6 +219,8 @@ for filePath in filePaths {
   }
   sourceFiles.append(sourceFile)
 }
+
+// lint the source files
 
 let driver = Driver(
   ruleIdentifiers: enabledRules,
