@@ -145,7 +145,7 @@ public class CodeBlockDepth {
     return max(depthCodeBlock, depthElseClause)
   }
 
-  private func depth(_ switchStmt: SwitchStatement) -> Int { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=6)
+  private func depth(_ switchStmt: SwitchStatement) -> Int {
     return 1 + switchStmt.cases.reduce(0) {
       switch $1 {
       case .case(_, let stmts):

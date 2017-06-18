@@ -67,12 +67,10 @@ public class Driver {
 
   @discardableResult public func lint(
     sourceFiles: [SourceFile],
-    ruleConfigurations: [String: Any]? = nil
+    ruleConfigurations: [String: Any]? = nil,
+    severityThresholds: [String: Int]? = nil
   ) -> ExitStatus {
     IssuePool.shared.clearIssues()
-
-    _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
-    _outputHandle.puts("", separator: _reporter.separator())
 
     for sourceFile in sourceFiles {
       let parser = Parser(source: sourceFile)
@@ -90,6 +88,11 @@ public class Driver {
       }
     }
 
+    let issueSummary = IssueSummary(issues: IssuePool.shared.issues)
+
+    _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
+    _outputHandle.puts("", separator: _reporter.separator())
+
     for issue in IssuePool.shared.issues {
       _outputHandle.puts(
         _reporter.handle(issue: issue), separator: _reporter.separator())
@@ -98,7 +101,7 @@ public class Driver {
     _outputHandle.puts("", separator: _reporter.separator())
     _outputHandle.puts(_reporter.footer(), separator: _reporter.separator())
 
-    return IssueSummary(issues: IssuePool.shared.issues).exitCode
+    return issueSummary.exitCode(withSeverityThresholds: severityThresholds)
   }
 }
 
@@ -109,19 +112,27 @@ public enum ExitStatus : Int32 {
 }
 
 private extension IssueSummary {
-  var exitCode: ExitStatus {
-    if numberOfIssues(withSeverity: .critical) > 0 {
-      return .tooManyIssues
+  func exitCode(withSeverityThresholds thresholds: [String: Int]?) -> ExitStatus {
+    let defaultThresholds: [Issue.Severity: Int] = [
+      .critical: 0,
+      .major: 10,
+      .minor: 20,
+      .cosmetic: 50,
+    ]
+
+    func threshold(for severity: Issue.Severity) -> Int {
+      if let thresholds = thresholds, let threshold = thresholds[severity.rawValue] {
+        return threshold
+      }
+      return defaultThresholds[severity] ?? 0
     }
-    if numberOfIssues(withSeverity: .major) > 10 {
-      return .tooManyIssues
+
+    for (severity, _) in defaultThresholds {
+      if numberOfIssues(withSeverity: severity) > threshold(for: severity) {
+        return .tooManyIssues
+      }
     }
-    if numberOfIssues(withSeverity: .minor) > 20 {
-      return .tooManyIssues
-    }
-    if numberOfIssues(withSeverity: .cosmetic) > 50 {
-      return .tooManyIssues
-    }
+
     return .success
   }
 }
