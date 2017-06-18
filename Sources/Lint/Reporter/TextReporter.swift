@@ -14,19 +14,31 @@
    limitations under the License.
 */
 
+import Foundation
+
 import Source
 
 class TextReporter : Reporter {
   func handle(issue: Issue) -> String {
-    return "\(issue.location): warning: \(issue.description)"
+    var filePath = "\(issue.location)"
+    let pwd = FileManager.default.currentDirectoryPath
+    if filePath.hasPrefix(pwd) {
+      let prefixIndex = filePath.index(filePath.startIndex, offsetBy: pwd.count+1)
+      filePath = String(filePath[prefixIndex...])
+    }
+    var issueDescription = ""
+    if !issue.description.isEmpty {
+      issueDescription = ": \(issue.description)"
+    }
+    return "\(filePath): \(issue.severity): \(issue.ruleIdentifier)\(issueDescription)"
+  }
+
+  func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String {
+    return ""
   }
 
   func header() -> String {
-    return "Swift Lint Report"
-  }
-
-  func footer() -> String {
-    return "[Swift Lint (http://swiftlint.org) v\(SWIFT_LINT_VERSION)]"
+    return "Yanagiba's \(SWIFT_LINT) (http://yanagiba.org/swift-lint) v\(SWIFT_LINT_VERSION) Report"
   }
 
   func separator() -> String {

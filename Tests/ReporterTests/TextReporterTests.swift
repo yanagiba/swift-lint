@@ -24,26 +24,56 @@ class TextReporterTests : XCTestCase {
 
   func testReportIssue() {
     let testIssue = Issue(
-        ruleIdentifier: "rule_id",
-        description: "text description for testing",
-        category: .badPractice,
-        location: SourceRange(
-            start: SourceLocation(path: "test/testTextReporterStart", line: 1, column: 2),
-            end: SourceLocation(path: "test/testTextReporterEnd", line: 3, column: 4)),
-        severity: .major,
-        correction: nil)
+      ruleIdentifier: "rule_id",
+      description: "text description for testing",
+      category: .badPractice,
+      location: SourceRange(
+        start: SourceLocation(path: "test/testTextReporterStart", line: 1, column: 2),
+        end: SourceLocation(path: "test/testTextReporterEnd", line: 3, column: 4)),
+      severity: .major,
+      correction: nil)
     XCTAssertEqual(
       textReporter.handle(issue: testIssue),
-      "test/testTextReporterStart:1:2-3:4: warning: text description for testing")
+      "test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing")
+  }
+
+  func testReportIssueWithCurrentDirectoryPathTrimmed() {
+    let pwd = FileManager.default.currentDirectoryPath
+    let testIssue = Issue(
+      ruleIdentifier: "rule_id",
+      description: "text description for testing",
+      category: .badPractice,
+      location: SourceRange(
+        start: SourceLocation(path: "\(pwd)/test/testTextReporterStart", line: 1, column: 2),
+        end: SourceLocation(path: "\(pwd)/test/testTextReporterEnd", line: 3, column: 4)),
+      severity: .critical,
+      correction: nil)
+    XCTAssertEqual(
+      textReporter.handle(issue: testIssue),
+      "test/testTextReporterStart:1:2-3:4: critical: rule_id: text description for testing")
+  }
+
+  func testReportIssueWithEmptyDescription() {
+    let pwd = FileManager.default.currentDirectoryPath
+    let testIssue = Issue(
+      ruleIdentifier: "rule_id",
+      description: "",
+      category: .badPractice,
+      location: SourceRange(
+        start: SourceLocation(path: "test", line: 1, column: 2),
+        end: SourceLocation(path: "testEnd", line: 3, column: 4)),
+      severity: .minor,
+      correction: nil)
+    XCTAssertEqual(textReporter.handle(issue: testIssue), "test:1:2-3:4: minor: rule_id")
   }
 
   func testHeader() {
-    XCTAssertEqual(textReporter.header(), "Swift Lint Report")
+    XCTAssertTrue(textReporter.header().hasPrefix("Yanagiba's swift-lint (http://yanagiba.org/swift-lint) v"))
+    XCTAssertTrue(textReporter.header().hasSuffix(" Report"))
   }
 
   func testFooter() {
-    XCTAssertTrue(textReporter.footer().hasPrefix("[Swift Lint (http://swiftlint.org) v"))
-    XCTAssertTrue(textReporter.footer().hasSuffix("]"))
+    XCTAssertTrue(textReporter.footer().isEmpty)
   }
 
   func testSeparator() {
@@ -52,6 +82,8 @@ class TextReporterTests : XCTestCase {
 
   static var allTests = [
     ("testReportIssue", testReportIssue),
+    ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
+    ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testHeader", testHeader),
     ("testFooter", testFooter),
     ("testSeparator", testSeparator),
