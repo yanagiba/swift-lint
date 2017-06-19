@@ -20,18 +20,12 @@ import Source
 
 class TextReporter : Reporter {
   func handle(issues: [Issue]) -> String {
-    let pwd = FileManager.default.currentDirectoryPath
     return issues.map({ issue -> String in
-      var filePath = "\(issue.location)"
-      if filePath.hasPrefix(pwd) {
-        let prefixIndex = filePath.index(filePath.startIndex, offsetBy: pwd.count+1)
-        filePath = String(filePath[prefixIndex...])
-      }
       var issueDescription = ""
       if !issue.description.isEmpty {
         issueDescription = ": \(issue.description)"
       }
-      return "\(filePath): \(issue.severity): \(issue.ruleIdentifier)\(issueDescription)"
+      return "\(issue.location.normalizedLocation): \(issue.severity): \(issue.ruleIdentifier)\(issueDescription)"
     }).joined(separator: separator)
   }
 

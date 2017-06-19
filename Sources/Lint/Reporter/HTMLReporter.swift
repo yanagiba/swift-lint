@@ -36,18 +36,11 @@ class HTMLReporter : Reporter {
       <tbody>
     """
 
-    let pwd = FileManager.default.currentDirectoryPath
     issuesText += issues.map({ issue -> String in
-      let startLocation = issue.location.start
-      var filePath = startLocation.path
-      if filePath.hasPrefix(pwd) {
-        let prefixIndex = filePath.index(filePath.startIndex, offsetBy: pwd.count+1)
-        filePath = String(filePath[prefixIndex...])
-      }
       return """
       <tr>
-        <td>\(filePath)</td>
-        <td>\(startLocation.line):\(startLocation.column)</td>
+        <td>\(issue.location.normalizedFilePath)</td>
+        <td>\(issue.location.startLineColumn)</td>
         <td>\(issue.ruleIdentifier)</td>
         <td>\(issue.category.rawValue)</td>
         <td>\(issue.severity)</td>
