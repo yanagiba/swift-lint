@@ -33,7 +33,7 @@ class TextReporterTests : XCTestCase {
       severity: .major,
       correction: nil)
     XCTAssertEqual(
-      textReporter.handle(issue: testIssue),
+      textReporter.handle(issues: [testIssue]),
       "test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing")
   }
 
@@ -49,7 +49,7 @@ class TextReporterTests : XCTestCase {
       severity: .critical,
       correction: nil)
     XCTAssertEqual(
-      textReporter.handle(issue: testIssue),
+      textReporter.handle(issues: [testIssue]),
       "test/testTextReporterStart:1:2-3:4: critical: rule_id: text description for testing")
   }
 
@@ -63,7 +63,7 @@ class TextReporterTests : XCTestCase {
         end: SourceLocation(path: "testEnd", line: 3, column: 4)),
       severity: .minor,
       correction: nil)
-    XCTAssertEqual(textReporter.handle(issue: testIssue), "test:1:2-3:4: minor: rule_id")
+    XCTAssertEqual(textReporter.handle(issues: [testIssue]), "test:1:2-3:4: minor: rule_id")
   }
 
   func testReportSummary() {

@@ -15,7 +15,7 @@
 */
 
 protocol Reporter {
-  func handle(issue: Issue) -> String
+  func handle(issues: [Issue]) -> String
   func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String
 
   var header: String { get }
@@ -24,7 +24,7 @@ protocol Reporter {
 }
 
 extension Reporter {
-  func handle(issue: Issue) -> String {
+  func handle(issues: [Issue]) -> String {
     return ""
   }
 

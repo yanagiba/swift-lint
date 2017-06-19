@@ -30,8 +30,8 @@ public class Driver {
     outputHandle: FileHandle = .standardOutput
   ) {
     switch reporter {
-    case "text":
-      fallthrough
+    case "html":
+      _reporter = HTMLReporter()
     default:
       _reporter = TextReporter()
     }
@@ -113,10 +113,8 @@ public class Driver {
       _outputHandle.puts("", separator: _reporter.separator)
     }
 
-    for issue in issues {
-      _outputHandle.puts(
-        _reporter.handle(issue: issue), separator: _reporter.separator)
-    }
+    _outputHandle.puts(
+      _reporter.handle(issues: issues), separator: _reporter.separator)
 
     let footerOutput = _reporter.footer
     if !footerOutput.isEmpty {

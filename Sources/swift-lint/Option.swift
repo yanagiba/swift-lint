@@ -99,7 +99,9 @@ func computeOutputHandle(
   var outputHandle: FileHandle = .standardOutput
   if let outputPath = outputPath {
     let fileManager = FileManager.default
-    if !fileManager.fileExists(atPath: outputPath) {
+    if fileManager.fileExists(atPath: outputPath) {
+      _ = try? "".write(toFile: outputPath, atomically: true, encoding: .utf8)
+    } else {
       _ = fileManager.createFile(atPath: outputPath, contents: nil)
     }
     if let fileHandle = FileHandle(forWritingAtPath: outputPath) {
