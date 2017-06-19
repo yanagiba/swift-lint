@@ -22,6 +22,7 @@ import XCTest
 class IssueSummaryTests : XCTestCase {
   func testNoIssue() {
     let summary = IssueSummary(issues: [])
+    XCTAssertEqual(summary.numberOfIssues, 0)
     XCTAssertEqual(summary.numberOfFiles, 0)
     XCTAssertEqual(summary.numberOfIssues(withSeverity: .critical), 0)
     XCTAssertEqual(summary.numberOfIssues(withSeverity: .major), 0)
@@ -38,6 +39,7 @@ class IssueSummaryTests : XCTestCase {
       issue("c", .minor),
       issue("c", .cosmetic),
     ])
+    XCTAssertEqual(summary.numberOfIssues, 6)
     XCTAssertEqual(summary.numberOfFiles, 3)
     XCTAssertEqual(summary.numberOfIssues(withSeverity: .critical), 1)
     XCTAssertEqual(summary.numberOfIssues(withSeverity: .major), 3)

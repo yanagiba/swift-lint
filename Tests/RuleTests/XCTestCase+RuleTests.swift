@@ -41,8 +41,8 @@ extension String {
 fileprivate class TestIssueCollector : Reporter {
   fileprivate var issues = [Issue]()
 
-  fileprivate func handle(issue: Issue) -> String {
-    issues.append(issue)
+  fileprivate func handle(issues: [Issue]) -> String {
+    self.issues = issues
     return ""
   }
 }

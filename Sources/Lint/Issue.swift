@@ -17,13 +17,13 @@
 import Source
 
 public struct Issue {
-  public enum Category {
+  public enum Category: String {
     case uncategorized
 
     case complexity
     case readability
     case size
-    case badPractice
+    case badPractice = "bad practice"
   }
 
   public enum Severity: String {
@@ -39,4 +39,15 @@ public struct Issue {
   let location: SourceRange
   let severity: Severity
   let correction: Correction?
+}
+
+public extension Issue.Severity {
+  static var allSeverities: [Issue.Severity] {
+    return [
+      .critical,
+      .major,
+      .minor,
+      .cosmetic,
+    ]
+  }
 }

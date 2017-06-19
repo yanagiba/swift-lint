@@ -24,34 +24,100 @@ class TextReporterTests : XCTestCase {
 
   func testReportIssue() {
     let testIssue = Issue(
-        ruleIdentifier: "rule_id",
-        description: "text description for testing",
-        category: .badPractice,
-        location: SourceRange(
-            start: SourceLocation(path: "test/testTextReporterStart", line: 1, column: 2),
-            end: SourceLocation(path: "test/testTextReporterEnd", line: 3, column: 4)),
-        severity: .major,
-        correction: nil)
+      ruleIdentifier: "rule_id",
+      description: "text description for testing",
+      category: .badPractice,
+      location: SourceRange(
+        start: SourceLocation(path: "test/testTextReporterStart", line: 1, column: 2),
+        end: SourceLocation(path: "test/testTextReporterEnd", line: 3, column: 4)),
+      severity: .major,
+      correction: nil)
     XCTAssertEqual(
-      textReporter.handle(issue: testIssue),
-      "test/testTextReporterStart:1:2-3:4: warning: text description for testing")
+      textReporter.handle(issues: [testIssue]),
+      "test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing")
+  }
+
+  func testReportIssueWithCurrentDirectoryPathTrimmed() {
+    let pwd = FileManager.default.currentDirectoryPath
+    let testIssue = Issue(
+      ruleIdentifier: "rule_id",
+      description: "text description for testing",
+      category: .badPractice,
+      location: SourceRange(
+        start: SourceLocation(path: "\(pwd)/test/testTextReporterStart", line: 1, column: 2),
+        end: SourceLocation(path: "\(pwd)/test/testTextReporterEnd", line: 3, column: 4)),
+      severity: .critical,
+      correction: nil)
+    XCTAssertEqual(
+      textReporter.handle(issues: [testIssue]),
+      "test/testTextReporterStart:1:2-3:4: critical: rule_id: text description for testing")
+  }
+
+  func testReportIssueWithEmptyDescription() {
+    let testIssue = Issue(
+      ruleIdentifier: "rule_id",
+      description: "",
+      category: .badPractice,
+      location: SourceRange(
+        start: SourceLocation(path: "test", line: 1, column: 2),
+        end: SourceLocation(path: "testEnd", line: 3, column: 4)),
+      severity: .minor,
+      correction: nil)
+    XCTAssertEqual(textReporter.handle(issues: [testIssue]), "test:1:2-3:4: minor: rule_id")
+  }
+
+  func testReportSummary() {
+    for (index, severity) in Issue.Severity.allSeverities.enumerated() {
+      let testIssue = Issue(
+        ruleIdentifier: "rule_id",
+        description: "",
+        category: .badPractice,
+        location: .EMPTY,
+        severity: severity,
+        correction: nil)
+      let issueSummary = IssueSummary(issues: [testIssue])
+      var numIssues = [0, 0, 0, 0]
+      numIssues[index] = 1
+      XCTAssertEqual(
+        textReporter.handle(numberOfTotalFiles: index, issueSummary: issueSummary),
+        """
+        Summary:
+        Within a total number of \(index) files, 1 file have issues.
+        Number of critical issues: \(numIssues[0])
+        Number of major issues: \(numIssues[1])
+        Number of minor issues: \(numIssues[2])
+        Number of cosmetic issues: \(numIssues[3])
+        """)
+    }
+  }
+
+  func testNoIssue() {
+    let issueSummary = IssueSummary(issues: [])
+    XCTAssertEqual(
+      textReporter.handle(numberOfTotalFiles: 100, issueSummary: issueSummary),
+      "Good job! Inspected 100 files, found no issue.")
+    XCTAssertTrue(textReporter.handle(issues: []).isEmpty)
   }
 
   func testHeader() {
-    XCTAssertEqual(textReporter.header(), "Swift Lint Report")
+    XCTAssertTrue(textReporter.header.hasPrefix("Yanagiba's swift-lint (http://yanagiba.org/swift-lint) v"))
+    XCTAssertTrue(textReporter.header.contains(" Report"))
   }
 
   func testFooter() {
-    XCTAssertTrue(textReporter.footer().hasPrefix("[Swift Lint (http://swiftlint.org) v"))
-    XCTAssertTrue(textReporter.footer().hasSuffix("]"))
+    XCTAssertTrue(textReporter.footer.isEmpty)
   }
 
   func testSeparator() {
-    XCTAssertEqual(textReporter.separator(), "\n")
+    XCTAssertEqual(textReporter.separator, "\n")
   }
 
   static var allTests = [
     ("testReportIssue", testReportIssue),
+    ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
+    ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
+    ("testReportSummary", testReportSummary),
+    ("testNoIssue", testNoIssue),
     ("testHeader", testHeader),
     ("testFooter", testFooter),
     ("testSeparator", testSeparator),

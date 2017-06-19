@@ -14,24 +14,30 @@
    limitations under the License.
 */
 
-struct IssueSummary {
-  private let issues: [Issue]
+import Foundation
 
-  init(issues: [Issue]) {
-    self.issues = issues
+import Source
+
+extension SourceRange {
+  var normalizedLocation: String {
+    return "\(normalizedFilePath):\(startLineColumn)-\(endLineColumn)"
   }
 
-  var numberOfIssues: Int {
-    return issues.count
+  var normalizedFilePath: String {
+    let pwd = FileManager.default.currentDirectoryPath
+    var filePath = start.path
+    if filePath.hasPrefix(pwd) {
+      let prefixIndex = filePath.index(filePath.startIndex, offsetBy: pwd.count+1)
+      filePath = String(filePath[prefixIndex...])
+    }
+    return filePath
   }
 
-  var numberOfFiles: Int {
-    let filePaths = issues.map({ $0.location.start.path })
-    let uniqueFilePaths = Array(Set(filePaths))
-    return uniqueFilePaths.count
+  var startLineColumn: String {
+    return "\(start.line):\(start.column)"
   }
 
-  func numberOfIssues(withSeverity severity: Issue.Severity) -> Int {
-    return issues.filter({ $0.severity == severity }).count
+  var endLineColumn: String {
+    return "\(end.line):\(end.column)"
   }
 }

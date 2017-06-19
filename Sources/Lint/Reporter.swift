@@ -15,23 +15,32 @@
 */
 
 protocol Reporter {
-  func handle(issue: Issue) -> String
+  func handle(issues: [Issue]) -> String
+  func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String
 
-  func header() -> String
-  func footer() -> String
-  func separator() -> String
+  var header: String { get }
+  var footer: String { get }
+  var separator: String { get }
 }
 
 extension Reporter {
-  func header() -> String {
+  func handle(issues: [Issue]) -> String {
     return ""
   }
 
-  func footer() -> String {
+  func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String {
     return ""
   }
 
-  func separator() -> String {
+  var header: String {
+    return ""
+  }
+
+  var footer: String {
+    return ""
+  }
+
+  var separator: String {
     return ""
   }
 }

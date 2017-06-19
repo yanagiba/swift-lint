@@ -14,24 +14,14 @@
    limitations under the License.
 */
 
-struct IssueSummary {
-  private let issues: [Issue]
+import Foundation
 
-  init(issues: [Issue]) {
-    self.issues = issues
-  }
-
-  var numberOfIssues: Int {
-    return issues.count
-  }
-
-  var numberOfFiles: Int {
-    let filePaths = issues.map({ $0.location.start.path })
-    let uniqueFilePaths = Array(Set(filePaths))
-    return uniqueFilePaths.count
-  }
-
-  func numberOfIssues(withSeverity severity: Issue.Severity) -> Int {
-    return issues.filter({ $0.severity == severity }).count
+extension Date {
+  var formatted: String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale.current
+    dateFormatter.dateStyle = .long
+    dateFormatter.timeStyle = .long
+    return dateFormatter.string(from: self)
   }
 }

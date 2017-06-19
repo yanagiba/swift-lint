@@ -20,15 +20,6 @@ import XCTest
 @testable import AST
 @testable import Lint
 
-fileprivate class TestDriverReporter : Reporter {
-  var issues = [Issue]()
-
-  func handle(issue: Issue) -> String {
-    issues.append(issue)
-    return ""
-  }
-}
-
 fileprivate class TestDriverRule : Rule {
   var name: String {
     return "Test Driver"
@@ -90,4 +81,13 @@ class DriverTests : XCTestCase {
     ("testLintContent", testLintContent),
     ("testRegisterRuleDoesNotExist", testRegisterRuleDoesNotExist),
   ]
+}
+
+fileprivate class TestDriverReporter : Reporter {
+  var issues = [Issue]()
+
+  func handle(issues: [Issue]) -> String {
+    self.issues = issues
+    return ""
+  }
 }

@@ -14,22 +14,48 @@
    limitations under the License.
 */
 
+import Foundation
+
 import Source
 
 class TextReporter : Reporter {
-  func handle(issue: Issue) -> String {
-    return "\(issue.location): warning: \(issue.description)"
+  func handle(issues: [Issue]) -> String {
+    return issues.map({ issue -> String in
+      var issueDescription = ""
+      if !issue.description.isEmpty {
+        issueDescription = ": \(issue.description)"
+      }
+      return "\(issue.location.normalizedLocation): \(issue.severity): \(issue.ruleIdentifier)\(issueDescription)"
+    }).joined(separator: separator)
   }
 
-  func header() -> String {
-    return "Swift Lint Report"
+  func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String {
+    if issueSummary.numberOfIssues == 0 {
+      return "Good job! Inspected \(numberOfTotalFiles) files, found no issue."
+    }
+
+    let numberOfIssueFiles = issueSummary.numberOfFiles
+    let filesText = numberOfIssueFiles == 1 ? "file" : "files"
+    var lines = [
+      "Summary:",
+      "Within a total number of \(numberOfTotalFiles) files, \(numberOfIssueFiles) \(filesText) have issues.",
+    ]
+    for severity in Issue.Severity.allSeverities {
+      let count = issueSummary.numberOfIssues(withSeverity: severity)
+      let line = "Number of \(severity) issues: \(count)"
+      lines.append(line)
+    }
+    return lines.joined(separator: separator)
   }
 
-  func footer() -> String {
-    return "[Swift Lint (http://swiftlint.org) v\(SWIFT_LINT_VERSION)]"
+  var header: String {
+    return """
+    Yanagiba's \(SWIFT_LINT) (http://yanagiba.org/swift-lint) v\(SWIFT_LINT_VERSION) Report
+    \(Date().formatted)
+    """
   }
 
-  func separator() -> String {
+  var separator: String {
     return "\n"
   }
 }

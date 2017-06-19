@@ -30,8 +30,8 @@ public class Driver {
     outputHandle: FileHandle = .standardOutput
   ) {
     switch reporter {
-    case "text":
-      fallthrough
+    case "html":
+      _reporter = HTMLReporter()
     default:
       _reporter = TextReporter()
     }
@@ -88,20 +88,39 @@ public class Driver {
       }
     }
 
-    let issueSummary = IssueSummary(issues: IssuePool.shared.issues)
+    let issues = IssuePool.shared.issues
 
-    _outputHandle.puts(_reporter.header(), separator: _reporter.separator())
-    _outputHandle.puts("", separator: _reporter.separator())
+    renderReport(issues, sourceFiles.count)
 
-    for issue in IssuePool.shared.issues {
-      _outputHandle.puts(
-        _reporter.handle(issue: issue), separator: _reporter.separator())
+    return IssueSummary(issues: issues)
+      .exitCode(withSeverityThresholds: severityThresholds)
+  }
+
+  private func renderReport(_ issues: [Issue], _ numberOfTotalFiles: Int) {
+    let issueSummary = IssueSummary(issues: issues)
+
+    let headerOutput = _reporter.header
+    if !headerOutput.isEmpty {
+      _outputHandle.puts(headerOutput, separator: _reporter.separator)
+      _outputHandle.puts("", separator: _reporter.separator)
     }
 
-    _outputHandle.puts("", separator: _reporter.separator())
-    _outputHandle.puts(_reporter.footer(), separator: _reporter.separator())
+    let summaryOutput = _reporter.handle(
+      numberOfTotalFiles: numberOfTotalFiles,
+      issueSummary: issueSummary)
+    if !summaryOutput.isEmpty {
+      _outputHandle.puts(summaryOutput, separator: _reporter.separator)
+      _outputHandle.puts("", separator: _reporter.separator)
+    }
 
-    return issueSummary.exitCode(withSeverityThresholds: severityThresholds)
+    _outputHandle.puts(
+      _reporter.handle(issues: issues), separator: _reporter.separator)
+
+    let footerOutput = _reporter.footer
+    if !footerOutput.isEmpty {
+      _outputHandle.puts("", separator: _reporter.separator)
+      _outputHandle.puts(footerOutput, separator: _reporter.separator)
+    }
   }
 }
 
