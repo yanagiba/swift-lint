@@ -17,13 +17,13 @@
 import Source
 
 public struct Issue {
-  public enum Category {
+  public enum Category: String {
     case uncategorized
 
     case complexity
     case readability
     case size
-    case badPractice
+    case badPractice = "bad practice"
   }
 
   public enum Severity: String {

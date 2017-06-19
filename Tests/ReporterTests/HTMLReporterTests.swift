@@ -51,7 +51,7 @@ class HTMLReporterTests : XCTestCase {
         <td>test/testHTMLReporterStart</td>
         <td>1:2</td>
         <td>rule_id</td>
-        <td>badPractice</td>
+        <td>bad practice</td>
         <td>major</td>
         <td>text description for testing</td>
       </tr></tbody></table>
@@ -88,7 +88,7 @@ class HTMLReporterTests : XCTestCase {
         <td>test/testHTMLReporterStart</td>
         <td>1:2</td>
         <td>rule_id</td>
-        <td>badPractice</td>
+        <td>bad practice</td>
         <td>critical</td>
         <td>text description for testing</td>
       </tr></tbody></table>
@@ -124,7 +124,7 @@ class HTMLReporterTests : XCTestCase {
         <td>test</td>
         <td>1:2</td>
         <td>rule_id</td>
-        <td>badPractice</td>
+        <td>bad practice</td>
         <td>minor</td>
         <td></td>
       </tr></tbody></table>

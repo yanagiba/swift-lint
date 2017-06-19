@@ -49,7 +49,7 @@ class HTMLReporter : Reporter {
         <td>\(filePath)</td>
         <td>\(startLocation.line):\(startLocation.column)</td>
         <td>\(issue.ruleIdentifier)</td>
-        <td>\(issue.category)</td>
+        <td>\(issue.category.rawValue)</td>
         <td>\(issue.severity)</td>
         <td>\(issue.description)</td>
       </tr>
