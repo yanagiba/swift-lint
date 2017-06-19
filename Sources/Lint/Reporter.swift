@@ -18,9 +18,9 @@ protocol Reporter {
   func handle(issue: Issue) -> String
   func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String
 
-  func header() -> String
-  func footer() -> String
-  func separator() -> String
+  var header: String { get }
+  var footer: String { get }
+  var separator: String { get }
 }
 
 extension Reporter {
@@ -32,15 +32,15 @@ extension Reporter {
     return ""
   }
 
-  func header() -> String {
+  var header: String {
     return ""
   }
 
-  func footer() -> String {
+  var footer: String {
     return ""
   }
 
-  func separator() -> String {
+  var separator: String {
     return ""
   }
 }

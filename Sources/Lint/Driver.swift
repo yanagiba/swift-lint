@@ -99,29 +99,29 @@ public class Driver {
   private func renderReport(_ issues: [Issue], _ numberOfTotalFiles: Int) {
     let issueSummary = IssueSummary(issues: issues)
 
-    let headerOutput = _reporter.header()
+    let headerOutput = _reporter.header
     if !headerOutput.isEmpty {
-      _outputHandle.puts(headerOutput, separator: _reporter.separator())
-      _outputHandle.puts("", separator: _reporter.separator())
+      _outputHandle.puts(headerOutput, separator: _reporter.separator)
+      _outputHandle.puts("", separator: _reporter.separator)
     }
 
     let summaryOutput = _reporter.handle(
       numberOfTotalFiles: numberOfTotalFiles,
       issueSummary: issueSummary)
     if !summaryOutput.isEmpty {
-      _outputHandle.puts(summaryOutput, separator: _reporter.separator())
-      _outputHandle.puts("", separator: _reporter.separator())
+      _outputHandle.puts(summaryOutput, separator: _reporter.separator)
+      _outputHandle.puts("", separator: _reporter.separator)
     }
 
     for issue in issues {
       _outputHandle.puts(
-        _reporter.handle(issue: issue), separator: _reporter.separator())
+        _reporter.handle(issue: issue), separator: _reporter.separator)
     }
 
-    let footerOutput = _reporter.footer()
+    let footerOutput = _reporter.footer
     if !footerOutput.isEmpty {
-      _outputHandle.puts("", separator: _reporter.separator())
-      _outputHandle.puts(footerOutput, separator: _reporter.separator())
+      _outputHandle.puts("", separator: _reporter.separator)
+      _outputHandle.puts(footerOutput, separator: _reporter.separator)
     }
   }
 }

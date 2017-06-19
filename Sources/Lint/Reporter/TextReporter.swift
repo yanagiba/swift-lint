@@ -45,14 +45,14 @@ class TextReporter : Reporter {
       let line = "Number of \(severity) issues: \(count)"
       lines.append(line)
     }
-    return lines.joined(separator: separator())
+    return lines.joined(separator: separator)
   }
 
-  func header() -> String {
+  var header: String {
     return "Yanagiba's \(SWIFT_LINT) (http://yanagiba.org/swift-lint) v\(SWIFT_LINT_VERSION) Report"
   }
 
-  func separator() -> String {
+  var separator: String {
     return "\n"
   }
 }
