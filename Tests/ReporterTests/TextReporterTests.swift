@@ -93,7 +93,7 @@ class TextReporterTests : XCTestCase {
 
   func testHeader() {
     XCTAssertTrue(textReporter.header.hasPrefix("Yanagiba's swift-lint (http://yanagiba.org/swift-lint) v"))
-    XCTAssertTrue(textReporter.header.hasSuffix(" Report"))
+    XCTAssertTrue(textReporter.header.contains(" Report"))
   }
 
   func testFooter() {

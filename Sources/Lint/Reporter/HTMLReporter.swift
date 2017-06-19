@@ -129,7 +129,7 @@ class HTMLReporter : Reporter {
   var footer: String {
     return """
     <hr />
-    <p>\(Date()) | Generated with <a href='http://yanagiba.org/swift-lint'>Yanagiba's \(SWIFT_LINT) v\(SWIFT_LINT_VERSION)</a>.</p>
+    <p>\(Date().formatted) | Generated with <a href='http://yanagiba.org/swift-lint'>Yanagiba's \(SWIFT_LINT) v\(SWIFT_LINT_VERSION)</a>.</p>
     </body>
     </html>
     """

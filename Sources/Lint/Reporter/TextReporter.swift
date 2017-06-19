@@ -45,7 +45,10 @@ class TextReporter : Reporter {
   }
 
   var header: String {
-    return "Yanagiba's \(SWIFT_LINT) (http://yanagiba.org/swift-lint) v\(SWIFT_LINT_VERSION) Report"
+    return """
+    Yanagiba's \(SWIFT_LINT) (http://yanagiba.org/swift-lint) v\(SWIFT_LINT_VERSION) Report
+    \(Date().formatted)
+    """
   }
 
   var separator: String {
