@@ -40,3 +40,14 @@ public struct Issue {
   let severity: Severity
   let correction: Correction?
 }
+
+public extension Issue.Severity {
+  static var allSeverities: [Issue.Severity] {
+    return [
+      .critical,
+      .major,
+      .minor,
+      .cosmetic,
+    ]
+  }
+}

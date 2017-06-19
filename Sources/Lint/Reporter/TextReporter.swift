@@ -34,7 +34,18 @@ class TextReporter : Reporter {
   }
 
   func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String {
-    return ""
+    let numberOfIssueFiles = issueSummary.numberOfFiles
+    let filesText = numberOfIssueFiles == 1 ? "file" : "files"
+    var lines = [
+      "Summary:",
+      "Within a total number of \(numberOfTotalFiles) files, \(numberOfIssueFiles) \(filesText) have issues.",
+    ]
+    for severity in Issue.Severity.allSeverities {
+      let count = issueSummary.numberOfIssues(withSeverity: severity)
+      let line = "Number of \(severity) issues: \(count)"
+      lines.append(line)
+    }
+    return lines.joined(separator: separator())
   }
 
   func header() -> String {

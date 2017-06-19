@@ -54,7 +54,6 @@ class TextReporterTests : XCTestCase {
   }
 
   func testReportIssueWithEmptyDescription() {
-    let pwd = FileManager.default.currentDirectoryPath
     let testIssue = Issue(
       ruleIdentifier: "rule_id",
       description: "",
@@ -65,6 +64,31 @@ class TextReporterTests : XCTestCase {
       severity: .minor,
       correction: nil)
     XCTAssertEqual(textReporter.handle(issue: testIssue), "test:1:2-3:4: minor: rule_id")
+  }
+
+  func testReportSummary() {
+    for (index, severity) in Issue.Severity.allSeverities.enumerated() {
+      let testIssue = Issue(
+        ruleIdentifier: "rule_id",
+        description: "",
+        category: .badPractice,
+        location: .EMPTY,
+        severity: severity,
+        correction: nil)
+      let issueSummary = IssueSummary(issues: [testIssue])
+      var numIssues = [0, 0, 0, 0]
+      numIssues[index] = 1
+      XCTAssertEqual(
+        textReporter.handle(numberOfTotalFiles: index, issueSummary: issueSummary),
+        """
+        Summary:
+        Within a total number of \(index) files, 1 file have issues.
+        Number of critical issues: \(numIssues[0])
+        Number of major issues: \(numIssues[1])
+        Number of minor issues: \(numIssues[2])
+        Number of cosmetic issues: \(numIssues[3])
+        """)
+    }
   }
 
   func testHeader() {
@@ -84,6 +108,7 @@ class TextReporterTests : XCTestCase {
     ("testReportIssue", testReportIssue),
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
+    ("testReportSummary", testReportSummary),
     ("testHeader", testHeader),
     ("testFooter", testFooter),
     ("testSeparator", testSeparator),
