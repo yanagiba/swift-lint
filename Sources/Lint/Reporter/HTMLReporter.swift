@@ -20,6 +20,10 @@ import Source
 
 class HTMLReporter : Reporter {
   func handle(issues: [Issue]) -> String {
+    if issues.isEmpty {
+      return ""
+    }
+
     var issuesText = """
     <hr />
     <table>

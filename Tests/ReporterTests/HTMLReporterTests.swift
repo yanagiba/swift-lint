@@ -162,6 +162,27 @@ class HTMLReporterTests : XCTestCase {
     }
   }
 
+  func testNoIssue() {
+    let issueSummary = IssueSummary(issues: [])
+    XCTAssertEqual(
+      htmlReporter.handle(numberOfTotalFiles: 100, issueSummary: issueSummary),
+      """
+      <table>
+        <thead>
+          <tr>
+            <th>Total Files</th>
+            <th>Files with Issues</th><th>Critical</th><th>Major</th><th>Minor</th><th>Cosmetic</th>    </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>100</td>
+            <td>0</td><th class="severity-critical">0</th><th class="severity-major">0</th><th class="severity-minor">0</th><th class="severity-cosmetic">0</th>    </tr>
+        </tbody>
+      </table>
+      """)
+    XCTAssertTrue(htmlReporter.handle(issues: []).isEmpty)
+  }
+
   func testHeader() {
     XCTAssertEqual(htmlReporter.header,
     """
@@ -224,6 +245,7 @@ class HTMLReporterTests : XCTestCase {
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),
+    ("testNoIssue", testNoIssue),
     ("testHeader", testHeader),
     ("testFooter", testFooter),
     ("testSeparator", testSeparator),

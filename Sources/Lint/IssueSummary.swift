@@ -21,6 +21,10 @@ struct IssueSummary {
     self.issues = issues
   }
 
+  var numberOfIssues: Int {
+    return issues.count
+  }
+
   var numberOfFiles: Int {
     let filePaths = issues.map({ $0.location.start.path })
     let uniqueFilePaths = Array(Set(filePaths))

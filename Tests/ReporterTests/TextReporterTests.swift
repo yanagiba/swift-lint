@@ -91,6 +91,14 @@ class TextReporterTests : XCTestCase {
     }
   }
 
+  func testNoIssue() {
+    let issueSummary = IssueSummary(issues: [])
+    XCTAssertEqual(
+      textReporter.handle(numberOfTotalFiles: 100, issueSummary: issueSummary),
+      "Good job! Inspected 100 files, found no issue.")
+    XCTAssertTrue(textReporter.handle(issues: []).isEmpty)
+  }
+
   func testHeader() {
     XCTAssertTrue(textReporter.header.hasPrefix("Yanagiba's swift-lint (http://yanagiba.org/swift-lint) v"))
     XCTAssertTrue(textReporter.header.contains(" Report"))
@@ -109,6 +117,7 @@ class TextReporterTests : XCTestCase {
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),
+    ("testNoIssue", testNoIssue),
     ("testHeader", testHeader),
     ("testFooter", testFooter),
     ("testSeparator", testSeparator),

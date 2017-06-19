@@ -30,6 +30,10 @@ class TextReporter : Reporter {
   }
 
   func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String {
+    if issueSummary.numberOfIssues == 0 {
+      return "Good job! Inspected \(numberOfTotalFiles) files, found no issue."
+    }
+
     let numberOfIssueFiles = issueSummary.numberOfFiles
     let filesText = numberOfIssueFiles == 1 ? "file" : "files"
     var lines = [
