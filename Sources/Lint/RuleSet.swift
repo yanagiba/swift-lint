@@ -35,4 +35,8 @@ public struct RuleSet {
     RedundantVariableDeclarationKeywordRule(),
     RedundantEnumCaseStringValueRule(),
   ]
+
+  public static var ruleIdentifiers: [String] {
+    return rules.map({ $0.identifier })
+  }
 }
