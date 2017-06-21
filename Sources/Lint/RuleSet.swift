@@ -34,6 +34,7 @@ public struct RuleSet {
     CollapsibleIfStatementsRule(),
     RedundantVariableDeclarationKeywordRule(),
     RedundantEnumCaseStringValueRule(),
+    TooManyParametersRule(),
   ]
 
   public static var ruleIdentifiers: [String] {

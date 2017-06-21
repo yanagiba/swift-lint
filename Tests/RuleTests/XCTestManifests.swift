@@ -37,6 +37,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(CollapsibleIfStatementsRuleTests.allTests),
     testCase(RedundantVariableDeclarationKeywordRuleTests.allTests),
     testCase(RedundantEnumCaseStringValueRuleTests.allTests),
+    testCase(TooManyParametersRuleTests.allTests),
   ]
 }
 #endif

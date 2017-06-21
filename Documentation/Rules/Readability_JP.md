@@ -81,3 +81,49 @@ if (1)
     }
 }
 ```
+
+
+## Too Many Parameters
+
+<dl>
+<dt>識別子</dt>
+<dd>too_many_parameters</dd>
+<dt>ファイル名</dt>
+<dd>TooManyParametersRule.swift</dd>
+<dt>激しさ</dt>
+<dd>Minor</dd>
+<dt>分類</dt>
+<dd>Readability</dd>
+</dl>
+
+Methods with too many parameters are hard to understand and maintain,
+and are thirsty for refactorings, like
+[Replace Parameter With Method](http://www.refactoring.com/catalog/replaceParameterWithMethod.html),
+[Introduce Parameter Object](http://www.refactoring.com/catalog/introduceParameterObject.html),
+or
+[Preserve Whole Object](http://www.refactoring.com/catalog/preserveWholeObject.html).
+
+##### Thresholds:
+
+<dl>
+<dt>MAX_PARAMETERS_COUNT</dt>
+<dd>The reporting threshold for too many parameters, default value is 10.</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+func example(
+  a: Int,
+  b: Int,
+  c: Int,
+  ...
+  z: Int
+) {}
+```
+
+##### References:
+
+Fowler, Martin (1999). *Refactoring: Improving the design of existing code.* Addison Wesley.
