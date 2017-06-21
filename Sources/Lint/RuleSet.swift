@@ -16,7 +16,8 @@
 
 public struct RuleSet {
   public static var rules: [Rule] = [
-    NoForceCastRule(), // TODO: this is clearly an OCP violation, I would take a technical debt here, and fix it in the near future
+    // TODO: this is clearly an OCP violation, I would take a technical debt here, and fix it in the near future
+    NoForceCastRule(),
     NoForcedTryRule(),
     CyclomaticComplexityRule(),
     NPathComplexityRule(),

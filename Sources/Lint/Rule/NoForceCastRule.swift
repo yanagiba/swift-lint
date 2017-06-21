@@ -35,7 +35,9 @@ class NoForceCastRule: RuleBase, ASTVisitorRule {
       """
       let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! MyCustomCell
 
-      // guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as? MyCustomCell else {
+      // guard let cell =
+      //   tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as? MyCustomCell
+      // else {
       //   print("Failed in casting to MyCustomCell.")
       //   return UITableViewCell()
       // }
