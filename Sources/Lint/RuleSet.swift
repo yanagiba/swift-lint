@@ -35,6 +35,7 @@ public struct RuleSet {
     RedundantVariableDeclarationKeywordRule(),
     RedundantEnumCaseStringValueRule(),
     TooManyParametersRule(),
+    LongLineRule(),
   ]
 
   public static var ruleIdentifiers: [String] {

@@ -127,3 +127,35 @@ func example(
 ##### References:
 
 Fowler, Martin (1999). *Refactoring: Improving the design of existing code.* Addison Wesley.
+
+
+## Long Line
+
+<dl>
+<dt>Identifier</dt>
+<dd>long_line</dd>
+<dt>File name</dt>
+<dd>LongLineRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Readability</dd>
+</dl>
+
+When a line of code is very long, it largely harms the readability.
+Break long lines of code into multiple lines.
+
+##### Thresholds:
+
+<dl>
+<dt>LONG_LINE</dt>
+<dd>The long line reporting threshold, default value is 100.</dd>
+</dl>
+
+##### Examples:
+
+###### Example 1
+
+```
+let a012345678901234567890123456789...1234567890123456789012345678901234567890123456789
+```

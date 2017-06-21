@@ -24,15 +24,40 @@ protocol SourceCodeRule : Rule {
 }
 
 extension SourceCodeRule where Self : RuleBase {
+  private var lines: [String] {
+    guard let astContext = astContext else {
+      return []
+    }
+
+    return astContext.sourceFile.content.components(separatedBy: .newlines)
+  }
+
   func inspect(_ astContext: ASTContext, configurations: [String: Any]? = nil) {
     self.astContext = astContext
     self.configurations = configurations
 
-    let sourceContent = astContext.sourceFile.content
-
-    let lines = sourceContent.components(separatedBy: .newlines)
     for (lineNumber, line) in lines.enumerated() {
         inspect(line: line, lineNumber: lineNumber + 1)
     }
+  }
+
+  func emitIssue(
+    _ lineNumber: Int,
+    description: String,
+    correction: Correction? = nil
+  ) {
+    guard lineNumber > 0 && lineNumber <= lines.count,
+      let path = astContext?.sourceFile.path
+    else {
+      return
+    }
+
+    let lineIndex = lineNumber - 1
+    let line = lines[lineIndex]
+    let sourceRange = SourceRange(
+      start: SourceLocation(path: path, line: lineNumber, column: 1),
+      end: SourceLocation(path: path, line: lineNumber, column: line.count)
+    )
+    emitIssue(sourceRange, description: description, correction: correction)
   }
 }
