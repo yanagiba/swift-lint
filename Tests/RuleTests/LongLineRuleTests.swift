@@ -35,7 +35,7 @@ class LongLineRuleTests : XCTestCase {
     let issue0 = issues[0]
     XCTAssertEqual(issue0.ruleIdentifier, "long_line")
     XCTAssertEqual(issue0.description, "Line with 9 characters exceeds limit of 5")
-    XCTAssertEqual(issue0.category, .readability)
+    XCTAssertEqual(issue0.category, .size)
     XCTAssertEqual(issue0.severity, .minor)
     let range0 = issue0.location
     XCTAssertEqual(range0.start.path, "test/test")
@@ -47,7 +47,7 @@ class LongLineRuleTests : XCTestCase {
     let issue1 = issues[1]
     XCTAssertEqual(issue1.ruleIdentifier, "long_line")
     XCTAssertEqual(issue1.description, "Line with 8 characters exceeds limit of 5")
-    XCTAssertEqual(issue1.category, .readability)
+    XCTAssertEqual(issue1.category, .size)
     XCTAssertEqual(issue1.severity, .minor)
     let range1 = issue1.location
     XCTAssertEqual(range1.start.path, "test/test")

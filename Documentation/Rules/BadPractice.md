@@ -535,3 +535,42 @@ enum Foo: String {
   case d
 }
 ```
+
+
+## Redundant Break In Switch Case
+
+<dl>
+<dt>Identifier</dt>
+<dd>redundant_break_in_switch_case</dd>
+<dt>File name</dt>
+<dd>RedundantBreakInSwitchCaseRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+According to Swift language reference:
+
+> After the code within a matched case has finished executing,
+> the program exits from the switch statement.
+> Program execution does not continue or “fall through” to the next case or default case.
+
+This means in Swift, it's safe to remove the `break` at the end of each switch case.
+
+##### Examples:
+
+###### Example 1
+
+```
+switch foo {
+case 0:
+  print(0)
+  break        // redundant, can be removed
+case 1:
+  print(1)
+  break        // redundant, can be removed
+default:
+  break
+}
+```

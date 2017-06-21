@@ -39,6 +39,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(RedundantEnumCaseStringValueRuleTests.allTests),
     testCase(TooManyParametersRuleTests.allTests),
     testCase(LongLineRuleTests.allTests),
+    testCase(RedundantBreakInSwitchCaseRuleTests.allTests),
   ]
 }
 #endif

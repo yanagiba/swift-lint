@@ -37,6 +37,7 @@ public struct RuleSet {
     RedundantEnumCaseStringValueRule(),
     TooManyParametersRule(),
     LongLineRule(),
+    RedundantBreakInSwitchCaseRule(),
   ]
 
   public static var ruleIdentifiers: [String] {

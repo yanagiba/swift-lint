@@ -63,7 +63,7 @@ class TooManyParametersRule : RuleBase, ASTVisitorRule {
     """
   }
   let severity = Issue.Severity.minor
-  let category = Issue.Category.readability
+  let category = Issue.Category.size
 
   private func getThreshold(of sourceRange: SourceRange) -> Int {
     return getConfiguration(

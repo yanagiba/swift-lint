@@ -43,7 +43,7 @@ class TooManyParametersRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "too_many_parameters")
     XCTAssertEqual(issue.description, "Method with 3 parameters exceeds limit of 1")
-    XCTAssertEqual(issue.category, .readability)
+    XCTAssertEqual(issue.category, .size)
     XCTAssertEqual(issue.severity, .minor)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
@@ -60,7 +60,7 @@ class TooManyParametersRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "too_many_parameters")
     XCTAssertEqual(issue.description, "Method with 2 parameters exceeds limit of 1")
-    XCTAssertEqual(issue.category, .readability)
+    XCTAssertEqual(issue.category, .size)
     XCTAssertEqual(issue.severity, .minor)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
@@ -77,7 +77,7 @@ class TooManyParametersRuleTests : XCTestCase {
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "too_many_parameters")
     XCTAssertEqual(issue.description, "Method with 4 parameters exceeds limit of 1")
-    XCTAssertEqual(issue.category, .readability)
+    XCTAssertEqual(issue.category, .size)
     XCTAssertEqual(issue.severity, .minor)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")

@@ -39,7 +39,7 @@ class LongLineRule : RuleBase, SourceCodeRule {
     ]
   }
   let severity = Issue.Severity.minor
-  let category = Issue.Category.readability
+  let category = Issue.Category.size
 
   private func getThreshold(of lineNumber: Int) -> Int {
     return getConfiguration(
