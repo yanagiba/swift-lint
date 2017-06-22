@@ -69,16 +69,52 @@ class DeadCodeRule : RuleBase, ASTVisitorRule {
   let severity = Issue.Severity.major
   let category = Issue.Category.badPractice
 
-  private func isControlTransferStatement(_ stmt: Statement) -> Bool {
+  private enum ExitType {
+    case no
+    case soft
+    case hard
+  }
+
+  private func getExitType(_ stmts: Statements) -> ExitType {
+    var maxType = ExitType.no
+    for stmt in stmts {
+      switch getExitType(stmt) {
+      case .hard:
+        return .hard
+      case .soft where maxType == .no:
+        maxType = .soft
+      default:
+        ()
+      }
+    }
+    return maxType
+  }
+
+  private func getExitType(_ stmt: Statement) -> ExitType {
     switch stmt {
-    case is BreakStatement,
-      is ContinueStatement,
-      is FallthroughStatement,
-      is ReturnStatement,
-      is ThrowStatement:
-      return true
+    case is BreakStatement, is ContinueStatement, is FallthroughStatement:
+      return .soft
+    case is ReturnStatement, is ThrowStatement:
+      return .hard
+    case let ifStmt as IfStatement:
+      guard let elseClause = ifStmt.elseClause else {
+        return .no
+      }
+
+      let thenExitType = getExitType(ifStmt.codeBlock.statements)
+      let elseExitType: ExitType
+      switch elseClause {
+      case .else(let codeBlock):
+        elseExitType = getExitType(codeBlock.statements)
+      case .elseif(let elseIfStmt):
+        elseExitType = getExitType(elseIfStmt)
+      }
+      if thenExitType == .hard && elseExitType == .hard {
+        return .hard
+      }
+      return .no
     default:
-      return false
+      return .no
     }
   }
 
@@ -91,7 +127,7 @@ class DeadCodeRule : RuleBase, ASTVisitorRule {
         return
       }
 
-      foundCtrlStmt = isControlTransferStatement(stmt)
+      foundCtrlStmt = getExitType(stmt) != .no
     }
   }
 
