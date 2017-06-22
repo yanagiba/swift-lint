@@ -54,6 +54,7 @@ class RedundantBreakInSwitchCaseRule : RuleBase, ASTVisitorRule {
   func visit(_ switchStmt: SwitchStatement) throws -> Bool {
     switchStmt.cases.flatMap({ switchCase -> BreakStatement? in
       guard case .case(_, let stmts) = switchCase,
+        stmts.count > 1,
         let breakStmt = stmts.last as? BreakStatement
       else {
         return nil

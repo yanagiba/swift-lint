@@ -106,10 +106,26 @@ class RedundantBreakInSwitchCaseRuleTests : XCTestCase {
     XCTAssertEqual(range1.end.column, 8)
   }
 
+  func testBreakOnly() {
+    // Note: if break is the only statement, then it may be used to break logic flow
+    let issues = """
+      switch foo {
+      case 0:
+        break
+      case 1:
+        break
+      default:
+        fd()
+      }
+      """.inspect(withRule: RedundantBreakInSwitchCaseRule())
+    XCTAssertTrue(issues.isEmpty)
+  }
+
   static var allTests = [
     ("testNoBreak", testNoBreak),
     ("testBreakInDefault", testBreakInDefault),
     ("testBreakInTheMiddle", testBreakInTheMiddle),
     ("testBreak", testBreak),
+    ("testBreakOnly", testBreakOnly),
   ]
 }
