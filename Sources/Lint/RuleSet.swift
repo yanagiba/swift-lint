@@ -39,6 +39,7 @@ public struct RuleSet {
     LongLineRule(),
     RedundantBreakInSwitchCaseRule(),
     RedundantReturnVoidTypeRule(),
+    DeadCodeRule(),
   ]
 
   public static var ruleIdentifiers: [String] {

@@ -604,3 +604,69 @@ func foo() -> Void // func foo()
 ```
 func foo() -> () // func foo()
 ```
+
+
+## Dead Code
+
+<dl>
+<dt>識別子</dt>
+<dd>dead_code</dd>
+<dt>ファイル名</dt>
+<dd>DeadCodeRule.swift</dd>
+<dt>激しさ</dt>
+<dd>Major</dd>
+<dt>分類</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+Control transfer statements (`break`, `continue`, `fallthrough`, `return`, and `throw`)
+can change the order of program execution.
+In the same scope of code block, the code after control transfer statements
+is unreachable and will never be executed.
+So they are considered as dead, and suggested to be removed.
+
+##### Examples:
+
+###### Example 1
+
+```
+for _ in 0..<10 {
+  if foo {
+    break
+    print("foo") // dead code, never print
+  }
+}
+```
+
+###### Example 2
+
+```
+while foo {
+  if bar {
+    continue
+    print("bar") // dead code, never print
+  }
+}
+```
+
+###### Example 3
+
+```
+func foo() {
+  if isJobDone {
+    return
+    startNewJob() // dead code, new job won't start
+  }
+}
+```
+
+###### Example 4
+
+```
+func foo() throws {
+  if isJobFailed {
+    throw JobError.failed
+    restartJob() // dead code, job won't restart
+  }
+}
+```
