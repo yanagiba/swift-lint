@@ -574,3 +574,33 @@ default:
   break
 }
 ```
+
+
+## Redundant Return Void Type
+
+<dl>
+<dt>标识名</dt>
+<dd>redundant_return_void_type</dd>
+<dt>文件名</dt>
+<dd>RedundantReturnVoidTypeRule.swift</dd>
+<dt>严重级别</dt>
+<dd>Minor</dd>
+<dt>分类</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+For functions that return `Void` type, the `-> Void` can be removed.
+
+##### Examples:
+
+###### Example 1
+
+```
+func foo() -> Void // func foo()
+```
+
+###### Example 2
+
+```
+func foo() -> () // func foo()
+```

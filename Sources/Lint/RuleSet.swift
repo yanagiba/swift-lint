@@ -38,6 +38,7 @@ public struct RuleSet {
     TooManyParametersRule(),
     LongLineRule(),
     RedundantBreakInSwitchCaseRule(),
+    RedundantReturnVoidTypeRule(),
   ]
 
   public static var ruleIdentifiers: [String] {
