@@ -24,6 +24,8 @@ fileprivate var issues = [Issue]()
 
 class CommentBasedSuppressionTests : XCTestCase {
   override func setUp() {
+    super.setUp()
+
     issues = [Issue]()
   }
 

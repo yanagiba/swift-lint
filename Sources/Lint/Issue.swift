@@ -24,6 +24,7 @@ public struct Issue {
     case readability
     case size
     case badPractice = "bad practice"
+    case cocoa
   }
 
   public enum Severity: String {

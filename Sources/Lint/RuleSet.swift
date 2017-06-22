@@ -40,6 +40,7 @@ public struct RuleSet {
     RedundantBreakInSwitchCaseRule(),
     RedundantReturnVoidTypeRule(),
     DeadCodeRule(),
+    MustCallSuperRule(),
   ]
 
   public static var ruleIdentifiers: [String] {

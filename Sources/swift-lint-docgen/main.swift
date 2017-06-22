@@ -41,6 +41,8 @@ extension Issue.Category {
       return "Complexity"
     case .size:
       return "Code Size"
+    case .cocoa:
+      return "Cocoa"
     }
   }
 

@@ -24,6 +24,8 @@ fileprivate var issues = [Issue]()
 
 class SourceCodeRuleTests : XCTestCase {
   override func setUp() {
+    super.setUp()
+
     issues = [Issue]()
   }
 
