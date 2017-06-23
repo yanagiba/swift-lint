@@ -22,7 +22,7 @@ import XCTest
 class JSONReporterTests : XCTestCase {
   let jsonReporter = JSONReporter()
 
-  func testReportIssue() {
+  func testReportIssues() {
     let testIssue = Issue(
       ruleIdentifier: "rule_id",
       description: "text description for testing",
@@ -33,9 +33,31 @@ class JSONReporterTests : XCTestCase {
       severity: .major,
       correction: nil)
     XCTAssertEqual(
-      jsonReporter.handle(issues: [testIssue]),
+      jsonReporter.handle(issues: [testIssue, testIssue, testIssue]),
       """
       "issues": [
+      {
+        "path": "test/testJSONReporterStart",
+        "startLine": 1,
+        "startColumn": 2,
+        "endLine": 3,
+        "endColumn": 4,
+        "rule": "rule_id",
+        "category": "bad practice",
+        "severity": "major",
+        "description": "text description for testing"
+      },
+      {
+        "path": "test/testJSONReporterStart",
+        "startLine": 1,
+        "startColumn": 2,
+        "endLine": 3,
+        "endColumn": 4,
+        "rule": "rule_id",
+        "category": "bad practice",
+        "severity": "major",
+        "description": "text description for testing"
+      },
       {
         "path": "test/testJSONReporterStart",
         "startLine": 1,
@@ -130,7 +152,8 @@ class JSONReporterTests : XCTestCase {
           "numberOfIssuesInMajor": \(numIssues[1]),
           "numberOfIssuesInMinor": \(numIssues[2]),
           "numberOfIssuesInCosmetic": \(numIssues[3])
-        }
+        },
+
         """)
     }
   }
@@ -145,7 +168,8 @@ class JSONReporterTests : XCTestCase {
         "numberOfIssuesInMajor": 0,
         "numberOfIssuesInMinor": 0,
         "numberOfIssuesInCosmetic": 0
-      }
+      },
+
       """)
     XCTAssertEqual(jsonReporter.handle(issues: []), """
       "issues": []
@@ -159,7 +183,7 @@ class JSONReporterTests : XCTestCase {
       "url": "http://yanagiba.org/swift-lint",
       "timestamp": "
       """))
-    XCTAssertTrue(jsonReporter.header.hasSuffix("\","))
+    XCTAssertTrue(jsonReporter.header.hasSuffix("\",\n"))
   }
 
   func testFooter() {
@@ -171,7 +195,7 @@ class JSONReporterTests : XCTestCase {
   }
 
   static var allTests = [
-    ("testReportIssue", testReportIssue),
+    ("testReportIssues", testReportIssues),
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),

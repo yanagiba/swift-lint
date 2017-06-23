@@ -22,7 +22,7 @@ import XCTest
 class PMDReporterTests : XCTestCase {
   let pmdReporter = PMDReporter()
 
-  func testReportIssue() {
+  func testReportIssues() {
     let testIssue = Issue(
       ruleIdentifier: "rule_id",
       description: "text description for testing",
@@ -33,9 +33,31 @@ class PMDReporterTests : XCTestCase {
       severity: .major,
       correction: nil)
     XCTAssertEqual(
-      pmdReporter.handle(issues: [testIssue]),
+      pmdReporter.handle(issues: [testIssue, testIssue, testIssue]),
       """
       <file name="test/testPMDReporterStart">
+      <violation
+        begincolumn="2"
+        endcolumn="4"
+        beginline="1"
+        endline="3"
+        priority="2"
+        rule="rule_id"
+        ruleset="bad practice">
+      text description for testing
+      </violation>
+      </file><file name="test/testPMDReporterStart">
+      <violation
+        begincolumn="2"
+        endcolumn="4"
+        beginline="1"
+        endline="3"
+        priority="2"
+        rule="rule_id"
+        ruleset="bad practice">
+      text description for testing
+      </violation>
+      </file><file name="test/testPMDReporterStart">
       <violation
         begincolumn="2"
         endcolumn="4"
@@ -144,7 +166,7 @@ class PMDReporterTests : XCTestCase {
   }
 
   static var allTests = [
-    ("testReportIssue", testReportIssue),
+    ("testReportIssues", testReportIssues),
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),

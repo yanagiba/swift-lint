@@ -22,7 +22,7 @@ import XCTest
 class TextReporterTests : XCTestCase {
   let textReporter = TextReporter()
 
-  func testReportIssue() {
+  func testReportIssues() {
     let testIssue = Issue(
       ruleIdentifier: "rule_id",
       description: "text description for testing",
@@ -33,8 +33,12 @@ class TextReporterTests : XCTestCase {
       severity: .major,
       correction: nil)
     XCTAssertEqual(
-      textReporter.handle(issues: [testIssue]),
-      "test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing")
+      textReporter.handle(issues: [testIssue, testIssue, testIssue]),
+      """
+      test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing
+      test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing
+      test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing
+      """)
   }
 
   func testReportIssueWithCurrentDirectoryPathTrimmed() {
@@ -113,7 +117,7 @@ class TextReporterTests : XCTestCase {
   }
 
   static var allTests = [
-    ("testReportIssue", testReportIssue),
+    ("testReportIssues", testReportIssues),
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),
