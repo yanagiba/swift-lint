@@ -16,31 +16,14 @@
 
 import Foundation
 
+import Lint
+
 func computeEnabledRules(
   _ dotYanagibaLint: DotYanagibaLint?,
   _ enableRulesOption: String?,
   _ disableRulesOption: String?
 ) -> [String] {
-  var enabledRules = [
-    "no_force_cast", // TODO: need better approach
-    "no_forced_try",
-    "high_cyclomatic_complexity",
-    "high_npath_complexity",
-    "high_ncss",
-    "nested_code_block_depth",
-    "remove_get_for_readonly_computed_property",
-    "redundant_initialization_to_nil",
-    "redundant_if_statement",
-    "redundant_conditional_operator",
-    "constant_if_statement_condition",
-    "constant_guard_statement_condition",
-    "constant_conditional_operator",
-    "inverted_logic",
-    "double_negative",
-    "collapsible_if_statements",
-    "redundant_variable_declaration_keyword",
-    "redundant_enumcase_string_value",
-  ]
+  var enabledRules = RuleSet.ruleIdentifiers
   if let dotYanagibaLint = dotYanagibaLint, let enableRules = dotYanagibaLint.enableRules {
     enabledRules = enableRules
   }

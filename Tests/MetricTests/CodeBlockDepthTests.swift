@@ -101,7 +101,8 @@ class CodeBlockDepthTests : XCTestCase {
     XCTAssertEqual(getDepth(for: "var foo = _foo { willSet { print(newValue) } didSet { print(newValue) } }"), 4)
     XCTAssertEqual(getDepth(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } }"), 4)
     XCTAssertEqual(getDepth(for: "var foo = _foo { a;b;c } { didSet { print(newValue) } }"), 4)
-    XCTAssertEqual(getDepth(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } didSet { print(newValue) } }"), 4)
+    XCTAssertEqual(
+      getDepth(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } didSet { print(newValue) } }"), 4)
   }
 
   func testClassDeclaration() {

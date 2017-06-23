@@ -264,7 +264,8 @@ class NonCommentingSourceStatementsTests : XCTestCase {
     XCTAssertEqual(getNCSS(for: "var foo = _foo { willSet { print(newValue) } didSet { print(newValue) } }"), 5)
     XCTAssertEqual(getNCSS(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } }"), 6)
     XCTAssertEqual(getNCSS(for: "var foo = _foo { a;b;c } { didSet { print(newValue) } }"), 6)
-    XCTAssertEqual(getNCSS(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } didSet { print(newValue) } }"), 8)
+    XCTAssertEqual(
+      getNCSS(for: "var foo = _foo { a;b;c } { willSet { print(newValue) } didSet { print(newValue) } }"), 8)
   }
 
   private func getNCSS(for content: String) -> Int {

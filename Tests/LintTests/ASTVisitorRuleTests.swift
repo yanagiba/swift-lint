@@ -25,6 +25,8 @@ fileprivate var issues = [Issue]()
 
 class ASTVisitorRuleTests : XCTestCase {
   override func setUp() {
+    super.setUp()
+
     issues = [Issue]()
   }
 

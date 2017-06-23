@@ -1,6 +1,7 @@
 lint:
   rule-configurations:
     - NESTED_CODE_BLOCK_DEPTH: 6
+    - LONG_LINE: 120
   severity-thresholds:
     - critical: 0
     - major: 0

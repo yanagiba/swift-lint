@@ -67,9 +67,8 @@ class HTMLReporter : Reporter {
           <th>Total Files</th>
           <th>Files with Issues</th>
     """
-    for severity in Issue.Severity.allSeverities {
-      summaryHtml += "<th>\(severity.rawValue.capitalized)</th>"
-    }
+    summaryHtml += Issue.Severity.allSeverities
+      .map({ "<th>\($0.rawValue.capitalized)</th>" }).joined(separator: "\n")
     summaryHtml += """
         </tr>
       </thead>
@@ -78,10 +77,10 @@ class HTMLReporter : Reporter {
           <td>\(numberOfTotalFiles)</td>
           <td>\(numberOfIssueFiles)</td>
     """
-    for severity in Issue.Severity.allSeverities {
-      let count = issueSummary.numberOfIssues(withSeverity: severity)
-      summaryHtml += "<th class=\"severity-\(severity)\">\(count)</th>"
-    }
+    summaryHtml += Issue.Severity.allSeverities.map({
+      let count = issueSummary.numberOfIssues(withSeverity: $0)
+      return "<th class=\"severity-\($0)\">\(count)</th>"
+    }).joined(separator: "\n")
     summaryHtml += """
         </tr>
       </tbody>
@@ -131,9 +130,14 @@ class HTMLReporter : Reporter {
   }
 
   var footer: String {
+    let versionInfo = "Yanagiba's \(SWIFT_LINT) v\(SWIFT_LINT_VERSION)"
     return """
     <hr />
-    <p>\(Date().formatted) | Generated with <a href='http://yanagiba.org/swift-lint'>Yanagiba's \(SWIFT_LINT) v\(SWIFT_LINT_VERSION)</a>.</p>
+    <p>
+      \(Date().formatted)
+      |
+      Generated with <a href='http://yanagiba.org/swift-lint'>\(versionInfo)</a>.
+    </p>
     </body>
     </html>
     """

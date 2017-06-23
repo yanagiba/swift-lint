@@ -27,7 +27,9 @@ and then handle the failed castings gently.
 ```
 let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! MyCustomCell
 
-// guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as? MyCustomCell else {
+// guard let cell =
+//   tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as? MyCustomCell
+// else {
 //   print("Failed in casting to MyCustomCell.")
 //   return UITableViewCell()
 // }
@@ -531,5 +533,140 @@ enum Foo: String {
   case a = "a"    // case a
   case b, c = "c" // case b, c
   case d
+}
+```
+
+
+## Redundant Break In Switch Case
+
+<dl>
+<dt>Identifier</dt>
+<dd>redundant_break_in_switch_case</dd>
+<dt>File name</dt>
+<dd>RedundantBreakInSwitchCaseRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+According to Swift language reference:
+
+> After the code within a matched case has finished executing,
+> the program exits from the switch statement.
+> Program execution does not continue or “fall through” to the next case or default case.
+
+This means in Swift, it's safe to remove the `break` at the end of each switch case.
+
+##### Examples:
+
+###### Example 1
+
+```
+switch foo {
+case 0:
+  print(0)
+  break        // redundant, can be removed
+case 1:
+  print(1)
+  break        // redundant, can be removed
+default:
+  break
+}
+```
+
+
+## Redundant Return Void Type
+
+<dl>
+<dt>Identifier</dt>
+<dd>redundant_return_void_type</dd>
+<dt>File name</dt>
+<dd>RedundantReturnVoidTypeRule.swift</dd>
+<dt>Severity</dt>
+<dd>Minor</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+For functions that return `Void` type, the `-> Void` can be removed.
+
+##### Examples:
+
+###### Example 1
+
+```
+func foo() -> Void // func foo()
+```
+
+###### Example 2
+
+```
+func foo() -> () // func foo()
+```
+
+
+## Dead Code
+
+<dl>
+<dt>Identifier</dt>
+<dd>dead_code</dd>
+<dt>File name</dt>
+<dd>DeadCodeRule.swift</dd>
+<dt>Severity</dt>
+<dd>Major</dd>
+<dt>Category</dt>
+<dd>Bad Practice</dd>
+</dl>
+
+Control transfer statements (`break`, `continue`, `fallthrough`, `return`, and `throw`)
+can change the order of program execution.
+In the same scope of code block, the code after control transfer statements
+is unreachable and will never be executed.
+So they are considered as dead, and suggested to be removed.
+
+##### Examples:
+
+###### Example 1
+
+```
+for _ in 0..<10 {
+  if foo {
+    break
+    print("foo") // dead code, never print
+  }
+}
+```
+
+###### Example 2
+
+```
+while foo {
+  if bar {
+    continue
+    print("bar") // dead code, never print
+  }
+}
+```
+
+###### Example 3
+
+```
+func foo() {
+  if isJobDone {
+    return
+    startNewJob() // dead code, new job won't start
+  }
+}
+```
+
+###### Example 4
+
+```
+func foo() throws {
+  if isJobFailed {
+    throw JobError.failed
+    restartJob() // dead code, job won't restart
+  }
 }
 ```

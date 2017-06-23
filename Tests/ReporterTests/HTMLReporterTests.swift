@@ -150,12 +150,18 @@ class HTMLReporterTests : XCTestCase {
           <thead>
             <tr>
               <th>Total Files</th>
-              <th>Files with Issues</th><th>Critical</th><th>Major</th><th>Minor</th><th>Cosmetic</th>    </tr>
+              <th>Files with Issues</th><th>Critical</th>
+        <th>Major</th>
+        <th>Minor</th>
+        <th>Cosmetic</th>    </tr>
           </thead>
           <tbody>
             <tr>
               <td>\(index)</td>
-              <td>1</td><th class="severity-critical">\(numIssues[0])</th><th class="severity-major">\(numIssues[1])</th><th class="severity-minor">\(numIssues[2])</th><th class="severity-cosmetic">\(numIssues[3])</th>    </tr>
+              <td>1</td><th class="severity-critical">\(numIssues[0])</th>
+        <th class="severity-major">\(numIssues[1])</th>
+        <th class="severity-minor">\(numIssues[2])</th>
+        <th class="severity-cosmetic">\(numIssues[3])</th>    </tr>
           </tbody>
         </table>
         """)
@@ -171,12 +177,18 @@ class HTMLReporterTests : XCTestCase {
         <thead>
           <tr>
             <th>Total Files</th>
-            <th>Files with Issues</th><th>Critical</th><th>Major</th><th>Minor</th><th>Cosmetic</th>    </tr>
+            <th>Files with Issues</th><th>Critical</th>
+      <th>Major</th>
+      <th>Minor</th>
+      <th>Cosmetic</th>    </tr>
         </thead>
         <tbody>
           <tr>
             <td>100</td>
-            <td>0</td><th class="severity-critical">0</th><th class="severity-major">0</th><th class="severity-minor">0</th><th class="severity-cosmetic">0</th>    </tr>
+            <td>0</td><th class="severity-critical">0</th>
+      <th class="severity-major">0</th>
+      <th class="severity-minor">0</th>
+      <th class="severity-cosmetic">0</th>    </tr>
         </tbody>
       </table>
       """)
@@ -230,7 +242,9 @@ class HTMLReporterTests : XCTestCase {
     <p>
     """))
     XCTAssertTrue(htmlReporter.footer.hasSuffix("""
-    Generated with <a href='http://yanagiba.org/swift-lint'>Yanagiba's swift-lint v\(SWIFT_LINT_VERSION)</a>.</p>
+      |
+      Generated with <a href='http://yanagiba.org/swift-lint'>Yanagiba's swift-lint v\(SWIFT_LINT_VERSION)</a>.
+    </p>
     </body>
     </html>
     """))

@@ -37,7 +37,8 @@ class RemoveGetForReadOnlyComputedPropertyRuleTests : XCTestCase {
     XCTAssertEqual(issues.count, 1)
     let issue = issues[0]
     XCTAssertEqual(issue.ruleIdentifier, "remove_get_for_readonly_computed_property")
-    XCTAssertEqual(issue.description, "read-only computed property `i` can be simplified by removing the `get` keyword and its braces")
+    XCTAssertEqual(issue.description,
+      "read-only computed property `i` can be simplified by removing the `get` keyword and its braces")
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .minor)
     let range = issue.location
@@ -69,6 +70,7 @@ class RemoveGetForReadOnlyComputedPropertyRuleTests : XCTestCase {
     ("testNotReadOnlyComputedProperty", testNotReadOnlyComputedProperty),
     ("testReadOnlyComputedPropertyWithoutGet", testReadOnlyComputedPropertyWithoutGet),
     ("testReadOnlyComputedPropertyWithGet", testReadOnlyComputedPropertyWithGet),
-    ("testReadOnlyComputedPropertyWithGetAndAttributesOrModifier", testReadOnlyComputedPropertyWithGetAndAttributesOrModifier),
+    ("testReadOnlyComputedPropertyWithGetAndAttributesOrModifier",
+      testReadOnlyComputedPropertyWithGetAndAttributesOrModifier),
   ]
 }

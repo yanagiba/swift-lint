@@ -62,7 +62,8 @@ class RemoveGetForReadOnlyComputedPropertyRule: RuleBase, ASTVisitorRule {
       )
       emitIssue(
         varDecl.sourceRange,
-        description: "read-only computed property `\(name)` can be simplified by removing the `get` keyword and its braces",
+        description: "read-only computed property `\(name)` " +
+          "can be simplified by removing the `get` keyword and its braces",
         correction: Correction(suggestion: refactoredVarDecl.formatted)
       )
     }
