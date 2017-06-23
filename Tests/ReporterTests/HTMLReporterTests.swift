@@ -22,7 +22,7 @@ import XCTest
 class HTMLReporterTests : XCTestCase {
   let htmlReporter = HTMLReporter()
 
-  func testReportIssue() {
+  func testReportIssues() {
     let testIssue = Issue(
       ruleIdentifier: "rule_id",
       description: "text description for testing",
@@ -33,7 +33,7 @@ class HTMLReporterTests : XCTestCase {
       severity: .major,
       correction: nil)
     XCTAssertEqual(
-      htmlReporter.handle(issues: [testIssue]),
+      htmlReporter.handle(issues: [testIssue, testIssue, testIssue]),
       """
       <hr />
       <table>
@@ -48,6 +48,20 @@ class HTMLReporterTests : XCTestCase {
           </tr>
         </thead>
         <tbody><tr>
+        <td>test/testHTMLReporterStart</td>
+        <td>1:2</td>
+        <td>rule_id</td>
+        <td>bad practice</td>
+        <td>major</td>
+        <td>text description for testing</td>
+      </tr><tr>
+        <td>test/testHTMLReporterStart</td>
+        <td>1:2</td>
+        <td>rule_id</td>
+        <td>bad practice</td>
+        <td>major</td>
+        <td>text description for testing</td>
+      </tr><tr>
         <td>test/testHTMLReporterStart</td>
         <td>1:2</td>
         <td>rule_id</td>
@@ -255,7 +269,7 @@ class HTMLReporterTests : XCTestCase {
   }
 
   static var allTests = [
-    ("testReportIssue", testReportIssue),
+    ("testReportIssues", testReportIssues),
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),

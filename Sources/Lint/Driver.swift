@@ -26,19 +26,32 @@ public class Driver {
 
   public init(
     ruleIdentifiers rules: [String] = [],
-    reportType reporter: String = "text",
+    reportType: String = "text",
     outputHandle: FileHandle = .standardOutput
   ) {
-    switch reporter {
-    case "html":
-      _reporter = HTMLReporter()
-    default:
-      _reporter = TextReporter()
-    }
+    _reporter = TextReporter()
     _rules = []
     _outputHandle = outputHandle
 
+    setReporter(with: reportType)
     registerRules(basedOn: rules)
+  }
+
+  private func setReporter(with type: String) {
+    let reporter: Reporter
+    switch type {
+    case "html":
+      reporter = HTMLReporter()
+    case "json":
+      reporter = JSONReporter()
+    case "pmd":
+      reporter = PMDReporter()
+    case "xcode":
+      reporter = XcodeReporter()
+    default:
+      reporter = TextReporter()
+    }
+    setReporter(reporter)
   }
 
   func setReporter(_ reporter: Reporter) {

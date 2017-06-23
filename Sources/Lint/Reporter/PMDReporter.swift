@@ -16,20 +16,21 @@
 
 import Foundation
 
-extension Date {
-  var formatted: String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.dateStyle = .long
-    dateFormatter.timeStyle = .long
-    return dateFormatter.string(from: self)
+import Source
+
+class PMDReporter : Reporter {
+  func handle(issues: [Issue]) -> String {
+    return issues.map({ $0.pmdString }).joined(separator: separator)
   }
 
-  var jsonFomatted: String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    return dateFormatter.string(from: self)
+  var header: String {
+    return """
+    <?xml version="1.0" encoding="UTF-8"?>
+    <pmd version="yanagiba-swift-lint-\(SWIFT_LINT_VERSION)">
+    """
+  }
+
+  var footer: String {
+    return "</pmd>"
   }
 }

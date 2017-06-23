@@ -20,13 +20,7 @@ import Source
 
 class TextReporter : Reporter {
   func handle(issues: [Issue]) -> String {
-    return issues.map({ issue -> String in
-      var issueDescription = ""
-      if !issue.description.isEmpty {
-        issueDescription = ": \(issue.description)"
-      }
-      return "\(issue.location.normalizedLocation): \(issue.severity): \(issue.ruleIdentifier)\(issueDescription)"
-    }).joined(separator: separator)
+    return issues.map({ $0.textString }).joined(separator: separator)
   }
 
   func handle(numberOfTotalFiles: Int, issueSummary: IssueSummary) -> String {

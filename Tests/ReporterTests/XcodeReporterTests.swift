@@ -19,25 +19,28 @@ import XCTest
 @testable import Lint
 @testable import Source
 
-class TextReporterTests : XCTestCase {
-  let textReporter = TextReporter()
+class XcodeReporterTests : XCTestCase {
+  let xcodeReporter = XcodeReporter()
 
   func testReportIssues() {
-    let testIssue = Issue(
-      ruleIdentifier: "rule_id",
-      description: "text description for testing",
-      category: .badPractice,
-      location: SourceRange(
-        start: SourceLocation(path: "test/testTextReporterStart", line: 1, column: 2),
-        end: SourceLocation(path: "test/testTextReporterEnd", line: 3, column: 4)),
-      severity: .major,
-      correction: nil)
+    let testIssues = Issue.Severity.allSeverities.map {
+      Issue(
+        ruleIdentifier: "rule_id",
+        description: "text description for testing",
+        category: .badPractice,
+        location: SourceRange(
+          start: SourceLocation(path: "test/testXcodeReporterStart", line: 1, column: 2),
+          end: SourceLocation(path: "test/testXcodeReporterEnd", line: 3, column: 4)),
+        severity: $0,
+        correction: nil)
+    }
     XCTAssertEqual(
-      textReporter.handle(issues: [testIssue, testIssue, testIssue]),
+      xcodeReporter.handle(issues: testIssues),
       """
-      test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing
-      test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing
-      test/testTextReporterStart:1:2-3:4: major: rule_id: text description for testing
+      test/testXcodeReporterStart:1:2-3:4: error: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2-3:4: error: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2-3:4: warning: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2-3:4: warning: [rule_id] text description for testing
       """)
   }
 
@@ -48,13 +51,13 @@ class TextReporterTests : XCTestCase {
       description: "text description for testing",
       category: .badPractice,
       location: SourceRange(
-        start: SourceLocation(path: "\(pwd)/test/testTextReporterStart", line: 1, column: 2),
-        end: SourceLocation(path: "\(pwd)/test/testTextReporterEnd", line: 3, column: 4)),
+        start: SourceLocation(path: "\(pwd)/test/testXcodeReporterStart", line: 1, column: 2),
+        end: SourceLocation(path: "\(pwd)/test/testXcodeReporterEnd", line: 3, column: 4)),
       severity: .critical,
       correction: nil)
     XCTAssertEqual(
-      textReporter.handle(issues: [testIssue]),
-      "test/testTextReporterStart:1:2-3:4: critical: rule_id: text description for testing")
+      xcodeReporter.handle(issues: [testIssue]),
+      "test/testXcodeReporterStart:1:2-3:4: error: [rule_id] text description for testing")
   }
 
   func testReportIssueWithEmptyDescription() {
@@ -67,11 +70,11 @@ class TextReporterTests : XCTestCase {
         end: SourceLocation(path: "testEnd", line: 3, column: 4)),
       severity: .minor,
       correction: nil)
-    XCTAssertEqual(textReporter.handle(issues: [testIssue]), "test:1:2-3:4: minor: rule_id")
+    XCTAssertEqual(xcodeReporter.handle(issues: [testIssue]), "test:1:2-3:4: warning: [rule_id]")
   }
 
   func testReportSummary() {
-    for (index, severity) in Issue.Severity.allSeverities.enumerated() {
+    for (_, severity) in Issue.Severity.allSeverities.enumerated() {
       let testIssue = Issue(
         ruleIdentifier: "rule_id",
         description: "",
@@ -80,40 +83,26 @@ class TextReporterTests : XCTestCase {
         severity: severity,
         correction: nil)
       let issueSummary = IssueSummary(issues: [testIssue])
-      var numIssues = [0, 0, 0, 0]
-      numIssues[index] = 1
-      XCTAssertEqual(
-        textReporter.handle(numberOfTotalFiles: index, issueSummary: issueSummary),
-        """
-        Summary:
-        Within a total number of \(index) files, 1 file have issues.
-        Number of critical issues: \(numIssues[0])
-        Number of major issues: \(numIssues[1])
-        Number of minor issues: \(numIssues[2])
-        Number of cosmetic issues: \(numIssues[3])
-        """)
+      XCTAssertTrue(xcodeReporter.handle(numberOfTotalFiles: 100, issueSummary: issueSummary).isEmpty)
     }
   }
 
   func testNoIssue() {
     let issueSummary = IssueSummary(issues: [])
-    XCTAssertEqual(
-      textReporter.handle(numberOfTotalFiles: 100, issueSummary: issueSummary),
-      "Good job! Inspected 100 files, found no issue.")
-    XCTAssertTrue(textReporter.handle(issues: []).isEmpty)
+    XCTAssertTrue(xcodeReporter.handle(numberOfTotalFiles: 100, issueSummary: issueSummary).isEmpty)
+    XCTAssertTrue(xcodeReporter.handle(issues: []).isEmpty)
   }
 
   func testHeader() {
-    XCTAssertTrue(textReporter.header.hasPrefix("Yanagiba's swift-lint (http://yanagiba.org/swift-lint) v"))
-    XCTAssertTrue(textReporter.header.contains(" Report"))
+    XCTAssertTrue(xcodeReporter.header.isEmpty)
   }
 
   func testFooter() {
-    XCTAssertTrue(textReporter.footer.isEmpty)
+    XCTAssertTrue(xcodeReporter.footer.isEmpty)
   }
 
   func testSeparator() {
-    XCTAssertEqual(textReporter.separator, "\n")
+    XCTAssertEqual(xcodeReporter.separator, "\n")
   }
 
   static var allTests = [

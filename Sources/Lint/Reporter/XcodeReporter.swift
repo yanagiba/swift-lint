@@ -16,20 +16,14 @@
 
 import Foundation
 
-extension Date {
-  var formatted: String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.dateStyle = .long
-    dateFormatter.timeStyle = .long
-    return dateFormatter.string(from: self)
+import Source
+
+class XcodeReporter : Reporter {
+  func handle(issues: [Issue]) -> String {
+    return issues.map({ $0.xcodeString }).joined(separator: separator)
   }
 
-  var jsonFomatted: String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    return dateFormatter.string(from: self)
+  var separator: String {
+    return "\n"
   }
 }
