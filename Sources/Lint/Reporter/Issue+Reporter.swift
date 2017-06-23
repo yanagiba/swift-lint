@@ -68,6 +68,21 @@ extension Issue {
     """
   }
 
+  var xcodeString: String {
+    var issueDescription = ""
+    if !description.isEmpty {
+      issueDescription = " \(description)"
+    }
+    let xcodeWarningText: String
+    switch severity {
+    case .critical, .major:
+      xcodeWarningText = "error"
+    case .minor, .cosmetic:
+      xcodeWarningText = "warning"
+    }
+    return "\(location.normalizedLocation): \(xcodeWarningText): [\(ruleIdentifier)]\(issueDescription)"
+  }
+
   var textString: String {
     var issueDescription = ""
     if !description.isEmpty {

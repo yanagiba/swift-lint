@@ -46,6 +46,8 @@ public class Driver {
       reporter = JSONReporter()
     case "pmd":
       reporter = PMDReporter()
+    case "xcode":
+      reporter = XcodeReporter()
     default:
       reporter = TextReporter()
     }
