@@ -40,18 +40,7 @@ class HTMLReporter : Reporter {
       <tbody>
     """
 
-    issuesText += issues.map({ issue -> String in
-      return """
-      <tr>
-        <td>\(issue.location.normalizedFilePath)</td>
-        <td>\(issue.location.startLineColumn)</td>
-        <td>\(issue.ruleIdentifier)</td>
-        <td>\(issue.category.rawValue)</td>
-        <td>\(issue.severity)</td>
-        <td>\(issue.description)</td>
-      </tr>
-      """
-    }).joined()
+    issuesText += issues.map({ $0.htmlString }).joined(separator: separator)
 
     issuesText += "</tbody></table>"
 

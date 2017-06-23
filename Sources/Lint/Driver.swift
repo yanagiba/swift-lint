@@ -42,6 +42,8 @@ public class Driver {
     switch type {
     case "html":
       reporter = HTMLReporter()
+    case "json":
+      reporter = JSONReporter()
     case "pmd":
       reporter = PMDReporter()
     default:

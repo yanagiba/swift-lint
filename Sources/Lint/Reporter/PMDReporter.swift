@@ -20,26 +20,7 @@ import Source
 
 class PMDReporter : Reporter {
   func handle(issues: [Issue]) -> String {
-    if issues.isEmpty {
-      return ""
-    }
-
-    return issues.map({ issue -> String in
-      return """
-      <file name="\(issue.location.normalizedFilePath)">
-      <violation
-        begincolumn="\(issue.location.start.column)"
-        endcolumn="\(issue.location.end.column)"
-        beginline="\(issue.location.start.line)"
-        endline="\(issue.location.end.line)"
-        priority="\(issue.severity.priority)"
-        rule="\(issue.ruleIdentifier)"
-        ruleset="\(issue.category.rawValue)">
-      \(issue.description)
-      </violation>
-      </file>
-      """
-    }).joined()
+    return issues.map({ $0.pmdString }).joined(separator: separator)
   }
 
   var header: String {

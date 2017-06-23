@@ -108,7 +108,7 @@ class PMDReporterTests : XCTestCase {
   }
 
   func testReportSummary() {
-    for (index, severity) in Issue.Severity.allSeverities.enumerated() {
+    for (_, severity) in Issue.Severity.allSeverities.enumerated() {
       let testIssue = Issue(
         ruleIdentifier: "rule_id",
         description: "",

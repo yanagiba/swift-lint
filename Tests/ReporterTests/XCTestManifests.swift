@@ -22,6 +22,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(TextReporterTests.allTests),
     testCase(HTMLReporterTests.allTests),
     testCase(PMDReporterTests.allTests),
+    testCase(JSONReporterTests.allTests),
   ]
 }
 #endif

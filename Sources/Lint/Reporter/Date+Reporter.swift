@@ -24,4 +24,12 @@ extension Date {
     dateFormatter.timeStyle = .long
     return dateFormatter.string(from: self)
   }
+
+  var jsonFomatted: String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale.current
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    return dateFormatter.string(from: self)
+  }
 }

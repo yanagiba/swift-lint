@@ -41,27 +41,3 @@ public struct Issue {
   let severity: Severity
   let correction: Correction?
 }
-
-public extension Issue.Severity {
-  static var allSeverities: [Issue.Severity] {
-    return [
-      .critical,
-      .major,
-      .minor,
-      .cosmetic,
-    ]
-  }
-
-  var priority: Int {
-    switch self {
-    case .critical:
-      return 1
-    case .major:
-      return 2
-    case .minor:
-      return 3
-    case .cosmetic:
-      return 4
-    }
-  }
-}
