@@ -7,7 +7,7 @@ It works fine as a good starting point, and applying these options allows you to
 - [Help and Version](#help-and-version)
 - [Rule](#rule)
 - [Reporter and Output](#reporter-and-output)
-- [Exit Code](#control=exit-code)
+- [Exit Code](#control-exit-code)
 
 ## Help and Version
 
@@ -23,7 +23,7 @@ Displays the versions of the tool and its dependencies.
 
 ### --enable-rules and --disable-rules
 
-Options `enable-rules` and `disable-rules` give you an oppurtunity to decide what rules you want to use for analysis, and what rules are not.
+Options `enable-rules` and `disable-rules` give you an opportunity to decide what rules you want to use for analysis, and what rules are not.
 
 ```
 --enable-rules <rule_identifier0>[,...,<rule_identifierN>]
