@@ -80,7 +80,9 @@ extension Issue {
     case .minor, .cosmetic:
       xcodeWarningText = "warning"
     }
-    return "\(location.normalizedLocation): \(xcodeWarningText): [\(ruleIdentifier)]\(issueDescription)"
+
+    let locationString = "\(location.start.path):\(location.startLineColumn)"
+    return "\(locationString): \(xcodeWarningText): [\(ruleIdentifier)]\(issueDescription)"
   }
 
   var textString: String {

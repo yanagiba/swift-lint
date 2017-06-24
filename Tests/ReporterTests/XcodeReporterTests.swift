@@ -37,10 +37,10 @@ class XcodeReporterTests : XCTestCase {
     XCTAssertEqual(
       xcodeReporter.handle(issues: testIssues),
       """
-      test/testXcodeReporterStart:1:2-3:4: error: [rule_id] text description for testing
-      test/testXcodeReporterStart:1:2-3:4: error: [rule_id] text description for testing
-      test/testXcodeReporterStart:1:2-3:4: warning: [rule_id] text description for testing
-      test/testXcodeReporterStart:1:2-3:4: warning: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2: error: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2: error: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2: warning: [rule_id] text description for testing
+      test/testXcodeReporterStart:1:2: warning: [rule_id] text description for testing
       """)
   }
 
@@ -57,7 +57,7 @@ class XcodeReporterTests : XCTestCase {
       correction: nil)
     XCTAssertEqual(
       xcodeReporter.handle(issues: [testIssue]),
-      "test/testXcodeReporterStart:1:2-3:4: error: [rule_id] text description for testing")
+      "\(pwd)/test/testXcodeReporterStart:1:2: error: [rule_id] text description for testing")
   }
 
   func testReportIssueWithEmptyDescription() {
@@ -70,7 +70,7 @@ class XcodeReporterTests : XCTestCase {
         end: SourceLocation(path: "testEnd", line: 3, column: 4)),
       severity: .minor,
       correction: nil)
-    XCTAssertEqual(xcodeReporter.handle(issues: [testIssue]), "test:1:2-3:4: warning: [rule_id]")
+    XCTAssertEqual(xcodeReporter.handle(issues: [testIssue]), "test:1:2: warning: [rule_id]")
   }
 
   func testReportSummary() {
