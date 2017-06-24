@@ -123,7 +123,7 @@ Run `swift-lint --help` to get the updated command line options.
 
 ### Documentation
 
-Go to [Documentation](http://github.com/yanagiba/swift-lint/tree/master/Documentation) for additional documentation.
+Go to [Documentation](Documentation/README.md) for additional documentation.
 
 ## Development
 
