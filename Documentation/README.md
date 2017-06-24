@@ -3,7 +3,6 @@
 ## Usage
 
 - [Command line options](CommandLineUsage.md)
-- [Choose a reporter](ChooseReporter.md)
 - [Select rules for inspection](SelectRules.md)
 - [Configure rule thresholds](RuleConfigurations.md)
 - [Suppress issues](SuppressIssues.md)

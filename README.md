@@ -39,6 +39,10 @@ of the source code for better accuracy and efficiency.
 Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
 and the Swift Lint are in active development. Though many features are implemented, some with limitations.
 
+Swift Lint doesn't modify your code, therefore,
+the tool is _good enough_ to be deployed in production environment while we are working hard on it.
+Please be cautious with bugs, edge cases and false positives (issues and pull requests are welcomed).
+
 Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-in-progress) from [swift-ast](https://github.com/yanagiba/swift-ast).
 
 ## Requirements
