@@ -1,6 +1,6 @@
 # Swift Lint
 
-[![swift-ast 0.3.4](https://img.shields.io/badge/swift‐ast-0.3.4-C70025.svg)](https://github.com/yanagiba/swift-ast)
+[![swift-ast 0.3.5](https://img.shields.io/badge/swift‐ast-0.3.5-C70025.svg)](https://github.com/yanagiba/swift-ast)
 [![swift-lint master](https://img.shields.io/badge/swift‐lint-master-C70025.svg)](https://github.com/yanagiba/swift-lint)
 [![swift-format pending](https://img.shields.io/badge/swift‐format-pending-C70025.svg)](https://github.com/yanagiba/swift-format)
 
@@ -21,6 +21,19 @@ of the source code for better accuracy and efficiency.
 
 * * *
 
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [Standalone Tool](#standalone-tool)
+  - [Embed Into Your Project](#embed-into-your-project)
+- [Usage and Documentation](#usage--documentation)
+  - [Command Line](#command-line)
+  - [Documentation](#documentation)
+- [Development](#development)
+- [Contact](#contact)
+- [License](#license)
+
+* * *
+
 ## A Work In Progress
 
 Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
@@ -32,7 +45,7 @@ Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-
 
 - [Swift 4.0-DEVELOPMENT-SNAPSHOT-2017-06-06-a](https://swift.org/download/)
 
-## Installing
+## Installation
 
 ### Standalone Tool
 
@@ -45,8 +58,30 @@ git clone https://github.com/yanagiba/swift-lint
 Go to the repository folder, run the following command:
 
 ```bash
-swift build
+swift build -c release
 ```
+
+This will generate a `swift-lint` executable inside `.build/release` folder.
+
+#### Adding to `swift` Path (Recommended, but Optional)
+
+It is possible to copy the `swift-lint` to the `bin` folder of
+your local Swift installation.
+
+For example, if `which swift` outputs
+
+```
+/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+```
+
+Then you can copy `swift-lint` to it by
+
+```
+cp .build/release/swift-lint /Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-lint
+```
+
+Once you have done this, you can invoke `swift-lint` by
+calling `swift lint` in your terminal directly.
 
 ### Embed Into Your Project
 
@@ -69,9 +104,9 @@ let package = Package(
 )
 ```
 
-An example project will be added soon.
+An example project will be added in the future.
 
-## Usage
+## Usage & Documentation
 
 ### Command Line
 
@@ -81,6 +116,14 @@ Simply append the path(s) of the file(s) to `swift-lint`:
 swift-lint path/to/Awesome.swift
 swift-lint path1/to1/foo.swift path2/to2/bar.swift ... path3/to3/main.swift
 ```
+
+#### CLI Options
+
+Run `swift-lint --help` to get the updated command line options.
+
+### Documentation
+
+Go to [Documentation](http://github.com/yanagiba/swift-lint/tree/master/Documentation) for additional documentation.
 
 ## Development
 
