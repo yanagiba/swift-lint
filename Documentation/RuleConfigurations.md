@@ -8,7 +8,7 @@ For example, according to [McCabe76](http://www.literateprogramming.com/mccabe.p
 
 There are three ways to configure the thresholds: from a higher precedence to lower, [Inline Comment](#inline-comment) > [Command Line](#command-line) > [Configuration File](#configuration-file).
 
-You can browse the [Documentation for Rules](Rules),
+> **See Also:** You can browse the [Documentation for Rules](Rules),
 and look for possible section `Thresholds`.
 If the rule supports threshold configurations,
 you can find the keys and default values in that section.
@@ -78,6 +78,8 @@ func foo() { /*
   .. even more complex code
 }
 ```
+
+> **See Also:** You can mix `rule_configure` with other comment based annotations, like [suppressing issues](SuppressIssues.md), in the same comment block.
 
 ## Command Line
 

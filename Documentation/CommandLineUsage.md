@@ -32,7 +32,7 @@ Options `enable-rules` and `disable-rules` give you an opportunity to decide wha
   Disable rules, default to empty
 ```
 
-Please checkout [Select Rules for Inspection](SelectRules.md) for details.
+> ** See Also:** Please checkout [Select Rules for Inspection](SelectRules.md) for details.
 
 ### --rule-configurations
 
@@ -43,7 +43,7 @@ You can configure the rule thresholds throughout the entire analysis by overridi
   Override the default rule configurations
 ```
 
-Details can be found at [Configure Rule Thresholds](RuleConfigurations.md).
+> ** See Also:** Details can be found at [Configure Rule Thresholds](RuleConfigurations.md).
 
 ## Reporter and Output
 

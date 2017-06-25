@@ -2,7 +2,11 @@
 
 Swift Lint is a rule based code analysis tool. Rule system is designed to be very extensible and flexible. So it's easy to customize rules in many ways. In this article, we will show you two approaches to load particular rules, through [command line options](#command-line) and [configuration file](#configuration-file).
 
-Before we dive into the details, please be advised that command line options have high precedence than the ones in configuration files.
+> **Warning:** Before we dive into the details, please be advised that command line options have high precedence than the ones in configuration files.
+
+> **See Also:** To enable and disable rules, you need to know the rule identifiers.
+You can browse the [Documentation for Rules](Rules),
+and look for `Identifier` under each rule's title.
 
 ## Command Line
 
@@ -33,7 +37,7 @@ You can then find the loaded rules with the table below.
 
 * `-` means no value is provided or resulted
 
-Maybe you already noticed, invalid rule identifiers are ignored by the tool regardless of their presence.
+> **Warning:** Maybe you already noticed, invalid rule identifiers are ignored by the tool regardless of their presence.
 
 ## Configuration File
 
