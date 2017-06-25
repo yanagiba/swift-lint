@@ -20,6 +20,8 @@ Swift Lint bundles with few reporters, like `text`, `html`, `json`, and others. 
 
 4. Add the test cases to `ReporterTests/XCTestManifests`. This is needed for running the tests on Linux (for now, and hopefully SPM can address this soon).
 
-5. Run dogfooding (`./dogFooding.sh`) to make sure the code is inspected by Swift Lint. Fix found issues if any.
+5. Make sure `make test` pass on both Linux and macOS.
 
-6. Send us a pull request with your newly implemented reporter, because others may benefit from your efforts. Thanks.
+6. Run dogfooding (`./dogFooding.sh`) to make sure the code is inspected by Swift Lint. Fix found issues if any.
+
+7. Send us a pull request with your newly implemented reporter, because others may benefit from your efforts. Thanks.
