@@ -22,7 +22,9 @@ class RedundantEnumCaseStringValueRule: RuleBase, ASTVisitorRule {
   let name = "Redundant Enum-Case String Value"
   var description: String? {
     return """
-    For cases of a raw-value typed enumeration declaration,
+    According to Swift language reference:
+    
+    > For cases of a raw-value typed enumeration declaration,
     if the raw-value type is specified as `String` and
     no values are assigned to the cases explicitly,
     each unassigned case is implicitly assigned a string with
