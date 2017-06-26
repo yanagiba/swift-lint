@@ -2,7 +2,7 @@
 
 You can analyze a list of files with Swift Lint by providing the paths of these files, like `swift-lint path/to/foo.swift path/to/bar.swift`. This will run `swift-lint` with it's default settings and workflow: loading all rules, using default thresholds while analyzing the code, rendering with text reporter, and writing output to console, etc.
 
-It works fine as a good starting point, and applying these options allows you to change the behavior of the tool to meet your customization needs.
+It works fine as a good starting point. Furthermore, by applying these options allows you to change the behavior of the tool to meet your customization needs.
 
 - [Help and Version](#help-and-version)
 - [Rule](#rule)
@@ -13,7 +13,7 @@ It works fine as a good starting point, and applying these options allows you to
 
 ### --help, -help
 
-Print out all options that the tool supports.
+Prints out all options that the tool supports.
 
 ### --version, -version
 
@@ -32,7 +32,7 @@ Options `enable-rules` and `disable-rules` give you an opportunity to decide wha
   Disable rules, default to empty
 ```
 
-> ** See Also:** Please checkout [Select Rules for Inspection](SelectRules.md) for details.
+> **See Also:** Please checkout [Select Rules for Inspection](SelectRules.md) for details.
 
 ### --rule-configurations
 
@@ -43,7 +43,7 @@ You can configure the rule thresholds throughout the entire analysis by overridi
   Override the default rule configurations
 ```
 
-> ** See Also:** Details can be found at [Configure Rule Thresholds](RuleConfigurations.md).
+> **See Also:** Details can be found at [Configure Rule Thresholds](RuleConfigurations.md).
 
 ## Reporter and Output
 
@@ -51,9 +51,9 @@ You can configure the rule thresholds throughout the entire analysis by overridi
 
 By default, the found issues are rendered in plain text format. This is primarily for console output.
 More human readable report types, like HTML, can be used to generate the report and opened in a browser;
-some machine friendly report types, like PMD and Xcode, can be used, and the other tools can pick up the report, and render it in their integrated environment.
+some machine friendly report types, like PMD and Xcode, can be used, so that other tools may pick up the output, and render it in their integrated environment.
 
-You can switch to another report type by `--report-type <report_identifier>`. Swift Lint bundles with the following report types:
+You can switch to another report type by `--report-type <report_identifier>`. Swift Lint bundles with the following reporters:
 
 - text:
   - the default text output, mainly used in console

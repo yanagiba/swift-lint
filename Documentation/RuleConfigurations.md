@@ -8,14 +8,21 @@ For example, according to [McCabe76](http://www.literateprogramming.com/mccabe.p
 
 There are three ways to configure the thresholds: from a higher precedence to lower, [Inline Comment](#inline-comment) > [Command Line](#command-line) > [Configuration File](#configuration-file).
 
-> **See Also:** You can browse the [Documentation for Rules](Rules),
+> **See Also:** You can browse the [Rule Index](Rules),
 and look for possible section `Thresholds`.
 If the rule supports threshold configurations,
 you can find the keys and default values in that section.
 
 ## Inline Comment
 
-You can alter the thresholds for the node on that line with one of the following syntaxes:
+You can alter the thresholds for the nodes by
+
+- appending single line comment to the same line
+- adding multi-line comment block with its head `/*` on the same line
+
+In addition, poorly written comments harm code quality as well.
+So we support few syntaxes,
+and let you choose the one with the best readability:
 
 - Aggregate all threshold keys and values in `rule_configure` call inside single line comment
 
@@ -48,15 +55,7 @@ You can alter the thresholds for the node on that line with one of the following
  */
 ```
 
-Poor written comments may harm code quality, too.
-That's why we support few syntaxes,
-so that you can choose the one with the best readability.
-
-The configurations defined inside single line comment apply to all the nodes defined on the same line as the comment. When the node spread among multiple lines, apply the single line comment based configurations to the first line of the node.
-
-The scope of the configurations defined in multi-line comments is controlled by the head of the comment `/*` and is applied to the nodes of which first line is on the same line of the `/*`.
-
-It sounds complicated, but it is actually quite easy with a few examples, say you have a function that you have a good reason to allow a higher cyclomatic complexity, then you can apply the configuration like this:
+For instances, when you have a function that you have a good reason to allow a higher cyclomatic complexity, then you can apply the configuration like this:
 
 ```
 func foo() { // swift-lint:rule_configure(CYCLOMATIC_COMPLEXITY=15)
@@ -65,8 +64,8 @@ func foo() { // swift-lint:rule_configure(CYCLOMATIC_COMPLEXITY=15)
 
 ```
 
-Later, you want to increase the threshold for NPath complexity and number of non-commenting source statement as well.
-In this case, if you write everything in one line,
+Later, you want to increase the thresholds for NPath complexity and count of non-commenting source statements as well.
+In this case, imagine if you write everything in one line,
 the code will looks messy. So instead, you can use multi-line comment this time:
 
 ```
@@ -83,7 +82,7 @@ func foo() { /*
 
 ## Command Line
 
-When the configurations are applied to all the files in this project, you can consider changing them through command line or save them in the configuration file (described in the section below).
+When the configurations are applied to all the files in your project, you can consider changing them through command line or save them in the configuration file (described in the section below).
 
 The option to use is `rule-configurations`:
 
@@ -119,3 +118,5 @@ rule-configurations:
   - CYCLOMATIC_COMPLEXITY: 15
   - LONG_LINE: 50
 ```
+
+> **See Also:** Check out [Configuration File](DotYanagibaFile.md) for additional documentation.

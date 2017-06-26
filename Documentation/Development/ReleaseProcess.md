@@ -2,7 +2,7 @@
 
 1. Make sure you have the latest master branch.
 2. Create a release branch `release-x.y.z`.
-3. Pump the version to x.y.z, and make sure `swift-ast`. version is also right.
+3. Pump the version to x.y.z, and make sure `swift-ast` version is also right.
   - `Package.swift`
   - `Constant.swift`
   - `README.md`

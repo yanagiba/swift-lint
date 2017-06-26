@@ -11,5 +11,5 @@
 ## Development
 
 - [Add new rule](Development/AddNewRule.md)
-- [Add new reporter type](Development/AddNewReporter.md)
+- [Add new reporter](Development/AddNewReporter.md)
 - [Release process](Development/ReleaseProcess.md)

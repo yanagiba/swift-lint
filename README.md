@@ -40,7 +40,7 @@ Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
 and the Swift Lint are in active development. Though many features are implemented, some with limitations.
 
 Swift Lint doesn't modify your code, therefore,
-the tool is _good enough_ to be deployed in production environment while we are working hard on it.
+the tool is safe to be deployed in production environment while we are working hard towards 1.0 release.
 Please be cautious with bugs, edge cases and false positives (issues and pull requests are welcomed).
 
 Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-in-progress) from [swift-ast](https://github.com/yanagiba/swift-ast).
@@ -69,10 +69,9 @@ This will generate a `swift-lint` executable inside `.build/release` folder.
 
 #### Adding to `swift` Path (Recommended, but Optional)
 
-It is possible to copy the `swift-lint` to the `bin` folder of
-your local Swift installation.
+It is recommended to copy the `swift-lint` to the same folder that your `swift` binary resides.
 
-For example, if `which swift` outputs
+For example, if `swift` is installed at (Linux) or the toolchain (macOS)'s `bin` path is
 
 ```
 /Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
@@ -89,7 +88,7 @@ calling `swift lint` in your terminal directly.
 
 ### Embed Into Your Project
 
-Add the swift-lint dependency to your SPM dependencies in Package.swift:
+Add the `swift-lint` dependency to your Swift Package Manager (SPM) dependencies in `Package.swift`:
 
 ```swift
 // swift-tools-version:4.0
@@ -99,7 +98,7 @@ import PackageDescription
 let package = Package(
   name: "MyPackage",
   dependencies: [
-    .package(url: "https://github.com/yanagiba/swift-lint.git", from: "0.1.2")
+    .package(url: "https://github.com/yanagiba/swift-lint.git", from: "0.2.0")
   ],
   targets: [
     .target(name: "MyTarget", dependencies: ["SwiftMetric", "SwiftLint"]),
@@ -114,7 +113,7 @@ An example project will be added in the future.
 
 ### Command Line
 
-Simply append the path(s) of the file(s) to `swift-lint`:
+Simply provide the file paths to `swift-lint`:
 
 ```bash
 swift-lint path/to/Awesome.swift

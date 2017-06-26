@@ -1,15 +1,7 @@
 # Suppress Issues
 
-There are two scenarios you might want to suppress an issue:
+When the standard for certain code measurement is controversial or just not applicable in your team setting, you might consider suppressing issues with one of the few methods:
 
-- the standard for certain code measurement is controversial or just not applicable in your team setting
-- it is a bug or a false positive
-
-There are several methods you could consider to suppress issues:
-
-- If the issue you need to suppress also appeals to other team members, e.g. a false positive
-  - Let us know by opening an issue with your code snippet on GitHub.
-  - Patch test cases, amend the rule to make tests pass, and submit a pull request. Your help would be greatly appreciated by everyone.
 - If the situation of your project is slightly different from our default settings
   - Consider [change rule configurations](RuleConfigurations.md)
   - Consider [disable rules](SelectRules.md)
@@ -20,9 +12,11 @@ There are several methods you could consider to suppress issues:
 You can browse the [Documentation for Rules](Rules),
 and look for `Identifier` under each rule's title.
 
+> **Note:** When it's a bug or a false positive, don't just suppress it, speak out loud! Let us know by opening an issue with your code snippet on GitHub, and we'll take a look. Even better, you can patch test cases, amend the rule to make tests pass, and submit a pull request with your fix. Your help is highly appreciated.
+
 ## Inline Comment
 
-You can suppress issues before they are emitted by appending comment with special annotations that are prefixed with `swift-lint:suppress`. We support suppress [one rule](#suppress-one-rule), [multiple rules](#suppress-multiple-rules), and [all rules](#suppress-all-rules).
+You can suppress issues by appending comment with special annotations that are prefixed with `swift-lint:suppress`. We support suppress [one rule](#suppress-one-rule), [multiple rules](#suppress-multiple-rules), and [all rules](#suppress-all-rules).
 
 ### Suppress One Rule
 
@@ -57,7 +51,7 @@ for _ in foo..<bar /*
 }
 ```
 
-you should choose the style with a case-by-case basis to give your best readability to the code.
+you should choose the style that optimizes for readability.
 
 ### Suppress Multiple Rules
 
@@ -79,7 +73,7 @@ To suppress multiple rules altogether, few syntaxes are available:
 
 ```
 /*
- swift-lint:suppress(rule_identifier_1,...,rule_identifier_
+ swift-lint:suppress(rule_identifier_1,...,rule_identifier_N)
  */
 ```
 
