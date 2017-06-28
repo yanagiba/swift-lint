@@ -161,7 +161,7 @@ make test
 Ryuichi Saito
 
 - http://github.com/ryuichis
-- ryuichi@ryuichisaito.com
+- ryuichi@yanagiba.org
 
 ## License
 
