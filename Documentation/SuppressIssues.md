@@ -1,15 +1,15 @@
 # Suppress Issues
 
-When the standard for certain code measurement is controversial or just not applicable in your team setting, you might consider suppressing issues with one of the few methods:
+When the standard for certain code measurement is controversial or simply not applicable in your team setting, you might want to consider suppressing issues with one of the few methods:
 
-- If the situation of your project is slightly different from our default settings
-  - Consider [change rule configurations](RuleConfigurations.md)
-  - Consider [disable rules](SelectRules.md)
+- If the situation of your project is slightly different from our default settings, consider
+  - [changing rule configurations](RuleConfigurations.md)
+  - [disabling rules](SelectRules.md)
 - If it is a case-by-case thing, and only particular places need to be suppressed
   - [Use inline comment based suppression](#inline-comment)
 
-> **See Also:** To disable rules or use of comment based suppression, you need to know the rule identifiers.
-You can browse the [Documentation for Rules](Rules),
+> **See Also:** To disable rules or use of comment based suppression, you will need to know the rule identifiers.
+You can browse the [Rule Index](Rules),
 and look for `Identifier` under each rule's title.
 
 > **Note:** When it's a bug or a false positive, don't just suppress it, speak out loud! Let us know by opening an issue with your code snippet on GitHub, and we'll take a look. Even better, you can patch test cases, amend the rule to make tests pass, and submit a pull request with your fix. Your help is highly appreciated.
@@ -108,7 +108,7 @@ func foo() { /*
 
 When you just want to suppress everything, you give no rule identifier to the `suppress` call, and simply provide a pair of parenthesis `()`.
 
-> **Warning:** All future introduced rules will be suppressed as well, so use it with cautious.
+> **Warning:** All future introduced rules will be suppressed as well, so use it with caution.
 
 For example:
 

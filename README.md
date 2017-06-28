@@ -11,13 +11,15 @@
 ![Platforms](https://img.shields.io/badge/platform-%20Linux%20|%20macOS%20-red.svg)
 ![License](https://img.shields.io/github/license/yanagiba/swift-lint.svg)
 
-The Swift Lint is a static code analysis tool for improving quality and reducing
+Swift Lint (`swift-lint`) is a static code analysis tool for improving quality and reducing
 defects by inspecting [Swift](https://swift.org/about/) code and looking for
-potential problems like possible bugs, unused code, complicated code, redundant
+potential problems, such as possible bugs, unused code, complicated code, redundant
 code, code smells, bad practices, and so on.
 
-Swift Lint relies on the [abstract syntax tree](https://github.com/yanagiba/swift-ast)
+Swift Lint relies on [Swift Abstract Syntax Tree (`swift-ast`)](http://yanagiba.org/swift-ast)
 of the source code for better accuracy and efficiency.
+
+Swift Lint is part of [Yanagiba Project](http://yanagiba.org). Yanagiba umbrella project is a toolchain of compiler modules, libraries, and utilities, written in Swift and for Swift.
 
 * * *
 
@@ -36,8 +38,8 @@ of the source code for better accuracy and efficiency.
 
 ## A Work In Progress
 
-Both the [Swift Abstract Syntax Tree](https://github.com/yanagiba/swift-ast)
-and the Swift Lint are in active development. Though many features are implemented, some with limitations.
+Both Swift Abstract Syntax Tree and Swift Lint are in active development.
+Though many features are implemented, some are with limitations.
 
 Swift Lint doesn't modify your code, therefore,
 the tool is safe to be deployed in production environment while we are working hard towards 1.0 release.
@@ -77,7 +79,7 @@ For example, if `swift` is installed at (Linux) or the toolchain (macOS)'s `bin`
 /Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
 ```
 
-Then you can copy `swift-lint` to it by
+Then copy `swift-lint` to it by
 
 ```
 cp .build/release/swift-lint /Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-lint
@@ -126,7 +128,7 @@ Run `swift-lint --help` to get the updated command line options.
 
 ### Documentation
 
-Go to [Documentation](Documentation/README.md) for additional documentation.
+Go to [Documentation](Documentation/README.md) for details.
 
 ## Development
 

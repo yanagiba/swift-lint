@@ -1,6 +1,6 @@
 # Configuration File (`.yanagiba`)
 
-When your team discussed and decided upon a set of rules, a tuned configurations, and output format, etc, you may want to save them into a configuration file, and name it `.yanagiba`. This way, you don't need to remember these flags and type them repeatedly every time you run Swift Lint. And you can check in this file to your source control repository, so that your teammates also get the same settings. Even better, if you have Continuous Integration set up, it will use the same configurations as well.
+When your team discussed and decided upon a set of rules, a tuned configurations, output format, etc., you may want to save them into a configuration file, and name it with `.yanagiba`. This way, you don't need to remember these flags and type them repeatedly every time you run Swift Lint. And you can check in this file to your source control repository, so that your teammates also get the same settings. Even better, if you have Continuous Integration set up, it will use the same configurations as well.
 
 > **Warning:** Definitely check with your teammates before you check in local configuration file to avoid unnecessary surprises.
 
@@ -11,12 +11,12 @@ You can save `.yanagiba` at
 - home directory (`~`)
 - the root of project folder
 
-The configurations defined in home directory's `.yanagiba` file are applied to all analysis triggered by this user. Meanwhile, the ones defined in project's `.yanagiba` file are only applied to this project.
+The configurations defined in home directory's `.yanagiba` file are applied to all analysis triggered by the specific user. Meanwhile, the ones defined in project's `.yanagiba` file are only applied to the specific project.
 
 When Swift Lint launches, it searches both locations, and tries to read from both if any exists. Please be advised that,
 the project scoped configurations will override the ones defined in the home directory.
 
-> **Warning:** The inline configurations have the highest precedence, following that is the command line options, and then the configurations in project's `.yanagiba` file, and the least is the ones defined in user home directory's `yanagiba` file.
+> **Warning:** The inline configurations have the highest precedence, the next highest is the command line options, and then the configurations in project's `.yanagiba` file, and the lowest is the ones defined in user home directory's `yanagiba` file.
 
 ## Format and Supported Configurations
 

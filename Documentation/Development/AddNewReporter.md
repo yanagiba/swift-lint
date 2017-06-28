@@ -1,6 +1,6 @@
 # Write New Reporter
 
-Swift Lint bundles with few reporters, like `text`, `html`, `json`, and others. You can also write your custom ones:
+Swift Lint bundles with few reporters, such as `text`, `html`, `json`, and others. You can also write your custom ones:
 
 1. Create a new `XYZReporter` class that conforms to `Reporter` protocol. Although all properties and methods in `Reporter` protocol have default implementations, you may change the behaviors of some (if not all) to meet your needs.
 
