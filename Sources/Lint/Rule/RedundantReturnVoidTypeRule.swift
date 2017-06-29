@@ -22,7 +22,7 @@ import AST
 class RedundantReturnVoidTypeRule : RuleBase, ASTVisitorRule {
   let name = "Redundant Return Void Type"
   var description: String? {
-    return "For functions that return `Void` type, the `-> Void` can be removed."
+    return "For functions that do not return, the `-> Void` can be removed."
   }
   var examples: [String]? {
     return [

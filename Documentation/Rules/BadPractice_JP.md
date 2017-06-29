@@ -516,7 +516,9 @@ var _ = bar // _ = bar
 <dd>Bad Practice</dd>
 </dl>
 
-For cases of a raw-value typed enumeration declaration,
+According to Swift language reference:
+
+> For cases of a raw-value typed enumeration declaration,
 if the raw-value type is specified as `String` and
 no values are assigned to the cases explicitly,
 each unassigned case is implicitly assigned a string with
@@ -589,7 +591,7 @@ default:
 <dd>Bad Practice</dd>
 </dl>
 
-For functions that return `Void` type, the `-> Void` can be removed.
+For functions that do not return, the `-> Void` can be removed.
 
 ##### Examples:
 
