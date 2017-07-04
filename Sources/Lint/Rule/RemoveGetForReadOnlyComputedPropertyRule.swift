@@ -44,7 +44,6 @@ class RemoveGetForReadOnlyComputedPropertyRule: RuleBase, ASTVisitorRule {
       """,
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ varDecl: VariableDeclaration) throws -> Bool {
