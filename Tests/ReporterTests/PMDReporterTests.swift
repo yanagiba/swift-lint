@@ -111,7 +111,7 @@ class PMDReporterTests : XCTestCase {
           start: SourceLocation(path: "test", line: 1, column: 2),
           end: SourceLocation(path: "testEnd", line: 3, column: 4)),
         severity: .minor,
-      correction: nil),
+        correction: nil),
       Issue(
         ruleIdentifier: "rule_id",
         description: "",
@@ -120,7 +120,7 @@ class PMDReporterTests : XCTestCase {
           start: SourceLocation(path: "test", line: 1, column: 2),
           end: SourceLocation(path: "testEnd", line: 3, column: 4)),
         severity: .cosmetic,
-      correction: nil),
+        correction: nil),
     ]
     XCTAssertEqual(
       pmdReporter.handle(issues: testIssues),
