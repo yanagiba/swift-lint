@@ -120,7 +120,7 @@ var foo: Int {
 <dt>Identifier</dt>
 <dd>redundant_initialization_to_nil</dd>
 <dt>File name</dt>
-<dd>RedundantInitializationtoNilRule.swift</dd>
+<dd>RedundantInitializationToNilRule.swift</dd>
 <dt>Severity</dt>
 <dd>Minor</dd>
 <dt>Category</dt>
@@ -342,13 +342,13 @@ guard 1 != 0, true else { // always true
 ```
 
 
-## Constant Conditional Operator
+## Constant Conditional Operator Condition
 
 <dl>
 <dt>Identifier</dt>
-<dd>constant_conditional_operator</dd>
+<dd>constant_conditional_operator_condition</dd>
 <dt>File name</dt>
-<dd>ConstantConditionalOperatorRule.swift</dd>
+<dd>ConstantConditionalOperatorConditionRule.swift</dd>
 <dt>Severity</dt>
 <dd>Minor</dd>
 <dt>Category</dt>

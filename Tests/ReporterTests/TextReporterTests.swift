@@ -95,6 +95,36 @@ class TextReporterTests : XCTestCase {
     }
   }
 
+  func testReportSummaryForMultipleIssues() {
+    let testIssues = [
+      Issue(
+        ruleIdentifier: "rule_id",
+        description: "",
+        category: .badPractice,
+        location: .EMPTY,
+        severity: .cosmetic,
+        correction: nil),
+      Issue(
+        ruleIdentifier: "rule_id",
+        description: "",
+        category: .badPractice,
+        location: .INVALID,
+        severity: .cosmetic,
+        correction: nil),
+    ]
+    let issueSummary = IssueSummary(issues: testIssues)
+    XCTAssertEqual(
+      textReporter.handle(numberOfTotalFiles: 2, issueSummary: issueSummary),
+      """
+      Summary:
+      Within a total number of 2 files, 2 files have issues.
+      Number of critical issues: 0
+      Number of major issues: 0
+      Number of minor issues: 0
+      Number of cosmetic issues: 2
+      """)
+  }
+
   func testNoIssue() {
     let issueSummary = IssueSummary(issues: [])
     XCTAssertEqual(
@@ -121,6 +151,7 @@ class TextReporterTests : XCTestCase {
     ("testReportIssueWithCurrentDirectoryPathTrimmed", testReportIssueWithCurrentDirectoryPathTrimmed),
     ("testReportIssueWithEmptyDescription", testReportIssueWithEmptyDescription),
     ("testReportSummary", testReportSummary),
+    ("testReportSummaryForMultipleIssues", testReportSummaryForMultipleIssues),
     ("testNoIssue", testNoIssue),
     ("testHeader", testHeader),
     ("testFooter", testFooter),

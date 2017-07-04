@@ -19,6 +19,35 @@ import XCTest
 @testable import Lint
 
 class ConstantIfStatementConditionRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = ConstantIfStatementConditionRule()
+
+    XCTAssertEqual(rule.identifier, "constant_if_statement_condition")
+    XCTAssertEqual(rule.name, "Constant If Statement Condition")
+    XCTAssertEqual(rule.fileName, "ConstantIfStatementConditionRule.swift")
+    XCTAssertNil(rule.description)
+    XCTAssertEqual(rule.examples?.count, 3)
+    XCTAssertEqual(rule.examples?[0], """
+      if true { // always true
+        return true
+      }
+      """)
+    XCTAssertEqual(rule.examples?[1], """
+      if 1 == 0 { // always false
+        return false
+      }
+      """)
+    XCTAssertEqual(rule.examples?[2], """
+      if 1 != 0, true { // always true
+        return true
+      }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testOneVariable() {
     let issues = "if foo { return true }"
       .inspect(withRule: ConstantIfStatementConditionRule())
@@ -133,6 +162,7 @@ class ConstantIfStatementConditionRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testOneVariable", testOneVariable),
     ("testConditionHasVariable", testConditionHasVariable),
     ("testOneConstant", testOneConstant),

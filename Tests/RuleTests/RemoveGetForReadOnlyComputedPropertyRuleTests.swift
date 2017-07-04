@@ -19,6 +19,37 @@ import XCTest
 @testable import Lint
 
 class RemoveGetForReadOnlyComputedPropertyRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RemoveGetForReadOnlyComputedPropertyRule()
+
+    XCTAssertEqual(rule.identifier, "remove_get_for_readonly_computed_property")
+    XCTAssertEqual(rule.name, "Remove Get For Read-Only Computed Property")
+    XCTAssertEqual(rule.fileName, "RemoveGetForReadOnlyComputedPropertyRule.swift")
+    XCTAssertEqual(rule.description, """
+      A computed property with a getter but no setter is known as
+      a *read-only computed property*.
+
+      You can simplify the declaration of a read-only computed property
+      by removing the get keyword and its braces.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      var foo: Int {
+        get {
+          return 1
+        }
+      }
+
+      // var foo: Int {
+      //   return 1
+      // }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNotReadOnlyComputedProperty() {
     let issues = "var i = 1; var j: Int { get { return i } set { i = newValue } }"
       .inspect(withRule: RemoveGetForReadOnlyComputedPropertyRule())
@@ -67,6 +98,7 @@ class RemoveGetForReadOnlyComputedPropertyRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNotReadOnlyComputedProperty", testNotReadOnlyComputedProperty),
     ("testReadOnlyComputedPropertyWithoutGet", testReadOnlyComputedPropertyWithoutGet),
     ("testReadOnlyComputedPropertyWithGet", testReadOnlyComputedPropertyWithGet),

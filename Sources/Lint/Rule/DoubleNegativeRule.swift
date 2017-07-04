@@ -29,7 +29,6 @@ class DoubleNegativeRule: RuleBase, ASTVisitorRule {
       "!(a != b) // a == b",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ prefixOpExpr: PrefixOperatorExpression) throws -> Bool {

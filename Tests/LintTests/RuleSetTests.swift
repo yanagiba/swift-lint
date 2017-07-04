@@ -1,5 +1,5 @@
 /*
-   Copyright 2016 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,19 +16,14 @@
 
 import XCTest
 
-#if !os(macOS)
-public func allTests() -> [XCTestCaseEntry] {
-  return [
-    testCase(CorrectionTests.allTests),
-    testCase(DriverTests.allTests),
-    testCase(RuleProtocolTests.allTests),
-    testCase(RuleBaseTests.allTests),
-    testCase(ReporterProtocolTests.allTests),
-    testCase(RuleSetTests.allTests),
-    testCase(ASTVisitorRuleTests.allTests),
-    testCase(SourceCodeRuleTests.allTests),
-    testCase(CommentBasedSuppressionTests.allTests),
-    testCase(IssueSummaryTests.allTests),
+@testable import Lint
+
+class RuleSetTests : XCTestCase {
+  func testRuleSet() {
+    XCTAssertEqual(RuleSet.rules.count, RuleSet.ruleIdentifiers.count)
+  }
+
+  static var allTests = [
+    ("testRuleSet", testRuleSet),
   ]
 }
-#endif

@@ -19,6 +19,27 @@ import XCTest
 @testable import Lint
 
 class LongLineRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = LongLineRule()
+
+    XCTAssertEqual(rule.identifier, "long_line")
+    XCTAssertEqual(rule.name, "Long Line")
+    XCTAssertEqual(rule.fileName, "LongLineRule.swift")
+    XCTAssertEqual(rule.description, """
+      When a line of code is very long, it largely harms the readability.
+      Break long lines of code into multiple lines.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0],
+      "let a012345678901234567890123456789...1234567890123456789012345678901234567890123456789")
+    XCTAssertEqual(rule.thresholds?.count, 1)
+    XCTAssertEqual(rule.thresholds?.keys.first, "LONG_LINE")
+    XCTAssertEqual(rule.thresholds?.values.first, "The long line reporting threshold, default value is 100.")
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .size)
+  }
+
   func testShortText() {
     XCTAssertTrue(getIssues(from: """
     let a
@@ -66,6 +87,7 @@ class LongLineRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testShortText", testShortText),
     ("testLongText", testLongText),
   ]

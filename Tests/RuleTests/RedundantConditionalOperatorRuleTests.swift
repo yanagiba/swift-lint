@@ -19,6 +19,33 @@ import XCTest
 @testable import Lint
 
 class RedundantConditionalOperatorRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantConditionalOperatorRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_conditional_operator")
+    XCTAssertEqual(rule.name, "Redundant Conditional Operator")
+    XCTAssertEqual(rule.fileName, "RedundantConditionalOperatorRule.swift")
+    XCTAssertEqual(rule.description, """
+      This rule detects three types of redundant conditional operators:
+
+      - true-expression and false-expression are returning true/false or false/true respectively;
+      - true-expression and false-expression are the same constant;
+      - true-expression and false-expression are the same variable expression.
+
+      They are usually introduced by mistake, and should be simplified or removed.
+      """)
+    XCTAssertEqual(rule.examples?.count, 5)
+    XCTAssertEqual(rule.examples?[0], "return a > b ? true : false // return a > b")
+    XCTAssertEqual(rule.examples?[1], "return a == b ? false : true // return a != b")
+    XCTAssertEqual(rule.examples?[2], "return a > b ? true : true // return true")
+    XCTAssertEqual(rule.examples?[3], "return a < b ? \"foo\" : \"foo\" // return \"foo\"")
+    XCTAssertEqual(rule.examples?[4], "return a != b ? c : c // return c")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testTrueFalseRespectively() {
     let returns: [(String, String)] = [
       ("true", "false"),
@@ -89,6 +116,7 @@ class RedundantConditionalOperatorRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testTrueFalseRespectively", testTrueFalseRespectively),
     ("testSameConstant", testSameConstant),
     ("testSameVariable", testSameVariable),

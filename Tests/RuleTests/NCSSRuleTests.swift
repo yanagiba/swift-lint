@@ -19,6 +19,42 @@ import XCTest
 @testable import Lint
 
 class NCSSRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = NCSSRule()
+
+    XCTAssertEqual(rule.identifier, "high_ncss")
+    XCTAssertEqual(rule.name, "High Non-Commenting Source Statements")
+    XCTAssertEqual(rule.fileName, "NCSSRule.swift")
+    XCTAssertEqual(rule.description, """
+      This rule counts number of lines for a method by
+      counting Non Commenting Source Statements (NCSS).
+
+      NCSS only takes actual statements into consideration,
+      in other words, ignores empty statements, empty blocks,
+      closing brackets or semicolons after closing brackets.
+
+      Meanwhile, a statement that is broken into multiple lines contribute only one count.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      func example()          // 1
+      {
+          if (1)              // 2
+          {
+          }
+          else                // 3
+          {
+          }
+      }
+      """)
+    XCTAssertEqual(rule.thresholds?.count, 1)
+    XCTAssertEqual(rule.thresholds?.keys.first, "NCSS")
+    XCTAssertEqual(rule.thresholds?.values.first, "The high NCSS method reporting threshold, default value is 30.")
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .major)
+    XCTAssertEqual(rule.category, .readability)
+  }
+
   func testEmptyCodeBlock() {
     XCTAssertTrue(getIssues(from: "func foo() {}").isEmpty)
     XCTAssertTrue(getIssues(from: "init() {}").isEmpty)
@@ -102,6 +138,7 @@ class NCSSRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testEmptyCodeBlock", testEmptyCodeBlock),
     ("testIfStatement", testIfStatement),
     ("testSwitchStatement", testSwitchStatement),

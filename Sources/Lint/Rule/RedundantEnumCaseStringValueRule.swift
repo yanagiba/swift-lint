@@ -23,7 +23,7 @@ class RedundantEnumCaseStringValueRule: RuleBase, ASTVisitorRule {
   var description: String? {
     return """
     According to Swift language reference:
-    
+
     > For cases of a raw-value typed enumeration declaration,
     if the raw-value type is specified as `String` and
     no values are assigned to the cases explicitly,
@@ -44,7 +44,6 @@ class RedundantEnumCaseStringValueRule: RuleBase, ASTVisitorRule {
       """,
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   private typealias RawValueEnumCase = EnumDeclaration.RawValueStyleEnumCase

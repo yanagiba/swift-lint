@@ -19,6 +19,28 @@ import XCTest
 @testable import Lint
 
 class InvertedLogicRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = InvertedLogicRule()
+
+    XCTAssertEqual(rule.identifier, "inverted_logic")
+    XCTAssertEqual(rule.name, "Inverted Logic")
+    XCTAssertEqual(rule.fileName, "InvertedLogicRule.swift")
+    XCTAssertNil(rule.description)
+    XCTAssertEqual(rule.examples?.count, 2)
+    XCTAssertEqual(rule.examples?[0], """
+      if a != 0 {  // if a == 0 {
+        i = 1      //   i = -1
+      } else {     // } else {
+        i = -1     //   i = 1
+      }            // }
+      """)
+    XCTAssertEqual(rule.examples?[1], "!foo ? -1 : 1  // foo ? 1 : -1")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testSmoothLogicFlow() {
     let issues = """
       if foo { return true } else { return false }
@@ -118,6 +140,7 @@ class InvertedLogicRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testSmoothLogicFlow", testSmoothLogicFlow),
     ("testIfWithLogicalNotOperator", testIfWithLogicalNotOperator),
     ("testIfWithNotEqualOperator", testIfWithNotEqualOperator),

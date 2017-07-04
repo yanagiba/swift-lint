@@ -67,7 +67,6 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
       """,
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   private func emitIssue(_ ifStmt: IfStatement, _ suggestion: String) {

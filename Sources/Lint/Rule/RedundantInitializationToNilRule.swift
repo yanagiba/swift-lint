@@ -20,6 +20,7 @@ import AST
 
 class RedundantInitializationToNilRule: RuleBase, ASTVisitorRule {
   let name = "Redundant Initialization to Nil"
+  let fileName = "RedundantInitializationToNilRule.swift"
   var description: String? {
     return """
     It is redundant to initialize an optional variable to `nil`,
@@ -32,7 +33,6 @@ class RedundantInitializationToNilRule: RuleBase, ASTVisitorRule {
       "var foo: Int? = nil // var foo: Int?",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ varDecl: VariableDeclaration) throws -> Bool {

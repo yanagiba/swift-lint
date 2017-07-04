@@ -84,8 +84,8 @@ fileprivate extension String {
   }
 
   private var punctutationAndWhitespaceRemoved: [String] {
-    return self.components(separatedBy: .punctuationCharacters)
-      .joined(separator: "")
+    return components(separatedBy: .punctuationCharacters)
+      .joined()
       .components(separatedBy: .whitespaces)
       .filter { !$0.isEmpty }
   }

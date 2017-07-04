@@ -40,7 +40,6 @@ class RedundantConditionalOperatorRule: RuleBase, ASTVisitorRule {
       "return a != b ? c : c // return c",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   private func emitIssue(

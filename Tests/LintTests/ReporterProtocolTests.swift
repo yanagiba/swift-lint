@@ -14,24 +14,23 @@
    limitations under the License.
 */
 
-struct IssueSummary {
-  private let issues: [Issue]
+import XCTest
 
-  init(issues: [Issue]) {
-    self.issues = issues
+@testable import Lint
+
+class ReporterProtocolTests : XCTestCase {
+  func testDefaultImplementations() {
+    class DoNothingReporter : Reporter {}
+
+    let doNothingReporter = DoNothingReporter()
+    XCTAssertEqual(doNothingReporter.handle(issues: []), "")
+    XCTAssertEqual(doNothingReporter.handle(numberOfTotalFiles: 0, issueSummary: IssueSummary(issues: [])), "")
+    XCTAssertEqual(doNothingReporter.header, "")
+    XCTAssertEqual(doNothingReporter.footer, "")
+    XCTAssertEqual(doNothingReporter.separator, "")
   }
 
-  var numberOfIssues: Int {
-    return issues.count
-  }
-
-  var numberOfFiles: Int {
-    let filePaths = issues.map({ $0.location.start.path })
-    let uniqueFilePaths = Set(filePaths)
-    return uniqueFilePaths.count
-  }
-
-  func numberOfIssues(withSeverity severity: Issue.Severity) -> Int {
-    return issues.filter({ $0.severity == severity }).count
-  }
+  static var allTests = [
+    ("testDefaultImplementations", testDefaultImplementations),
+  ]
 }

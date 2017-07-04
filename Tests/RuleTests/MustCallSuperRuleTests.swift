@@ -19,6 +19,62 @@ import XCTest
 @testable import Lint
 
 class MustCallSuperRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = MustCallSuperRule()
+
+    XCTAssertEqual(rule.identifier, "must_call_super")
+    XCTAssertEqual(rule.name, "Must Call Super")
+    XCTAssertEqual(rule.fileName, "MustCallSuperRule.swift")
+    XCTAssertEqual(rule.description, """
+      By convention, these overridden cocoa methods should always call super:
+
+      - UIViewController
+        - viewDidLoad()
+        - viewDidAppear(_:)
+        - viewDidDisappear(_:)
+        - viewWillAppear(_:)
+        - viewWillDisappear(_:)
+        - addChildViewController(_:)
+        - removeFromParentViewController()
+        - didReceiveMemoryWarning()
+      - UIView
+        - updateConstraints()
+      - UICollectionViewLayout
+        - invalidateLayout()
+        - invalidateLayout(with:)
+      - XCTestCase
+        - setUp()
+        - tearDown()
+
+      Apparently, this is not a comprehensive list.
+      More will be added by our contributors in the future.
+      The goal is to fully automate this list,
+      so pull request is welcomed while we address other priorities.
+      """)
+    XCTAssertEqual(rule.examples?.count, 2)
+    XCTAssertEqual(rule.examples?[0], """
+      class MyVC : UIViewController {
+        override func viewDidLoad() {
+          // need to add `super.viewDidLoad()` here
+          self.title = "Awesome Title"
+        }
+      }
+      """)
+    XCTAssertEqual(rule.examples?[1], """
+      class MyVCTest : XCTestCase {
+        let myVC: MyVC!
+        override func setUp() {
+          // need to add `super.setUp()` here
+          myVC = MyVC()
+        }
+      }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .major)
+    XCTAssertEqual(rule.category, .cocoa)
+  }
+
   func testNotInMethodList() {
     let issues = """
       override func viewDidAppear() {}
@@ -40,6 +96,9 @@ class MustCallSuperRuleTests : XCTestCase {
       }
       override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+      }
+      override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        super.invalidateLayout(with: context)
       }
       """.inspect(withRule: MustCallSuperRule())
     XCTAssertTrue(issues.isEmpty)
@@ -79,10 +138,49 @@ class MustCallSuperRuleTests : XCTestCase {
     }
   }
 
+  func testMismatchSuperCalls() {
+    let testMethods = [
+      """
+      override func viewDidLoad() {
+        super.viewDidLoad(a, b)
+      }
+      """,
+      """
+      override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(&animated)
+      }
+      """,
+      """
+      override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        super.invalidateLayout(context)
+      }
+      """,
+    ]
+
+    for testMethod in testMethods {
+      let issues = testMethod.inspect(withRule: MustCallSuperRule())
+      XCTAssertEqual(issues.count, 1)
+      let issue = issues[0]
+      XCTAssertEqual(issue.ruleIdentifier, "must_call_super")
+      XCTAssertEqual(issue.description, "")
+      XCTAssertEqual(issue.category, .cocoa)
+      XCTAssertEqual(issue.severity, .major)
+      let range = issue.location
+      XCTAssertEqual(range.start.path, "test/test")
+      XCTAssertEqual(range.start.line, 1)
+      XCTAssertEqual(range.start.column, 1)
+      XCTAssertEqual(range.end.path, "test/test")
+      XCTAssertEqual(range.end.line, 3)
+      XCTAssertEqual(range.end.column, 2)
+    }
+  }
+
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNotInMethodList", testNotInMethodList),
     ("testMissingOverriden", testMissingOverriden),
     ("testSuperCalled", testSuperCalled),
     ("testMissingSuperCalls", testMissingSuperCalls),
+    ("testMismatchSuperCalls", testMismatchSuperCalls),
   ]
 }

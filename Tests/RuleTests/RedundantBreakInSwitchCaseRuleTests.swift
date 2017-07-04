@@ -19,6 +19,40 @@ import XCTest
 @testable import Lint
 
 class RedundantBreakInSwitchCaseRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantBreakInSwitchCaseRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_break_in_switch_case")
+    XCTAssertEqual(rule.name, "Redundant Break In Switch Case")
+    XCTAssertEqual(rule.fileName, "RedundantBreakInSwitchCaseRule.swift")
+    XCTAssertEqual(rule.description, """
+      According to Swift language reference:
+
+      > After the code within a matched case has finished executing,
+      > the program exits from the switch statement.
+      > Program execution does not continue or “fall through” to the next case or default case.
+
+      This means in Swift, it's safe to remove the `break` at the end of each switch case.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      switch foo {
+      case 0:
+        print(0)
+        break        // redundant, can be removed
+      case 1:
+        print(1)
+        break        // redundant, can be removed
+      default:
+        break
+      }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNoBreak() {
     let issues = """
       switch foo {
@@ -122,6 +156,7 @@ class RedundantBreakInSwitchCaseRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoBreak", testNoBreak),
     ("testBreakInDefault", testBreakInDefault),
     ("testBreakInTheMiddle", testBreakInTheMiddle),

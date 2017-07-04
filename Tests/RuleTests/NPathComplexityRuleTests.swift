@@ -19,6 +19,38 @@ import XCTest
 @testable import Lint
 
 class NPathComplexityRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = NPathComplexityRule()
+
+    XCTAssertEqual(rule.identifier, "high_npath_complexity")
+    XCTAssertEqual(rule.name, "High NPath Complexity")
+    XCTAssertEqual(rule.fileName, "NPathComplexityRule.swift")
+    XCTAssertEqual(rule.description, """
+      NPath complexity is determined by the number of execution paths through that method.
+      Compared to cyclomatic complexity, NPath complexity has two outstanding characteristics:
+      first, it distinguishes between different kinds of control flow structures;
+      second, it takes the various type of acyclic paths in a flow graph into consideration.
+
+      Based on studies done by the original author in AT&T Bell Lab,
+      an NPath threshold value of 200 has been established for a method.
+      """)
+    XCTAssertNil(rule.examples)
+    XCTAssertEqual(rule.thresholds?.count, 1)
+    XCTAssertEqual(rule.thresholds?.keys.first, "NPATH_COMPLEXITY")
+    XCTAssertEqual(rule.thresholds?.values.first, "The NPath complexity reporting threshold, default value is 200.")
+    XCTAssertEqual(rule.additionalDocument, """
+
+      ##### References:
+
+      Brian A. Nejmeh  (1988).
+      ["NPATH: a measure of execution path complexity and its applications"](http://dl.acm.org/citation.cfm?id=42379).
+      *Communications of the ACM 31 (2) p. 188-200*
+
+      """)
+    XCTAssertEqual(rule.severity, .major)
+    XCTAssertEqual(rule.category, .complexity)
+  }
+
   func testEmptyCodeBlock() {
     XCTAssertTrue(getIssues(from: "func foo()").isEmpty)
     XCTAssertTrue(getIssues(from: "init() {}").isEmpty)
@@ -102,6 +134,7 @@ class NPathComplexityRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testEmptyCodeBlock", testEmptyCodeBlock),
     ("testIfStatement", testIfStatement),
     ("testSwitchStatement", testSwitchStatement),

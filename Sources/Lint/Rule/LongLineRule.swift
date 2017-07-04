@@ -38,7 +38,6 @@ class LongLineRule : RuleBase, SourceCodeRule {
         "The long line reporting threshold, default value is \(LongLineRule.DefaultThreshold)."
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.size
 
   private func getThreshold(of lineNumber: Int) -> Int {

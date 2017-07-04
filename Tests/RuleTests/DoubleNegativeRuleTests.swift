@@ -19,6 +19,22 @@ import XCTest
 @testable import Lint
 
 class DoubleNegativeRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = DoubleNegativeRule()
+
+    XCTAssertEqual(rule.identifier, "double_negative")
+    XCTAssertEqual(rule.name, "Double Negative")
+    XCTAssertEqual(rule.fileName, "DoubleNegativeRule.swift")
+    XCTAssertEqual(rule.description, "Logically, double negative is positive. So prefer to write positively.")
+    XCTAssertEqual(rule.examples?.count, 2)
+    XCTAssertEqual(rule.examples?[0], "!!foo // foo")
+    XCTAssertEqual(rule.examples?[1], "!(a != b) // a == b")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testPositiveLogicFlow() {
     let issues = """
       if foo { return true } else { return false }
@@ -95,6 +111,7 @@ class DoubleNegativeRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testPositiveLogicFlow", testPositiveLogicFlow),
     ("testOneNegative", testOneNegative),
     ("testDoubleNegativePrefixOpAndPrefixOp", testDoubleNegativePrefixOpAndPrefixOp),

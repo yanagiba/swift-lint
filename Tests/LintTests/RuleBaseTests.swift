@@ -67,13 +67,15 @@ class RuleBaseTests : XCTestCase {
       /*
        swift-lint:rule_configure(integer=1,double=1.23):rule_configure(string=bar_foo)
        swift-lint:rule_configure(boolean=false)
+       swift-lint:rule_configure(boolean2=true)
        */
       """)
     ruleBase.configurations = [
       "integer": -1,
       "double": -1.23,
       "string": "foobar",
-      "boolean": true
+      "boolean": true,
+      "boolean2": false,
     ]
     XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", atLineNumber: 1, orDefault: 0), 1)
     XCTAssertEqual(ruleBase.getConfiguration(forKey: "integer", atLineNumber: 2, orDefault: 0), -1)
@@ -83,6 +85,8 @@ class RuleBaseTests : XCTestCase {
     XCTAssertEqual(ruleBase.getConfiguration(forKey: "string", atLineNumber: 2, orDefault: "defualt"), "foobar")
     XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean", atLineNumber: 1, orDefault: true), false)
     XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean", atLineNumber: 2, orDefault: false), true)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean2", atLineNumber: 1, orDefault: false), true)
+    XCTAssertEqual(ruleBase.getConfiguration(forKey: "boolean2", atLineNumber: 2, orDefault: true), false)
   }
 
   func testRetrieveFromCalculatedConfigurations() {

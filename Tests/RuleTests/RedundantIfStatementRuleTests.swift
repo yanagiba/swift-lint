@@ -19,6 +19,60 @@ import XCTest
 @testable import Lint
 
 class RedundantIfStatementRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantIfStatementRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_if_statement")
+    XCTAssertEqual(rule.name, "Redundant If Statement")
+    XCTAssertEqual(rule.fileName, "RedundantIfStatementRule.swift")
+    XCTAssertEqual(rule.description, """
+      This rule detects three types of redundant if statements:
+
+      - then-block and else-block are returning true/false or false/true respectively;
+      - then-block and else-block are the same constant;
+      - then-block and else-block are the same variable expression.
+
+      They are usually introduced by mistake, and should be simplified or removed.
+      """)
+    XCTAssertEqual(rule.examples?.count, 4)
+    XCTAssertEqual(rule.examples?[0], """
+      if a == b {
+        return true
+      } else {
+        return false
+      }
+      // return a == b
+      """)
+    XCTAssertEqual(rule.examples?[1], """
+      if a == b {
+        return false
+      } else {
+        return true
+      }
+      // return a != b
+      """)
+    XCTAssertEqual(rule.examples?[2], """
+      if a == b {
+        return true
+      } else {
+        return true
+      }
+      // return true
+      """)
+    XCTAssertEqual(rule.examples?[3], """
+      if a == b {
+        return foo
+      } else {
+        return foo
+      }
+      // return foo
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNoElseBlock() {
     let issues = "if a == b { return true }"
       .inspect(withRule: RedundantIfStatementRule())
@@ -121,6 +175,7 @@ class RedundantIfStatementRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoElseBlock", testNoElseBlock),
     ("testPatternMatchings", testPatternMatchings),
     ("testReturnTrueFalseRespectively", testReturnTrueFalseRespectively),

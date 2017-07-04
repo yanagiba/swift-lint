@@ -19,6 +19,22 @@ import XCTest
 @testable import Lint
 
 class RedundantReturnVoidTypeRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantReturnVoidTypeRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_return_void_type")
+    XCTAssertEqual(rule.name, "Redundant Return Void Type")
+    XCTAssertEqual(rule.fileName, "RedundantReturnVoidTypeRule.swift")
+    XCTAssertEqual(rule.description, "For functions that do not return, the `-> Void` can be removed.")
+    XCTAssertEqual(rule.examples?.count, 2)
+    XCTAssertEqual(rule.examples?[0], "func foo() -> Void // func foo()")
+    XCTAssertEqual(rule.examples?[1], "func foo() -> () // func foo()")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNoReturnType() {
     let issues = "func foo()".inspect(withRule: RedundantReturnVoidTypeRule())
     XCTAssertTrue(issues.isEmpty)
@@ -67,6 +83,7 @@ class RedundantReturnVoidTypeRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoReturnType", testNoReturnType),
     ("testReturnTypeIsNotVoid", testReturnTypeIsNotVoid),
     ("testReturnVoid", testReturnVoid),

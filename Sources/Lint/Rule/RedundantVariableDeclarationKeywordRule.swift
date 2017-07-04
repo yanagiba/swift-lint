@@ -32,7 +32,6 @@ class RedundantVariableDeclarationKeywordRule: RuleBase, ASTVisitorRule {
       "var _ = bar // _ = bar",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   private func containsOnlyOneWildcard(_ inits: [PatternInitializer]) -> Bool {

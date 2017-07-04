@@ -19,6 +19,37 @@ import XCTest
 @testable import Lint
 
 class RedundantEnumCaseStringValueRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantEnumCaseStringValueRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_enumcase_string_value")
+    XCTAssertEqual(rule.name, "Redundant Enum-Case String Value")
+    XCTAssertEqual(rule.fileName, "RedundantEnumCaseStringValueRule.swift")
+    XCTAssertEqual(rule.description, """
+      According to Swift language reference:
+
+      > For cases of a raw-value typed enumeration declaration,
+      if the raw-value type is specified as `String` and
+      no values are assigned to the cases explicitly,
+      each unassigned case is implicitly assigned a string with
+      the same text as the name of that case.
+
+      So the string literal can be omitted when it is the same as the case name.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      enum Foo: String {
+        case a = "a"    // case a
+        case b, c = "c" // case b, c
+        case d
+      }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNotStringRawValueType() {
     let issues = """
       enum i: Int { case foo = 1, bar = 2 }
@@ -76,6 +107,7 @@ class RedundantEnumCaseStringValueRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNotStringRawValueType", testNotStringRawValueType),
     ("testNoAssignment", testNoAssignment),
     ("testAssignDifferentValue", testAssignDifferentValue),

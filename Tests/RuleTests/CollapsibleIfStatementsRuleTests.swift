@@ -19,6 +19,35 @@ import XCTest
 @testable import Lint
 
 class CollapsibleIfStatementsRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = CollapsibleIfStatementsRule()
+
+    XCTAssertEqual(rule.identifier, "collapsible_if_statements")
+    XCTAssertEqual(rule.name, "Collapsible If Statements")
+    XCTAssertEqual(rule.fileName, "CollapsibleIfStatementsRule.swift")
+    XCTAssertEqual(rule.description, """
+      This rule detects instances where the conditions of
+      two consecutive if statements can be combined into one
+      in order to increase code cleanness and readability.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      if (x) {
+        if (y) {
+          foo()
+        }
+      }
+      // depends on the situation, could be collapsed into
+      // if x && y { foo() }
+      // or
+      // if x, y { foo() }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testWithElses() {
     let issues = """
       if foo { if bar {} } else {}
@@ -93,6 +122,7 @@ class CollapsibleIfStatementsRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testWithElses", testWithElses),
     ("testWithAdditionalStatements", testWithAdditionalStatements),
     ("testCollapsibles", testCollapsibles),
