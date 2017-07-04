@@ -30,7 +30,6 @@ class RedundantReturnVoidTypeRule : RuleBase, ASTVisitorRule {
       "func foo() -> () // func foo()",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ funcDecl: FunctionDeclaration) throws -> Bool {
