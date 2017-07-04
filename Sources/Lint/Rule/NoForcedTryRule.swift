@@ -48,7 +48,6 @@ class NoForcedTryRule: RuleBase, ASTVisitorRule {
       """,
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ tryOpExpr: TryOperatorExpression) throws -> Bool {
