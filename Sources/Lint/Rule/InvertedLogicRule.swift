@@ -32,7 +32,6 @@ class InvertedLogicRule: RuleBase, ASTVisitorRule {
       "!foo ? -1 : 1  // foo ? 1 : -1",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ ifStmt: IfStatement) throws -> Bool {
