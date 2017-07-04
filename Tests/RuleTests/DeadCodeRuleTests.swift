@@ -82,9 +82,10 @@ class DeadCodeRuleTests : XCTestCase {
 
   func testBreak() {
     let issues = """
-      func foo() {
+      switch foo {
+      default:
         break
-        print("foo")
+        print("1")
       }
       """.inspect(withRule: DeadCodeRule())
     XCTAssertEqual(issues.count, 1)
@@ -95,11 +96,11 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
     XCTAssertEqual(range.start.path, "test/test")
-    XCTAssertEqual(range.start.line, 3)
+    XCTAssertEqual(range.start.line, 4)
     XCTAssertEqual(range.start.column, 3)
     XCTAssertEqual(range.end.path, "test/test")
-    XCTAssertEqual(range.end.line, 3)
-    XCTAssertEqual(range.end.column, 15)
+    XCTAssertEqual(range.end.line, 4)
+    XCTAssertEqual(range.end.column, 13)
   }
 
   func testContinue() {
@@ -200,6 +201,12 @@ class DeadCodeRuleTests : XCTestCase {
 
         if foo {
           print("foo")
+        } else {
+          return
+        }
+
+        if foo {
+          break
         } else {
           return
         }
