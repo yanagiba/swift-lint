@@ -102,17 +102,28 @@ class PMDReporterTests : XCTestCase {
   }
 
   func testReportIssueWithEmptyDescription() {
-    let testIssue = Issue(
-      ruleIdentifier: "rule_id",
-      description: "",
-      category: .badPractice,
-      location: SourceRange(
-        start: SourceLocation(path: "test", line: 1, column: 2),
-        end: SourceLocation(path: "testEnd", line: 3, column: 4)),
-      severity: .minor,
-      correction: nil)
+    let testIssues = [
+      Issue(
+        ruleIdentifier: "rule_id",
+        description: "",
+        category: .badPractice,
+        location: SourceRange(
+          start: SourceLocation(path: "test", line: 1, column: 2),
+          end: SourceLocation(path: "testEnd", line: 3, column: 4)),
+        severity: .minor,
+      correction: nil),
+      Issue(
+        ruleIdentifier: "rule_id",
+        description: "",
+        category: .badPractice,
+        location: SourceRange(
+          start: SourceLocation(path: "test", line: 1, column: 2),
+          end: SourceLocation(path: "testEnd", line: 3, column: 4)),
+        severity: .cosmetic,
+      correction: nil),
+    ]
     XCTAssertEqual(
-      pmdReporter.handle(issues: [testIssue]),
+      pmdReporter.handle(issues: testIssues),
       """
       <file name="test">
       <violation
@@ -121,6 +132,17 @@ class PMDReporterTests : XCTestCase {
         beginline="1"
         endline="3"
         priority="3"
+        rule="rule_id"
+        ruleset="bad practice">
+
+      </violation>
+      </file><file name="test">
+      <violation
+        begincolumn="2"
+        endcolumn="4"
+        beginline="1"
+        endline="3"
+        priority="4"
         rule="rule_id"
         ruleset="bad practice">
 
