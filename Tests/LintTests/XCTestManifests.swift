@@ -24,6 +24,7 @@ public func allTests() -> [XCTestCaseEntry] {
     testCase(DriverTests.allTests),
     testCase(RuleProtocolTests.allTests),
     testCase(RuleBaseTests.allTests),
+    testCase(ReporterProtocolTests.allTests),
     testCase(SourceCodeRuleTests.allTests),
     testCase(CommentBasedSuppressionTests.allTests),
     testCase(IssueSummaryTests.allTests),
