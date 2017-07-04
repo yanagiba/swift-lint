@@ -19,6 +19,25 @@ import XCTest
 @testable import Lint
 
 class RedundantVariableDeclarationKeywordRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantVariableDeclarationKeywordRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_variable_declaration_keyword")
+    XCTAssertEqual(rule.name, "Redundant Variable Declaration Keyword")
+    XCTAssertEqual(rule.fileName, "RedundantVariableDeclarationKeywordRule.swift")
+    XCTAssertEqual(rule.description, """
+      When the result of a function call or computed property is discarded by
+      a wildcard variable `_`, its `let` or `var` keyword can be safely removed.
+      """)
+    XCTAssertEqual(rule.examples?.count, 2)
+    XCTAssertEqual(rule.examples?[0], "let _ = foo() // _ = foo()")
+    XCTAssertEqual(rule.examples?[1], "var _ = bar // _ = bar")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNotWildcard() {
     let issues = """
       var foo = foo()
@@ -92,6 +111,7 @@ class RedundantVariableDeclarationKeywordRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNotWildcard", testNotWildcard),
     ("testNoKeyword", testNoKeyword),
     ("testExplicitTypeAnnotation", testExplicitTypeAnnotation),
