@@ -19,6 +19,58 @@ import XCTest
 @testable import Lint
 
 class DeadCodeRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = DeadCodeRule()
+
+    XCTAssertEqual(rule.identifier, "dead_code")
+    XCTAssertEqual(rule.name, "Dead Code")
+    XCTAssertEqual(rule.fileName, "DeadCodeRule.swift")
+    XCTAssertEqual(rule.description, """
+      Control transfer statements (`break`, `continue`, `fallthrough`, `return`, and `throw`)
+      can change the order of program execution.
+      In the same scope of code block, the code after control transfer statements
+      is unreachable and will never be executed.
+      So they are considered as dead, and suggested to be removed.
+      """)
+    XCTAssertEqual(rule.examples?.count, 4)
+    XCTAssertEqual(rule.examples?[0], """
+      for _ in 0..<10 {
+        if foo {
+          break
+          print("foo") // dead code, never print
+        }
+      }
+      """)
+    XCTAssertEqual(rule.examples?[1], """
+      while foo {
+        if bar {
+          continue
+          print("bar") // dead code, never print
+        }
+      }
+      """)
+    XCTAssertEqual(rule.examples?[2], """
+      func foo() {
+        if isJobDone {
+          return
+          startNewJob() // dead code, new job won't start
+        }
+      }
+      """)
+    XCTAssertEqual(rule.examples?[3], """
+      func foo() throws {
+        if isJobFailed {
+          throw JobError.failed
+          restartJob() // dead code, job won't restart
+        }
+      }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .major)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNoControlTransferStatement() {
     let issues = """
       func foo() {
@@ -258,6 +310,7 @@ class DeadCodeRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoControlTransferStatement", testNoControlTransferStatement),
     ("testBreak", testBreak),
     ("testContinue", testContinue),
