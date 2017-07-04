@@ -120,7 +120,7 @@ var foo: Int {
 <dt>識別子</dt>
 <dd>redundant_initialization_to_nil</dd>
 <dt>ファイル名</dt>
-<dd>RedundantInitializationtoNilRule.swift</dd>
+<dd>RedundantInitializationToNilRule.swift</dd>
 <dt>激しさ</dt>
 <dd>Minor</dd>
 <dt>分類</dt>
