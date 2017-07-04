@@ -19,6 +19,39 @@ import XCTest
 @testable import Lint
 
 class NoForceCastRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = NoForceCastRule()
+
+    XCTAssertEqual(rule.identifier, "no_force_cast")
+    XCTAssertEqual(rule.name, "No Force Cast")
+    XCTAssertEqual(rule.fileName, "NoForceCastRule.swift")
+    XCTAssertEqual(rule.description, """
+      Force casting `as!` should be avoided, because it could crash the program
+      when the type casting fails.
+
+      Although it is arguable that, in rare cases, having crashes may help developers
+      identify issues easier, we recommend using a `guard` statement with optional casting
+      and then handle the failed castings gently.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! MyCustomCell
+
+      // guard let cell =
+      //   tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as? MyCustomCell
+      // else {
+      //   print("Failed in casting to MyCustomCell.")
+      //   return UITableViewCell()
+      // }
+
+      return cell
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNoForceCast() {
     let issues = "let foo = 1.2 as? Bool\nlet a = 1 as? String; let b = false as? Int"
       .inspect(withRule: NoForceCastRule())
@@ -43,6 +76,7 @@ class NoForceCastRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoForceCast", testNoForceCast),
     ("testOneForceCast", testOneForceCast),
   ]

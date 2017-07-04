@@ -46,7 +46,6 @@ class NoForceCastRule: RuleBase, ASTVisitorRule {
       """,
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ typeCasting: TypeCastingOperatorExpression) throws -> Bool {
