@@ -19,6 +19,35 @@ import XCTest
 @testable import Lint
 
 class ConstantGuardStatementConditionRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = ConstantGuardStatementConditionRule()
+
+    XCTAssertEqual(rule.identifier, "constant_guard_statement_condition")
+    XCTAssertEqual(rule.name, "Constant Guard Statement Condition")
+    XCTAssertEqual(rule.fileName, "ConstantGuardStatementConditionRule.swift")
+    XCTAssertNil(rule.description)
+    XCTAssertEqual(rule.examples?.count, 3)
+    XCTAssertEqual(rule.examples?[0], """
+      guard true else { // always true
+        return true
+      }
+      """)
+    XCTAssertEqual(rule.examples?[1], """
+      guard 1 == 0 else { // always false
+        return false
+      }
+      """)
+    XCTAssertEqual(rule.examples?[2], """
+      guard 1 != 0, true else { // always true
+        return true
+      }
+      """)
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testOneVariable() {
     let issues = "guard foo else { return true }"
       .inspect(withRule: ConstantGuardStatementConditionRule())
@@ -133,6 +162,7 @@ class ConstantGuardStatementConditionRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testOneVariable", testOneVariable),
     ("testConditionHasVariable", testConditionHasVariable),
     ("testOneConstant", testOneConstant),
