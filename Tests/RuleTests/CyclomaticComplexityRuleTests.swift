@@ -19,6 +19,69 @@ import XCTest
 @testable import Lint
 
 class CyclomaticComplexityRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = CyclomaticComplexityRule()
+
+    XCTAssertEqual(rule.identifier, "high_cyclomatic_complexity")
+    XCTAssertEqual(rule.name, "High Cyclomatic Complexity")
+    XCTAssertEqual(rule.fileName, "CyclomaticComplexityRule.swift")
+    XCTAssertEqual(rule.description, """
+      Cyclomatic complexity is determined by the number of
+      linearly independent paths through a program's source code.
+      In other words, cyclomatic complexity of a method is measured by
+      the number of decision points, like `if`, `while`, and `for` statements,
+      plus one for the method entry.
+
+      The experiments McCabe, the author of cyclomatic complexity,
+      conclude that methods in the 3 to 7 complexity range are
+      quite well structured. He also suggest
+      the cyclomatic complexity of 10 is a reasonable upper limit.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      func example(a: Int, b: Int, c: Int) // 1
+      {
+          if (a == b)                      // 2
+          {
+              if (b == c)                  // 3
+              {
+              }
+              else if (a == c)             // 3
+              {
+              }
+              else
+              {
+              }
+          }
+          for i in 0..<c                   // 4
+          {
+          }
+          switch(c)
+          {
+              case 1:                      // 5
+                  break
+              case 2:                      // 6
+                  break
+              default:                     // 7
+                  break
+          }
+      }
+      """)
+    XCTAssertEqual(rule.thresholds?.count, 1)
+    XCTAssertEqual(rule.thresholds?.keys.first, "CYCLOMATIC_COMPLEXITY")
+    XCTAssertEqual(rule.thresholds?.values.first, "The cyclomatic complexity reporting threshold, default value is 10.")
+    XCTAssertEqual(rule.additionalDocument, """
+
+      ##### References:
+
+      McCabe (December 1976). ["A Complexity Measure"](http://www.literateprogramming.com/mccabe.pdf).
+      *IEEE Transactions on Software Engineering: 308–320*
+
+      """)
+    XCTAssertEqual(rule.severity, .major)
+    XCTAssertEqual(rule.category, .complexity)
+  }
+
   func testNoDecisionPoint() {
     XCTAssertTrue(getIssues(from: "func foo() {}").isEmpty)
     XCTAssertTrue(getIssues(from: "init() {}").isEmpty)
@@ -102,6 +165,7 @@ class CyclomaticComplexityRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoDecisionPoint", testNoDecisionPoint),
     ("testIfStatement", testIfStatement),
     ("testSwitchStatement", testSwitchStatement),
