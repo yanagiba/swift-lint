@@ -19,6 +19,25 @@ import XCTest
 @testable import Lint
 
 class RedundantInitializationToNilRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = RedundantInitializationToNilRule()
+
+    XCTAssertEqual(rule.identifier, "redundant_initialization_to_nil")
+    XCTAssertEqual(rule.name, "Redundant Initialization to Nil")
+    XCTAssertEqual(rule.fileName, "RedundantInitializationToNilRule.swift")
+    XCTAssertEqual(rule.description, """
+      It is redundant to initialize an optional variable to `nil`,
+      because if you don’t provide an initial value when you declare an optional variable or property,
+      its value automatically defaults to `nil` by the compiler.
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], "var foo: Int? = nil // var foo: Int?")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testNotOptional() {
     let issues = "var foo: Int! = nil"
       .inspect(withRule: RedundantInitializationToNilRule())
@@ -86,6 +105,7 @@ class RedundantInitializationToNilRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNotOptional", testNotOptional),
     ("testNoInitialization", testNoInitialization),
     ("testInitializationToNil", testInitializationToNil),
