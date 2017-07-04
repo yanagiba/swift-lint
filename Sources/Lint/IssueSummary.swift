@@ -27,7 +27,7 @@ struct IssueSummary {
 
   var numberOfFiles: Int {
     let filePaths = issues.map({ $0.location.start.path })
-    let uniqueFilePaths = Array(Set(filePaths))
+    let uniqueFilePaths = Set(filePaths)
     return uniqueFilePaths.count
   }
 

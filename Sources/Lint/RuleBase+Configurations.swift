@@ -50,9 +50,7 @@ extension RuleBase {
   }
 
   func getConfiguration<T>(forKey key: String, orDefault defaultValue: T) -> T {
-    if let configurations = configurations,
-      let customThreshold = configurations[key] as? T
-    {
+    if let configurations = configurations, let customThreshold = configurations[key] as? T {
       return customThreshold
     }
     return defaultValue

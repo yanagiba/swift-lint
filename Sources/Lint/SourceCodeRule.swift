@@ -37,7 +37,7 @@ extension SourceCodeRule where Self : RuleBase {
     self.configurations = configurations
 
     for (lineNumber, line) in lines.enumerated() {
-        inspect(line: line, lineNumber: lineNumber + 1)
+      inspect(line: line, lineNumber: lineNumber + 1)
     }
   }
 
@@ -46,9 +46,7 @@ extension SourceCodeRule where Self : RuleBase {
     description: String,
     correction: Correction? = nil
   ) {
-    guard lineNumber > 0 && lineNumber <= lines.count,
-      let path = astContext?.sourceFile.path
-    else {
+    guard lineNumber > 0 && lineNumber <= lines.count, let path = astContext?.sourceFile.path else {
       return
     }
 
@@ -56,8 +54,7 @@ extension SourceCodeRule where Self : RuleBase {
     let line = lines[lineIndex]
     let sourceRange = SourceRange(
       start: SourceLocation(path: path, line: lineNumber, column: 1),
-      end: SourceLocation(path: path, line: lineNumber, column: line.count)
-    )
+      end: SourceLocation(path: path, line: lineNumber, column: line.count))
     emitIssue(sourceRange, description: description, correction: correction)
   }
 }

@@ -131,9 +131,7 @@ public class NPathComplexity {
   }
 
   private func nPath(_ whileStmt: WhileStatement) -> Int {
-    return 1 +
-      nPath(whileStmt.codeBlock) +
-      nPath(whileStmt.conditionList)
+    return 1 + nPath(whileStmt.codeBlock) + nPath(whileStmt.conditionList)
   }
 
   private func nPath(forExpression expr: Expression) -> Int {
