@@ -19,6 +19,31 @@ import XCTest
 @testable import Lint
 
 class NestedCodeBlockDepthRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = NestedCodeBlockDepthRule()
+
+    XCTAssertEqual(rule.identifier, "nested_code_block_depth")
+    XCTAssertEqual(rule.name, "Nested Code Block Depth")
+    XCTAssertEqual(rule.fileName, "NestedCodeBlockDepthRule.swift")
+    XCTAssertEqual(rule.description, "This rule indicates blocks nested more deeply than the upper limit.")
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      if (1)
+      {               // 1
+          {           // 2
+              {       // 3
+              }
+          }
+      }
+      """)
+    XCTAssertEqual(rule.thresholds?.count, 1)
+    XCTAssertEqual(rule.thresholds?.keys.first, "NESTED_CODE_BLOCK_DEPTH")
+    XCTAssertEqual(rule.thresholds?.values.first, "The depth of a code block reporting threshold, default value is 5.")
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .major)
+    XCTAssertEqual(rule.category, .readability)
+  }
+
   func testEmptyCodeBlock() {
     XCTAssertTrue(getIssues(from: "func foo() {}").isEmpty)
     XCTAssertTrue(getIssues(from: "init() {}").isEmpty)
@@ -116,6 +141,7 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testEmptyCodeBlock", testEmptyCodeBlock),
     ("testIfStatement", testIfStatement),
     ("testSwitchStatement", testSwitchStatement),
