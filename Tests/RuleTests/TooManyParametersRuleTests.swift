@@ -45,7 +45,8 @@ class TooManyParametersRuleTests : XCTestCase {
       """)
     XCTAssertEqual(rule.thresholds?.count, 1)
     XCTAssertEqual(rule.thresholds?.keys.first, "MAX_PARAMETERS_COUNT")
-    XCTAssertEqual(rule.thresholds?.values.first, "The reporting threshold for too many parameters, default value is 10.")
+    XCTAssertEqual(rule.thresholds?.values.first,
+      "The reporting threshold for too many parameters, default value is 10.")
     XCTAssertEqual(rule.additionalDocument, """
 
       ##### References:
