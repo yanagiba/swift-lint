@@ -19,6 +19,44 @@ import XCTest
 @testable import Lint
 
 class TooManyParametersRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = TooManyParametersRule()
+
+    XCTAssertEqual(rule.identifier, "too_many_parameters")
+    XCTAssertEqual(rule.name, "Too Many Parameters")
+    XCTAssertEqual(rule.fileName, "TooManyParametersRule.swift")
+    XCTAssertEqual(rule.description, """
+      Methods with too many parameters are hard to understand and maintain,
+      and are thirsty for refactorings, like
+      [Replace Parameter With Method](http://www.refactoring.com/catalog/replaceParameterWithMethod.html),
+      [Introduce Parameter Object](http://www.refactoring.com/catalog/introduceParameterObject.html),
+      or
+      [Preserve Whole Object](http://www.refactoring.com/catalog/preserveWholeObject.html).
+      """)
+    XCTAssertEqual(rule.examples?.count, 1)
+    XCTAssertEqual(rule.examples?[0], """
+      func example(
+        a: Int,
+        b: Int,
+        c: Int,
+        ...
+        z: Int
+      ) {}
+      """)
+    XCTAssertEqual(rule.thresholds?.count, 1)
+    XCTAssertEqual(rule.thresholds?.keys.first, "MAX_PARAMETERS_COUNT")
+    XCTAssertEqual(rule.thresholds?.values.first, "The reporting threshold for too many parameters, default value is 10.")
+    XCTAssertEqual(rule.additionalDocument, """
+
+      ##### References:
+
+      Fowler, Martin (1999). *Refactoring: Improving the design of existing code.* Addison Wesley.
+
+      """)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .size)
+  }
+
   func testNoParameter() {
     XCTAssertTrue(getIssues(from: """
     func foo() {}
@@ -96,6 +134,7 @@ class TooManyParametersRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testNoParameter", testNoParameter),
     ("testOneParameter", testOneParameter),
     ("testFunction", testFunction),
