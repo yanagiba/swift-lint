@@ -19,7 +19,7 @@ import Foundation
 import AST
 
 class ConstantConditionalOperatorConditionRule: RuleBase, ASTVisitorRule {
-  let name = "Constant Conditional Operator"
+  let name = "Constant Conditional Operator Condition"
   var examples: [String]? {
     return [
       "1 == 1 ? 1 : 0",
@@ -27,7 +27,6 @@ class ConstantConditionalOperatorConditionRule: RuleBase, ASTVisitorRule {
       "false ? 1 : 0",
     ]
   }
-  let severity = Issue.Severity.minor
   let category = Issue.Category.badPractice
 
   func visit(_ condOpExpr: TernaryConditionalOperatorExpression) throws -> Bool {

@@ -342,13 +342,13 @@ guard 1 != 0, true else { // always true
 ```
 
 
-## Constant Conditional Operator
+## Constant Conditional Operator Condition
 
 <dl>
 <dt>标识名</dt>
-<dd>constant_conditional_operator</dd>
+<dd>constant_conditional_operator_condition</dd>
 <dt>文件名</dt>
-<dd>ConstantConditionalOperatorRule.swift</dd>
+<dd>ConstantConditionalOperatorConditionRule.swift</dd>
 <dt>严重级别</dt>
 <dd>Minor</dd>
 <dt>分类</dt>

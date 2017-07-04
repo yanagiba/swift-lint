@@ -19,6 +19,23 @@ import XCTest
 @testable import Lint
 
 class ConstantConditionalOperatorConditionRuleTests : XCTestCase {
+  func testProperties() {
+    let rule = ConstantConditionalOperatorConditionRule()
+
+    XCTAssertEqual(rule.identifier, "constant_conditional_operator_condition")
+    XCTAssertEqual(rule.name, "Constant Conditional Operator Condition")
+    XCTAssertEqual(rule.fileName, "ConstantConditionalOperatorConditionRule.swift")
+    XCTAssertNil(rule.description)
+    XCTAssertEqual(rule.examples?.count, 3)
+    XCTAssertEqual(rule.examples?[0], "1 == 1 ? 1 : 0")
+    XCTAssertEqual(rule.examples?[1], "true ? 1 : 0")
+    XCTAssertEqual(rule.examples?[2], "false ? 1 : 0")
+    XCTAssertNil(rule.thresholds)
+    XCTAssertNil(rule.additionalDocument)
+    XCTAssertEqual(rule.severity, .minor)
+    XCTAssertEqual(rule.category, .badPractice)
+  }
+
   func testOneVariable() {
     let issues = "foo ? true : false"
       .inspect(withRule: ConstantConditionalOperatorConditionRule())
@@ -40,7 +57,7 @@ class ConstantConditionalOperatorConditionRuleTests : XCTestCase {
         .inspect(withRule: ConstantConditionalOperatorConditionRule())
       XCTAssertEqual(issues.count, 1)
       let issue = issues[0]
-      XCTAssertEqual(issue.ruleIdentifier, "constant_conditional_operator")
+      XCTAssertEqual(issue.ruleIdentifier, "constant_conditional_operator_condition")
       XCTAssertEqual(issue.description, "Conditional operator with constant condition is confusing")
       XCTAssertEqual(issue.category, .badPractice)
       XCTAssertEqual(issue.severity, .minor)
@@ -78,7 +95,7 @@ class ConstantConditionalOperatorConditionRuleTests : XCTestCase {
         .inspect(withRule: ConstantConditionalOperatorConditionRule())
       XCTAssertEqual(issues.count, 1)
       let issue = issues[0]
-      XCTAssertEqual(issue.ruleIdentifier, "constant_conditional_operator")
+      XCTAssertEqual(issue.ruleIdentifier, "constant_conditional_operator_condition")
       XCTAssertEqual(issue.description, "Conditional operator with constant condition is confusing")
       XCTAssertEqual(issue.category, .badPractice)
       XCTAssertEqual(issue.severity, .minor)
@@ -93,6 +110,7 @@ class ConstantConditionalOperatorConditionRuleTests : XCTestCase {
   }
 
   static var allTests = [
+    ("testProperties", testProperties),
     ("testOneVariable", testOneVariable),
     ("testOneConstant", testOneConstant),
     ("testVariableComparisons", testVariableComparisons),
