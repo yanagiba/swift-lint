@@ -2,5 +2,7 @@ comment:
   layout: header, changes, diff
 coverage:
   ignore:
-  - Packages
+  - Sources/swift-lint
+  - Sources/swift-lint-docgen
   - Tests
+  - Documentation
