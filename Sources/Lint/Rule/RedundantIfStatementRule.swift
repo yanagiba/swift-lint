@@ -75,7 +75,7 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
       description: "if statement is redundant and can be \(suggestion)")
   }
 
-  func visit(_ ifStmt: IfStatement) throws -> Bool { // swift-lint:configure CYCLOMATIC_COMPLEXITY=12
+  func visit(_ ifStmt: IfStatement) throws -> Bool {
     guard ifStmt.areAllConditionsExpressions,
       let (thenStmt, elseStmt) = ifStmt.thenElseStmts
     else {
