@@ -14,15 +14,8 @@
    limitations under the License.
 */
 
-import Foundation
-
 extension Issue {
   var jsonString: String {
-    // TODO: as of today, swift-4-snapshot-2017-06-22-a,
-    // awesome `Encodable` and `JSONEncoder` are not available on Linux yet
-    // we will switch to that later when it is available
-    // right now, just brutal string concatenation
-
     return """
     {
       "path": "\(location.normalizedFilePath)",
