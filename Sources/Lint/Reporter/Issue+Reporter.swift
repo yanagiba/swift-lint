@@ -14,14 +14,48 @@
    limitations under the License.
 */
 
-import Foundation
+// import Foundation
 
 extension Issue {
   var jsonString: String {
-    // TODO: as of today, swift-4-snapshot-2017-06-22-a,
-    // awesome `Encodable` and `JSONEncoder` are not available on Linux yet
-    // we will switch to that later when it is available
-    // right now, just brutal string concatenation
+    /*
+    struct IssueEntry : Encodable { // Note: because `implementation of 'Encodable' cannot
+                                    // be automatically synthesized in an extension yet`
+      let path: String
+      let startLine: Int
+      let startColumn: Int
+      let endLine: Int
+      let endColumn: Int
+      let rule: String
+      let category: String
+      let severity: String
+      let description: String
+
+      init(issue: Issue) {
+        path = issue.location.normalizedFilePath
+        startLine = issue.location.start.line
+        startColumn = issue.location.start.column
+        endLine = issue.location.end.line
+        endColumn = issue.location.end.column
+        rule = issue.ruleIdentifier
+        category = issue.category.rawValue
+        severity = issue.severity.rawValue
+        description = issue.description
+      }
+    }
+
+    let jsonEncoder = JSONEncoder()
+    do {
+        let jsonData = try jsonEncoder.encode(IssueEntry(issue: self))
+        let jsonString = String(data: jsonData, encoding: .utf8)
+        return jsonString ?? ""
+    }
+    catch {
+      return ""
+    }
+    */
+
+    // Note: for our use case, simply string concatenation seems to be better, don't want to overcomplicate things.
 
     return """
     {
