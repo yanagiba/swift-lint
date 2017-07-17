@@ -14,49 +14,8 @@
    limitations under the License.
 */
 
-// import Foundation
-
 extension Issue {
   var jsonString: String {
-    /*
-    struct IssueEntry : Encodable { // Note: because `implementation of 'Encodable' cannot
-                                    // be automatically synthesized in an extension yet`
-      let path: String
-      let startLine: Int
-      let startColumn: Int
-      let endLine: Int
-      let endColumn: Int
-      let rule: String
-      let category: String
-      let severity: String
-      let description: String
-
-      init(issue: Issue) {
-        path = issue.location.normalizedFilePath
-        startLine = issue.location.start.line
-        startColumn = issue.location.start.column
-        endLine = issue.location.end.line
-        endColumn = issue.location.end.column
-        rule = issue.ruleIdentifier
-        category = issue.category.rawValue
-        severity = issue.severity.rawValue
-        description = issue.description
-      }
-    }
-
-    let jsonEncoder = JSONEncoder()
-    do {
-        let jsonData = try jsonEncoder.encode(IssueEntry(issue: self))
-        let jsonString = String(data: jsonData, encoding: .utf8)
-        return jsonString ?? ""
-    }
-    catch {
-      return ""
-    }
-    */
-
-    // Note: for our use case, simply string concatenation seems to be better, don't want to overcomplicate things.
-
     return """
     {
       "path": "\(location.normalizedFilePath)",
