@@ -2,7 +2,7 @@
 
 [![swift-ast 0.3.5](https://img.shields.io/badge/swift‐ast-0.3.5-C70025.svg)](https://github.com/yanagiba/swift-ast)
 [![swift-lint master](https://img.shields.io/badge/swift‐lint-master-C70025.svg)](https://github.com/yanagiba/swift-lint)
-[![swift-format pending](https://img.shields.io/badge/swift‐format-pending-C70025.svg)](https://github.com/yanagiba/swift-format)
+[![swift-transform pending](https://img.shields.io/badge/swift‐transform-pending-C70025.svg)](https://github.com/yanagiba/swift-transform)
 
 [![Travis CI Status](https://api.travis-ci.org/yanagiba/swift-lint.svg?branch=master)](https://travis-ci.org/yanagiba/swift-lint)
 [![codecov](https://codecov.io/gh/yanagiba/swift-lint/branch/master/graph/badge.svg)](https://codecov.io/gh/yanagiba/swift-lint)
