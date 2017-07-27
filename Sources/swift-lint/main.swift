@@ -16,6 +16,7 @@
 
 import Foundation
 
+import Bocho
 import Source
 import Lint
 
@@ -23,51 +24,9 @@ let dotYanagibaLint = DotYanagibaLint.loadFromDisk()
 
 var cliArgs = CommandLine.arguments
 cliArgs.remove(at: 0)
+let cliOption = CLIOption(cliArgs)
 
-func argumentsContain(_ option: String) -> Bool {
-  return !cliArgs.filter({ $0 == "-\(option)" || $0 == "--\(option)" }).isEmpty
-}
-
-func readOption(_ option: String) -> String? {
-  guard let argIndex = cliArgs.index(of: "-\(option)") else {
-    return nil
-  }
-
-  let argValueIndex = cliArgs.index(after: argIndex)
-  guard argValueIndex < cliArgs.count else {
-    return nil
-  }
-
-  let option = cliArgs[argValueIndex]
-  cliArgs.removeSubrange(argIndex...argValueIndex)
-  return option
-}
-
-func readOptionAsDictionary(_ option: String) -> [String: Any]? {
-  guard let optionString = readOption(option) else {
-    return nil
-  }
-
-  return optionString.components(separatedBy: ",")
-    .flatMap({ opt -> (String, Int)? in // TODO: need to support other types
-      let keyValuePair = opt.components(separatedBy: "=")
-      guard keyValuePair.count == 2 else {
-        return nil
-      }
-      let key = keyValuePair[0]
-      let valueString = keyValuePair[1]
-      guard let valueInt = Int(valueString) else {
-        return nil
-      }
-      return (key, valueInt)
-    }).reduce([:]) { (carryOver, arg) -> [String: Any] in
-      var mutableDict = carryOver
-      mutableDict[arg.0] = arg.1
-      return mutableDict
-    }
-}
-
-if argumentsContain("help") {
+if cliOption.contains("help") {
   print("""
   swift-lint [options] <source0> [... <sourceN>]
 
@@ -102,7 +61,7 @@ if argumentsContain("help") {
   exit(0)
 }
 
-if argumentsContain("version") {
+if cliOption.contains("version") {
   print("""
   Yanagiba's swift-lint (http://yanagiba.org/swift-lint):
     version \(SWIFT_LINT_VERSION).
@@ -114,16 +73,16 @@ if argumentsContain("version") {
 }
 
 let enabledRules = computeEnabledRules(
-  dotYanagibaLint, readOption("-enable-rules"), readOption("-disable-rules"))
+  dotYanagibaLint, cliOption.readAsString("-enable-rules"), cliOption.readAsString("-disable-rules"))
 let ruleConfigurations = computeRuleConfigurations(
-  dotYanagibaLint, readOptionAsDictionary("-rule-configurations"))
-let reportType = computeReportType(dotYanagibaLint, readOption("-report-type"))
+  dotYanagibaLint, cliOption.readAsDictionary("-rule-configurations"))
+let reportType = computeReportType(dotYanagibaLint, cliOption.readAsString("-report-type"))
 let outputHandle =
-  computeOutputHandle(dotYanagibaLint, readOption("o") ?? readOption("-output"))
+  computeOutputHandle(dotYanagibaLint, cliOption.readAsString("o") ?? cliOption.readAsString("-output"))
 let severityThresholds = computeSeverityThresholds(
-  dotYanagibaLint, readOptionAsDictionary("-severity-thresholds"))
+  dotYanagibaLint, cliOption.readAsDictionary("-severity-thresholds"))
 
-let filePaths = cliArgs
+let filePaths = cliOption.arguments
 var sourceFiles = [SourceFile]()
 for filePath in filePaths {
   guard let sourceFile = try? SourceReader.read(at: filePath) else {
