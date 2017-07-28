@@ -17,6 +17,7 @@
 import Foundation
 
 import Source
+import Bocho
 
 extension SourceRange {
   var normalizedLocation: String {
@@ -24,13 +25,7 @@ extension SourceRange {
   }
 
   var normalizedFilePath: String {
-    let pwd = FileManager.default.currentDirectoryPath
-    var filePath = start.identifier
-    if filePath.hasPrefix(pwd) {
-      let prefixIndex = filePath.index(filePath.startIndex, offsetBy: pwd.count+1)
-      filePath = String(filePath[prefixIndex...])
-    }
-    return filePath
+    return start.identifier.truncatedPath
   }
 
   var startLineColumn: String {
