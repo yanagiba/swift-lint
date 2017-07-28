@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ extension Issue {
       xcodeWarningText = "warning"
     }
 
-    let locationString = "\(location.start.path):\(location.startLineColumn)"
+    let locationString = "\(location.start.identifier):\(location.startLineColumn)"
     return "\(locationString): \(xcodeWarningText): [\(ruleIdentifier)]\(issueDescription)"
   }
 

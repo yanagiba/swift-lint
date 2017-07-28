@@ -1,5 +1,5 @@
 /*
-   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2015-2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -55,9 +55,9 @@ class SourceCodeRuleTests : XCTestCase {
           category: .badPractice,
           location: SourceRange(
             start: SourceLocation(
-              path: sourceFile.path, line: lineNumber, column: startLocation),
+              identifier: sourceFile.identifier, line: lineNumber, column: startLocation),
             end: SourceLocation(
-              path: sourceFile.path, line: lineNumber, column: endLocation)),
+              identifier: sourceFile.identifier, line: lineNumber, column: endLocation)),
           severity: .major,
           correction: nil))
       }
@@ -92,10 +92,10 @@ class SourceCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.ruleIdentifier, "testing_sourcecode")
     XCTAssertEqual(issue.description, "`contains` is quite dangerous for testing purposes")
     let range = issue.location
-    XCTAssertEqual(range.start.path, "LintTests/SourceCodeRuleTests")
+    XCTAssertEqual(range.start.identifier, "LintTests/SourceCodeRuleTests")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 13)
-    XCTAssertEqual(range.end.path, "LintTests/SourceCodeRuleTests")
+    XCTAssertEqual(range.end.identifier, "LintTests/SourceCodeRuleTests")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 21)
   }

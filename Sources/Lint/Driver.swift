@@ -1,5 +1,5 @@
 /*
-   Copyright 2015-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2015-2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class Driver {
     for sourceFile in sourceFiles {
       let parser = Parser(source: sourceFile)
       guard let result = try? parser.parse() else {
-        print("Failed in parsing file \(sourceFile.path)")
+        print("Failed in parsing file \(sourceFile.identifier)")
         // Ignore the errors for now
         return .failedInParsingFile
       }

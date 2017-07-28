@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ class HTMLReporterTests : XCTestCase {
       description: "text description for testing",
       category: .badPractice,
       location: SourceRange(
-        start: SourceLocation(path: "test/testHTMLReporterStart", line: 1, column: 2),
-        end: SourceLocation(path: "test/testHTMLReporterEnd", line: 3, column: 4)),
+        start: SourceLocation(identifier: "test/testHTMLReporterStart", line: 1, column: 2),
+        end: SourceLocation(identifier: "test/testHTMLReporterEnd", line: 3, column: 4)),
       severity: .major,
       correction: nil)
     XCTAssertEqual(
@@ -79,8 +79,8 @@ class HTMLReporterTests : XCTestCase {
       description: "text description for testing",
       category: .badPractice,
       location: SourceRange(
-        start: SourceLocation(path: "\(pwd)/test/testHTMLReporterStart", line: 1, column: 2),
-        end: SourceLocation(path: "\(pwd)/test/testHTMLReporterEnd", line: 3, column: 4)),
+        start: SourceLocation(identifier: "\(pwd)/test/testHTMLReporterStart", line: 1, column: 2),
+        end: SourceLocation(identifier: "\(pwd)/test/testHTMLReporterEnd", line: 3, column: 4)),
       severity: .critical,
       correction: nil)
     XCTAssertEqual(
@@ -115,8 +115,8 @@ class HTMLReporterTests : XCTestCase {
       description: "",
       category: .badPractice,
       location: SourceRange(
-        start: SourceLocation(path: "test", line: 1, column: 2),
-        end: SourceLocation(path: "testEnd", line: 3, column: 4)),
+        start: SourceLocation(identifier: "test", line: 1, column: 2),
+        end: SourceLocation(identifier: "testEnd", line: 3, column: 4)),
       severity: .minor,
       correction: nil)
     XCTAssertEqual(

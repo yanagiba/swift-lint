@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -60,10 +60,10 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .readability)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 12)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 25)
   }
@@ -77,10 +77,10 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .readability)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 8)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 73)
   }
@@ -95,10 +95,10 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     XCTAssertEqual(issue1.category, .readability)
     XCTAssertEqual(issue1.severity, .major)
     let range1 = issue1.location
-    XCTAssertEqual(range1.start.path, "test/test")
+    XCTAssertEqual(range1.start.identifier, "test/test")
     XCTAssertEqual(range1.start.line, 1)
     XCTAssertEqual(range1.start.column, 8)
-    XCTAssertEqual(range1.end.path, "test/test")
+    XCTAssertEqual(range1.end.identifier, "test/test")
     XCTAssertEqual(range1.end.line, 1)
     XCTAssertEqual(range1.end.column, 32)
 
@@ -108,10 +108,10 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     XCTAssertEqual(issue2.category, .readability)
     XCTAssertEqual(issue2.severity, .major)
     let range2 = issue2.location
-    XCTAssertEqual(range2.start.path, "test/test")
+    XCTAssertEqual(range2.start.identifier, "test/test")
     XCTAssertEqual(range2.start.line, 1)
     XCTAssertEqual(range2.start.column, 17)
-    XCTAssertEqual(range2.end.path, "test/test")
+    XCTAssertEqual(range2.end.identifier, "test/test")
     XCTAssertEqual(range2.end.line, 1)
     XCTAssertEqual(range2.end.column, 30)
   }
@@ -125,10 +125,10 @@ class NestedCodeBlockDepthRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .readability)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 21)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 63)
   }
