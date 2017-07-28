@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -59,10 +59,10 @@ class LongLineRuleTests : XCTestCase {
     XCTAssertEqual(issue0.category, .size)
     XCTAssertEqual(issue0.severity, .minor)
     let range0 = issue0.location
-    XCTAssertEqual(range0.start.path, "test/test")
+    XCTAssertEqual(range0.start.identifier, "test/test")
     XCTAssertEqual(range0.start.line, 1)
     XCTAssertEqual(range0.start.column, 1)
-    XCTAssertEqual(range0.end.path, "test/test")
+    XCTAssertEqual(range0.end.identifier, "test/test")
     XCTAssertEqual(range0.end.line, 1)
     XCTAssertEqual(range0.end.column, 9)
     let issue1 = issues[1]
@@ -71,10 +71,10 @@ class LongLineRuleTests : XCTestCase {
     XCTAssertEqual(issue1.category, .size)
     XCTAssertEqual(issue1.severity, .minor)
     let range1 = issue1.location
-    XCTAssertEqual(range1.start.path, "test/test")
+    XCTAssertEqual(range1.start.identifier, "test/test")
     XCTAssertEqual(range1.start.line, 2)
     XCTAssertEqual(range1.start.column, 1)
-    XCTAssertEqual(range1.end.path, "test/test")
+    XCTAssertEqual(range1.end.identifier, "test/test")
     XCTAssertEqual(range1.end.line, 2)
     XCTAssertEqual(range1.end.column, 8)
   }

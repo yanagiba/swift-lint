@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -53,8 +53,8 @@ class IssueSummaryTests : XCTestCase {
       description: "",
       category: .badPractice,
       location: SourceRange(
-        start: SourceLocation(path: path, line: 0, column: 0),
-        end: SourceLocation(path: path, line: 0, column: 0)),
+        start: SourceLocation(identifier: path, line: 0, column: 0),
+        end: SourceLocation(identifier: path, line: 0, column: 0)),
       severity: severity,
       correction: nil)
   }

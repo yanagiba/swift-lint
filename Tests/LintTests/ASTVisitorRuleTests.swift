@@ -1,5 +1,5 @@
 /*
-   Copyright 2016-2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2016-2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -83,10 +83,10 @@ class ASTVisitorRuleTests : XCTestCase {
     XCTAssertEqual(issue.ruleIdentifier, "testing_astvisitor")
     XCTAssertEqual(issue.description, "foo is not allowed in import declaration for testing purposes")
     let range = issue.location
-    XCTAssertEqual(range.start.path, "LintTests/ASTVisitorRuleTests")
+    XCTAssertEqual(range.start.identifier, "LintTests/ASTVisitorRuleTests")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 1)
-    XCTAssertEqual(range.end.path, "LintTests/ASTVisitorRuleTests")
+    XCTAssertEqual(range.end.identifier, "LintTests/ASTVisitorRuleTests")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 11)
   }

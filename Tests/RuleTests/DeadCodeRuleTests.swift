@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -95,10 +95,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 4)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 4)
     XCTAssertEqual(range.end.column, 13)
   }
@@ -117,10 +117,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 3)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 3)
     XCTAssertEqual(range.end.column, 15)
   }
@@ -140,10 +140,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 4)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 4)
     XCTAssertEqual(range.end.column, 13)
   }
@@ -162,10 +162,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 3)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 3)
     XCTAssertEqual(range.end.column, 15)
   }
@@ -184,10 +184,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 3)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 3)
     XCTAssertEqual(range.end.column, 15)
   }
@@ -241,10 +241,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 7)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 7)
     XCTAssertEqual(range.end.column, 15)
   }
@@ -269,10 +269,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .badPractice)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 9)
     XCTAssertEqual(range.start.column, 3)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 9)
     XCTAssertEqual(range.end.column, 15)
   }
@@ -296,10 +296,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue0.category, .badPractice)
     XCTAssertEqual(issue0.severity, .major)
     let range0 = issue0.location
-    XCTAssertEqual(range0.start.path, "test/test")
+    XCTAssertEqual(range0.start.identifier, "test/test")
     XCTAssertEqual(range0.start.line, 8)
     XCTAssertEqual(range0.start.column, 3)
-    XCTAssertEqual(range0.end.path, "test/test")
+    XCTAssertEqual(range0.end.identifier, "test/test")
     XCTAssertEqual(range0.end.line, 8)
     XCTAssertEqual(range0.end.column, 15)
     let issue1 = issues[1]
@@ -308,10 +308,10 @@ class DeadCodeRuleTests : XCTestCase {
     XCTAssertEqual(issue1.category, .badPractice)
     XCTAssertEqual(issue1.severity, .major)
     let range1 = issue1.location
-    XCTAssertEqual(range1.start.path, "test/test")
+    XCTAssertEqual(range1.start.identifier, "test/test")
     XCTAssertEqual(range1.start.line, 6)
     XCTAssertEqual(range1.start.column, 5)
-    XCTAssertEqual(range1.end.path, "test/test")
+    XCTAssertEqual(range1.end.identifier, "test/test")
     XCTAssertEqual(range1.end.line, 6)
     XCTAssertEqual(range1.end.column, 17)
   }

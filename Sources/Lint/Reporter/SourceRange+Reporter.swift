@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 import Foundation
 
 import Source
+import Bocho
 
 extension SourceRange {
   var normalizedLocation: String {
@@ -24,13 +25,7 @@ extension SourceRange {
   }
 
   var normalizedFilePath: String {
-    let pwd = FileManager.default.currentDirectoryPath
-    var filePath = start.path
-    if filePath.hasPrefix(pwd) {
-      let prefixIndex = filePath.index(filePath.startIndex, offsetBy: pwd.count+1)
-      filePath = String(filePath[prefixIndex...])
-    }
-    return filePath
+    return start.identifier.truncatedPath
   }
 
   var startLineColumn: String {

@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ class CommentBasedSuppressionTests : XCTestCase {
 
     func inspect(line: String, lineNumber: Int) {
       let srcLoc = SourceLocation(
-        path: astContext?.sourceFile.path ?? "", line: lineNumber, column: 0)
+        identifier: astContext?.sourceFile.identifier ?? "", line: lineNumber, column: 0)
       emitIssue(SourceRange(start: srcLoc, end: srcLoc), description: "")
     }
   }

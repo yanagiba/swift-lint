@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2015 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -46,15 +46,15 @@ extension SourceCodeRule where Self : RuleBase {
     description: String,
     correction: Correction? = nil
   ) {
-    guard lineNumber > 0 && lineNumber <= lines.count, let path = astContext?.sourceFile.path else {
+    guard lineNumber > 0 && lineNumber <= lines.count, let path = astContext?.sourceFile.identifier else {
       return
     }
 
     let lineIndex = lineNumber - 1
     let line = lines[lineIndex]
     let sourceRange = SourceRange(
-      start: SourceLocation(path: path, line: lineNumber, column: 1),
-      end: SourceLocation(path: path, line: lineNumber, column: line.count))
+      start: SourceLocation(identifier: path, line: lineNumber, column: 1),
+      end: SourceLocation(identifier: path, line: lineNumber, column: line.count))
     emitIssue(sourceRange, description: description, correction: correction)
   }
 }

@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Saito, LLC and the Yanagiba project contributors
+   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -98,10 +98,10 @@ class CyclomaticComplexityRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .complexity)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 1)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 25)
   }
@@ -115,10 +115,10 @@ class CyclomaticComplexityRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .complexity)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 1)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 73)
   }
@@ -132,10 +132,10 @@ class CyclomaticComplexityRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .complexity)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 1)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 29)
   }
@@ -149,10 +149,10 @@ class CyclomaticComplexityRuleTests : XCTestCase {
     XCTAssertEqual(issue.category, .complexity)
     XCTAssertEqual(issue.severity, .major)
     let range = issue.location
-    XCTAssertEqual(range.start.path, "test/test")
+    XCTAssertEqual(range.start.identifier, "test/test")
     XCTAssertEqual(range.start.line, 1)
     XCTAssertEqual(range.start.column, 1)
-    XCTAssertEqual(range.end.path, "test/test")
+    XCTAssertEqual(range.end.identifier, "test/test")
     XCTAssertEqual(range.end.line, 1)
     XCTAssertEqual(range.end.column, 74)
   }
