@@ -156,6 +156,20 @@ public class NPathComplexity {
         return true
       }
 
+      func visit(_ seqExpr: SequenceExpression) throws -> Bool {
+        for element in seqExpr.elements {
+          switch element {
+          case .binaryOperator(let biOp) where biOp == "&&" || biOp == "||":
+            _count += 1
+          case .ternaryConditionalOperator:
+            _count += 1
+          default:
+            continue
+          }
+        }
+        return true
+      }
+
       func visit(_ ternaryExpr: TernaryConditionalOperatorExpression) throws -> Bool {
         _count += 1
         return true

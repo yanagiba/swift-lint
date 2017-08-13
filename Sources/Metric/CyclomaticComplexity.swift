@@ -96,6 +96,15 @@ public class CyclomaticComplexity : ASTVisitor {
     return true
   }
 
+  public func visit(_ seqExpr: SequenceExpression) throws -> Bool {
+    for element in seqExpr.elements {
+      if case .binaryOperator(let biOp) = element, biOp == "&&" || biOp == "||" {
+        _count += 1
+      }
+    }
+    return true
+  }
+
   private func calculate(_ conditionList: ConditionList) {
     if conditionList.count > 1 {
       _count += conditionList.count - 1
