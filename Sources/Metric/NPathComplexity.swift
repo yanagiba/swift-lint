@@ -134,7 +134,7 @@ public class NPathComplexity {
     return 1 + nPath(whileStmt.codeBlock) + nPath(whileStmt.conditionList)
   }
 
-  private func nPath(forExpression expr: Expression) -> Int {
+  private func nPath(forExpression expr: Expression) -> Int { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=7)
     class NPathExpressionVisitor : ASTVisitor {
       var _count = 0
 
@@ -152,6 +152,20 @@ public class NPathComplexity {
         let biOp = biOpExpr.binaryOperator
         if biOp == "&&" || biOp == "||" {
           _count += 1
+        }
+        return true
+      }
+
+      func visit(_ seqExpr: SequenceExpression) throws -> Bool {
+        for element in seqExpr.elements {
+          switch element {
+          case .binaryOperator(let biOp) where biOp == "&&" || biOp == "||":
+            _count += 1
+          case .ternaryConditionalOperator:
+            _count += 1
+          default:
+            continue
+          }
         }
         return true
       }

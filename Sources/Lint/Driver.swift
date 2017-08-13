@@ -18,6 +18,8 @@ import Foundation
 
 import Source
 import Parser
+import Diagnostic
+import Tooling
 
 public class Driver {
   private var _reporter: Reporter
@@ -85,17 +87,26 @@ public class Driver {
   ) -> ExitStatus {
     IssuePool.shared.clearIssues()
 
-    for sourceFile in sourceFiles {
-      let parser = Parser(source: sourceFile)
-      guard let result = try? parser.parse() else {
-        print("Failed in parsing file \(sourceFile.identifier)")
-        // Ignore the errors for now
-        return .failedInParsingFile
+    let diagnosticConsumer = SilentDiagnosticConsumer()
+    let toolingOption = ToolActionOption(sequenceExpressionFoldingEnabled: true)
+    let tooling = ToolAction()
+    let result = tooling.run(
+      sourceFiles: sourceFiles,
+      diagnosticConsumer: diagnosticConsumer,
+      option: toolingOption)
+
+    guard result.exitCode == ToolActionResult.success else {
+      return .failedInParsingFile
+    }
+
+    let astContexts = result.astUnitCollection.flatMap { unit -> ASTContext? in
+      guard let sourceFile = unit.sourceFile else {
+        return nil
       }
+      return ASTContext(sourceFile: sourceFile, topLevelDeclaration: unit.translationUnit)
+    }
 
-      let astContext =
-        ASTContext(sourceFile: sourceFile, topLevelDeclaration: result)
-
+    for astContext in astContexts {
       for rule in _rules {
         rule.inspect(astContext, configurations: ruleConfigurations)
       }
@@ -175,4 +186,8 @@ private extension FileHandle {
       write(strData)
     }
   }
+}
+
+private struct SilentDiagnosticConsumer : DiagnosticConsumer {
+  func consume(diagnostics: [Diagnostic]) {}
 }
