@@ -134,7 +134,7 @@ public class NPathComplexity {
     return 1 + nPath(whileStmt.codeBlock) + nPath(whileStmt.conditionList)
   }
 
-  private func nPath(forExpression expr: Expression) -> Int {
+  private func nPath(forExpression expr: Expression) -> Int { // swift-lint:rule_configure(NESTED_CODE_BLOCK_DEPTH=7)
     class NPathExpressionVisitor : ASTVisitor {
       var _count = 0
 
