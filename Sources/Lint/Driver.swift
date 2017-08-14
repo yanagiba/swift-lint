@@ -88,12 +88,11 @@ public class Driver {
     IssuePool.shared.clearIssues()
 
     let diagnosticConsumer = SilentDiagnosticConsumer()
-    let toolingOption = ToolActionOption(sequenceExpressionFoldingEnabled: true)
     let tooling = ToolAction()
     let result = tooling.run(
       sourceFiles: sourceFiles,
       diagnosticConsumer: diagnosticConsumer,
-      option: toolingOption)
+      options: [.foldSequenceExpression])
 
     guard result.exitCode == ToolActionResult.success else {
       return .failedInParsingFile
