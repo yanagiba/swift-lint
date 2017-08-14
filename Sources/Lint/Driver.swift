@@ -87,7 +87,7 @@ public class Driver {
   ) -> ExitStatus {
     IssuePool.shared.clearIssues()
 
-    let diagnosticConsumer = SilentDiagnosticConsumer()
+    let diagnosticConsumer = TerminalDiagnosticConsumer()
     let tooling = ToolAction()
     let result = tooling.run(
       sourceFiles: sourceFiles,
@@ -187,6 +187,46 @@ private extension FileHandle {
   }
 }
 
-private struct SilentDiagnosticConsumer : DiagnosticConsumer {
-  func consume(diagnostics: [Diagnostic]) {}
+private struct TerminalDiagnosticConsumer : DiagnosticConsumer {
+  func consume(diagnostics: [Diagnostic]) {
+    // TODO: copied from swift-ast
+    var cachedContent: [String: String] = [:]
+
+    for d in diagnostics {
+      let levelStr: String
+      switch d.level {
+      case .fatal, .error:
+        levelStr = d.level.rawValue.colored(with: .red)
+      case .warning:
+        levelStr = d.level.rawValue.colored(with: .yellow)
+      }
+      print("\(d.location) \(levelStr): \(d.kind.diagnosticMessage)")
+
+      let filePath = d.location.identifier
+      var fileContent = cachedContent[filePath]
+      if fileContent == nil {
+        fileContent = (try? SourceReader.read(at: filePath))?.content
+      }
+      if let fileContent = fileContent {
+        cachedContent[filePath] = fileContent
+        let lines = fileContent.components(separatedBy: .newlines)
+        var lineNum = d.location.line - 1
+        if lineNum < 0 {
+          lineNum = 0
+        }
+        if lineNum < lines.count {
+          print(lines[lineNum])
+          var paddingNum = d.location.column - 1
+          if paddingNum < 0 {
+            paddingNum = 0
+          }
+          let padding = String(repeating: " ", count: paddingNum)
+          let pointer = padding + "^~~~".colored(with: .green)
+          print(pointer)
+        }
+      }
+
+      print()
+    }
+  }
 }
