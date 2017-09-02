@@ -34,10 +34,10 @@ public struct Issue {
     case cosmetic
   }
 
-  let ruleIdentifier: String
-  let description: String
-  let category: Category
-  let location: SourceRange
-  let severity: Severity
-  let correction: Correction?
+  public let ruleIdentifier: String
+  public let description: String
+  public let category: Category
+  public let location: SourceRange
+  public let severity: Severity
+  public let correction: Correction?
 }

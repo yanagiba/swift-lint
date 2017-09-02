@@ -16,8 +16,8 @@
 
 import Source
 
-class IssuePool {
-  static let shared = IssuePool()
+public class IssuePool {
+  public static let shared = IssuePool()
 
   public private(set) var issues: [Issue]
 
