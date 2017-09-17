@@ -49,7 +49,7 @@ Please also check out the [status](https://github.com/yanagiba/swift-ast#a-work-
 
 ## Requirements
 
-- [Swift 4.0-DEVELOPMENT-SNAPSHOT-2017-06-06-a](https://swift.org/download/)
+- [Swift 4.0-DEVELOPMENT-SNAPSHOT-2017-09-16-a](https://swift.org/download/)
 
 ## Installation
 
@@ -158,7 +158,7 @@ make test
 
 ## Contact
 
-Ryuichi Saito
+Ryuichi Sai
 
 - http://github.com/ryuichis
 - ryuichi@yanagiba.org
