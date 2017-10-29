@@ -6,7 +6,7 @@
 
 [![Travis CI Status](https://api.travis-ci.org/yanagiba/swift-lint.svg?branch=master)](https://travis-ci.org/yanagiba/swift-lint)
 [![codecov](https://codecov.io/gh/yanagiba/swift-lint/branch/master/graph/badge.svg)](https://codecov.io/gh/yanagiba/swift-lint)
-![Swift 4.0-beta](https://img.shields.io/badge/swift-4.0‐beta-brightgreen.svg)
+![Swift 4.0](https://img.shields.io/badge/swift-4.0-brightgreen.svg)
 ![Swift Package Manager](https://img.shields.io/badge/SPM-ready-orange.svg)
 ![Platforms](https://img.shields.io/badge/platform-%20Linux%20|%20macOS%20-red.svg)
 ![License](https://img.shields.io/github/license/yanagiba/swift-lint.svg)
