@@ -155,6 +155,22 @@ class RedundantBreakInSwitchCaseRuleTests : XCTestCase {
     XCTAssertTrue(issues.isEmpty)
   }
 
+  func testBreakToLabel() {
+    let issues = """
+      switch foo {
+      case 0:
+        f0()
+        break l0
+      case 1:
+        f1()
+        break l1
+      default:
+        fd()
+      }
+      """.inspect(withRule: RedundantBreakInSwitchCaseRule())
+    XCTAssertTrue(issues.isEmpty)
+  }
+
   static var allTests = [
     ("testProperties", testProperties),
     ("testNoBreak", testNoBreak),
@@ -162,5 +178,6 @@ class RedundantBreakInSwitchCaseRuleTests : XCTestCase {
     ("testBreakInTheMiddle", testBreakInTheMiddle),
     ("testBreak", testBreak),
     ("testBreakOnly", testBreakOnly),
+    ("testBreakToLabel", testBreakToLabel),
   ]
 }
