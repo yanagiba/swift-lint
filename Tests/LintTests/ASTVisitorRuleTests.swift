@@ -40,7 +40,7 @@ class ASTVisitorRuleTests : XCTestCase {
     }
 
     func visit(_ importDecl: ImportDeclaration) throws -> Bool {
-      let pathText = importDecl.path.joined(separator: ".")
+      let pathText = importDecl.path.map({ $0.textDescription }).joined(separator: ".")
       if let configurations = configurations,
         let moduleName = configurations["moduleName"] as? String,
         pathText == moduleName

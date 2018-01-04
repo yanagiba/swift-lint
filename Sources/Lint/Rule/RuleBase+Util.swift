@@ -43,7 +43,7 @@ extension RuleBase {
     case let (thenIdExpr as IdentifierExpression, elseIdExpr as IdentifierExpression):
       if case .identifier(let thenId, nil) = thenIdExpr.kind,
         case .identifier(let elseId, nil) = elseIdExpr.kind,
-        thenId == elseId
+        thenId.isSyntacticallyEqual(to: elseId)
       {
         return "removed"
       }
