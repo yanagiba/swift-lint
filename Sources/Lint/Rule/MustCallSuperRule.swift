@@ -84,7 +84,7 @@ class MustCallSuperRule : RuleBase, ASTVisitorRule {
       let funcCallExpr = funcBody.statements.first as? FunctionCallExpression,
       let postfixExpr = funcCallExpr.postfixExpression as? SuperclassExpression,
       case .method(let methodName) = postfixExpr.kind,
-      methodName == funcName,
+      methodName.isSyntacticallyEqual(to: .name(funcName)),
       let arguments = funcCallExpr.argumentClause
     else {
       return nil
@@ -106,7 +106,7 @@ class MustCallSuperRule : RuleBase, ASTVisitorRule {
       switch arguments[0] {
       case .expression where paramName == "_":
         break
-      case .namedExpression(let id, _) where paramName == id:
+      case .namedExpression(let id, _) where id.isSyntacticallyEqual(to: .name(paramName)):
         break
       default:
         emitIssue(funcDecl)
@@ -149,14 +149,12 @@ class MustCallSuperRule : RuleBase, ASTVisitorRule {
       ("tearDown", nil, nil),
     ]
 
-    for (funcName, paramName, paramType) in methodNamesOfInterest where funcName == funcDecl.name
+    for (funcName, paramName, paramType) in methodNamesOfInterest
+      where funcDecl.name.isSyntacticallyEqual(to: .name(funcName))
     {
       if let paramName = paramName, let paramType = paramType {
         let params = funcDecl.signature.parameterList
-        if params.count == 1 &&
-          params[0].externalName == paramName &&
-          params[0].typeAnnotation.textDescription == ": \(paramType)"
-        {
+        if matchParameterList(params: params, paramName: paramName, paramType: paramType) {
           checkBody(funcName, paramName, funcDecl)
         }
       } else if funcDecl.signature.parameterList.isEmpty {
@@ -165,5 +163,19 @@ class MustCallSuperRule : RuleBase, ASTVisitorRule {
     }
 
     return true
+  }
+
+  private func matchParameterList(
+    params: [FunctionSignature.Parameter], paramName: String, paramType: String
+  ) -> Bool {
+    if
+      params.count == 1,
+      let paramExtName = params[0].externalName,
+      paramExtName.isSyntacticallyEqual(to: paramName == "_" ? .wildcard : .name(paramName)),
+      params[0].typeAnnotation.textDescription == ": \(paramType)"
+    {
+      return true
+    }
+    return false
   }
 }

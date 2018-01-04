@@ -40,7 +40,7 @@ class RedundantReturnVoidTypeRule : RuleBase, ASTVisitorRule {
     switch funcResult.type {
     case let idType as TypeIdentifier where idType.names.count == 1:
       let idTypeName = idType.names[0]
-      if idTypeName.name == "Void" && idTypeName.genericArgumentClause == nil {
+      if idTypeName.name.isSyntacticallyEqual(to: .name("Void")) && idTypeName.genericArgumentClause == nil {
         emitIssue(funcDecl.sourceRange, description: "`-> Void` is redundant and can be removed")
       }
     case let tupleType as TupleType where tupleType.elements.isEmpty:

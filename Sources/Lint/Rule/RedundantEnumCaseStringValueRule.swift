@@ -64,7 +64,7 @@ class RedundantEnumCaseStringValueRule: RuleBase, ASTVisitorRule {
     }).reduce([]) { carryOver, enumCase -> [RawValueCase] in
       carryOver + enumCase.cases
     }.forEach { e in
-      if case .string(let stringValue)? = e.assignment, stringValue == e.name {
+      if case .string(let stringValue)? = e.assignment, e.name.isSyntacticallyEqual(to: .name(stringValue)) {
         emitIssue(
           enumDecl.sourceRange, // TODO: I am not pointing to the most precise location
           description: "`= \"\(stringValue)\"` is redundant and can be removed")

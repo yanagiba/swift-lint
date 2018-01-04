@@ -52,12 +52,12 @@ class RedundantInitializationToNilRule: RuleBase, ASTVisitorRule {
     return true
   }
 
-  private func getVariableForm(_ names: [String]) -> String {
+  private func getVariableForm(_ names: [Identifier]) -> String {
     let pluralS = names.count > 1 ? "s" : ""
     return "variable\(pluralS)"
   }
 
-  private func getNameText(_ names: [String]) -> String {
+  private func getNameText(_ names: [Identifier]) -> String {
     let nameCount = names.count
     var nameString = ""
     for (index, name) in names.enumerated() {
