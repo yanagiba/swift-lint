@@ -1,7 +1,7 @@
 // swift-tools-version:4.0
 
 /*
-   Copyright 2015-2017 Ryuichi Laboratories and the Yanagiba project contributors
+   Copyright 2015-2018 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -43,11 +43,11 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/yanagiba/swift-ast",
-      .revision("95850381045b0386a3c4b18f8bf2af929da48398")
+      .exact("0.4.2")
     ),
     .package(
       url: "https://github.com/yanagiba/bocho",
-      .exact("0.1.1")
+      .exact("0.1.2")
     ),
   ],
   targets: [
