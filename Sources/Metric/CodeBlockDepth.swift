@@ -79,7 +79,7 @@ public class CodeBlockDepth {
   }
 
   private func depth(_ classDecl: ClassDeclaration) -> Int {
-    return 1 + classDecl.members.flatMap { member -> Int? in
+    return 1 + classDecl.members.compactMap { member -> Int? in
       switch member {
       case .declaration(let decl):
         return depth(decl)
@@ -90,7 +90,7 @@ public class CodeBlockDepth {
   }
 
   private func depth(_ enumDecl: EnumDeclaration) -> Int {
-    return 1 + enumDecl.members.flatMap { member -> Int? in
+    return 1 + enumDecl.members.compactMap { member -> Int? in
       switch member {
       case .declaration(let decl):
         return depth(decl)
@@ -103,7 +103,7 @@ public class CodeBlockDepth {
   }
 
   private func depth(_ extDecl: ExtensionDeclaration) -> Int {
-    return 1 + extDecl.members.flatMap { member -> Int? in
+    return 1 + extDecl.members.compactMap { member -> Int? in
       switch member {
       case .declaration(let decl):
         return depth(decl)
@@ -118,7 +118,7 @@ public class CodeBlockDepth {
   }
 
   private func depth(_ structDecl: StructDeclaration) -> Int {
-    return 1 + structDecl.members.flatMap { member -> Int? in
+    return 1 + structDecl.members.compactMap { member -> Int? in
       switch member {
       case .declaration(let decl):
         return depth(decl)
@@ -187,7 +187,7 @@ public class CodeBlockDepth {
   }
 
   private func depth(_ initList: [PatternInitializer]) -> Int {
-    return initList.flatMap({ $0.initializerExpression })
+    return initList.compactMap({ $0.initializerExpression })
       .map({ depth($0) - 1 })
       .reduce(0, max)
   }
