@@ -56,7 +56,7 @@ class RedundantEnumCaseStringValueRule: RuleBase, ASTVisitorRule {
       return true
     }
 
-    enumDecl.members.flatMap({ member -> RawValueEnumCase? in
+    enumDecl.members.compactMap({ member -> RawValueEnumCase? in
       if case .rawValue(let rawValueCase) = member {
         return rawValueCase
       }

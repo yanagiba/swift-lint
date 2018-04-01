@@ -98,7 +98,7 @@ public class Driver {
       return .failedInParsingFile
     }
 
-    let astContexts = result.astUnitCollection.flatMap { unit -> ASTContext? in
+    let astContexts = result.astUnitCollection.compactMap { unit -> ASTContext? in
       guard let sourceFile = unit.sourceFile else {
         return nil
       }

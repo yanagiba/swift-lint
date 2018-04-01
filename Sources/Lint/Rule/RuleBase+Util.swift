@@ -88,7 +88,7 @@ extension RuleBase {
       return false
     }
 
-    let conditionExprs = conditionList.flatMap({ condition -> Expression? in
+    let conditionExprs = conditionList.compactMap({ condition -> Expression? in
       if case .expression(let expr) = condition {
         return expr
       }

@@ -37,7 +37,7 @@ class RedundantInitializationToNilRule: RuleBase, ASTVisitorRule {
 
   func visit(_ varDecl: VariableDeclaration) throws -> Bool {
     if case .initializerList(let inits) = varDecl.body {
-      let foundVariableNames = inits.flatMap { $0.identifier }
+      let foundVariableNames = inits.compactMap { $0.identifier }
       if foundVariableNames.count > 0 {
         let variableText = getVariableForm(foundVariableNames)
         let nameString = getNameText(foundVariableNames)
