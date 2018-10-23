@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 
 /*
    Copyright 2015-2018 Ryuichi Laboratories and the Yanagiba project contributors
@@ -43,11 +43,11 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/yanagiba/swift-ast",
-      .exact("0.4.3")
+      .exact("0.18.10")
     ),
     .package(
       url: "https://github.com/yanagiba/bocho",
-      .exact("0.1.3")
+      .exact("0.18.10")
     ),
   ],
   targets: [
@@ -108,5 +108,5 @@ let package = Package(
       ]
     ),
   ],
-  swiftLanguageVersions: [4]
+  swiftLanguageVersions: [.v4_2]
 )
