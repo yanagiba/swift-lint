@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
+   Copyright 2017, 2019 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ class RedundantIfStatementRule: RuleBase, ASTVisitorRule {
 }
 
 fileprivate extension IfStatement {
-  fileprivate var thenElseStmts: (Statement, Statement)? {
+  var thenElseStmts: (Statement, Statement)? {
     // check if both then-block and else-block exist and have one and only one statement
     guard codeBlock.statements.count == 1,
       let elseClause = elseClause,
@@ -118,7 +118,7 @@ fileprivate extension IfStatement {
     return (thenStmt, elseStmt)
   }
 
-  fileprivate var areAllConditionsExpressions: Bool {
+  var areAllConditionsExpressions: Bool {
     return conditionList.filter({
       if case .expression = $0 {
         return false

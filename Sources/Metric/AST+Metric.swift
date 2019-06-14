@@ -1,5 +1,5 @@
 /*
-   Copyright 2017 Ryuichi Laboratories and the Yanagiba project contributors
+   Copyright 2017, 2019 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,36 +17,36 @@
 import AST
 
 public extension Declaration {
-  public var cyclomaticComplexity: Int {
+  var cyclomaticComplexity: Int {
     let calculator = CyclomaticComplexity()
     return calculator.calculate(for: self)
   }
 
-  public var ncssCount: Int {
+  var ncssCount: Int {
     let calculator = NonCommentingSourceStatements()
     return calculator.calculate(for: self)
   }
 }
 
 public extension TopLevelDeclaration {
-  public var ncssCount: Int {
+  var ncssCount: Int {
     let calculator = NonCommentingSourceStatements()
     return calculator.calculate(for: self)
   }
 }
 
 public extension CodeBlock {
-  public var nPathComplexity: Int {
+  var nPathComplexity: Int {
     let calculator = NPathComplexity()
     return calculator.calculate(for: self)
   }
 
-  public var ncssCount: Int {
+  var ncssCount: Int {
     let calculator = NonCommentingSourceStatements()
     return calculator.calculate(for: self)
   }
 
-  public var depth: Int {
+  var depth: Int {
     let calculator = CodeBlockDepth()
     return calculator.calculate(for: self)
   }
