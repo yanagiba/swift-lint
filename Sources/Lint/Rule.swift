@@ -1,5 +1,5 @@
 /*
-   Copyright 2015 Ryuichi Laboratories and the Yanagiba project contributors
+   Copyright 2015, 2019 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -74,12 +74,12 @@ extension Rule {
 }
 
 fileprivate extension String {
-  fileprivate var toFileName: String {
+  var toFileName: String {
     let fileName = punctutationAndWhitespaceRemoved.joined()
     return "\(fileName)Rule.swift"
   }
 
-  fileprivate var toIdentifier: String {
+  var toIdentifier: String {
     return punctutationAndWhitespaceRemoved.joined(separator: "_").lowercased()
   }
 
