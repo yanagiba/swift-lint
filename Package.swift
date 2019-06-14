@@ -1,7 +1,7 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 
 /*
-   Copyright 2015-2018 Ryuichi Laboratories and the Yanagiba project contributors
+   Copyright 2015-2019 Ryuichi Laboratories and the Yanagiba project contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -43,11 +43,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/yanagiba/swift-ast",
-      .exact("0.18.10")
-    ),
-    .package(
-      url: "https://github.com/yanagiba/bocho",
-      .exact("0.18.10")
+      .exact("0.19.6")
     ),
   ],
   targets: [
@@ -68,7 +64,6 @@ let package = Package(
       name: "swift-lint",
       dependencies: [
         "Lint",
-        "Bocho",
       ]
     ),
     .target(
@@ -108,5 +103,5 @@ let package = Package(
       ]
     ),
   ],
-  swiftLanguageVersions: [.v4_2]
+  swiftLanguageVersions: [.v5]
 )
