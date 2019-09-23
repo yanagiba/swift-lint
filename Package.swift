@@ -43,7 +43,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/yanagiba/swift-ast",
-      .exact("0.19.6")
+      .exact("0.19.9")
     ),
   ],
   targets: [
